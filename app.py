@@ -1,92 +1,182 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import os
 
-# 1. Page Configuration & Custom ESHAP Branding
-st.set_page_config(page_title="ESHAP CSAI", layout="wide")
-st.title("📊 ESHAP Cross-Screen Attention Index")
+# Helper function to safely read external copy files if they exist
+def load_text_asset(filename, default_text=""):
+    if os.path.exists(filename):
+        with open(filename, "r", encoding="utf-8") as f:
+            return f.read().strip()
+    return default_text
 
-# 2. Regional Selection Hub
-region = st.sidebar.selectbox("🌍 Select Market Region", ["United States (All Media Attention)", "France (Video Only)"])
-is_fr = "France" in region
+# ==============================================================================
+# 1. CORE DATA STRUCTURES & CONFIGURATION
+# ==============================================================================
+st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# 3. Dynamic Methodology Headnote Rendering Based on Active Selection
-if is_fr:
-    st.markdown("Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using Institut National de la Statistique et des Études Économiques (INSEE) headcounts and GWI daily consumer diaries, applying an empirical duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Médiamétrie’s Médiamat and application session tracking from Sensor Tower France and data.ai Europe telemetry are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other social media.")
-else:
-    st.markdown("Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using U.S. Census Bureau headcounts and GWI daily consumer diaries, applying a duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Nielsen’s Media Distributor Gauge and application session tracking from Comscore Mobile Metrix are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other social media.")
+# Base Market Footprints (December 2025 - May 2026 Cycle)
+# Structure: { Entity: (P13+ Baseline, 55+ Retirement Layer) }
+US_RAW = {
+    "YouTube": (2110.0, 490.0), "Disney": (1945.0, 1080.0), "Netflix": (1540.0, 380.0),
+    "TikTok": (1480.0, 65.0), "Paramount": (1290.0, 810.0), "NBCU": (1265.0, 795.0),
+    "Instagram": (1120.0, 110.0), "WBD": (1040.0, 685.0), "Facebook": (995.0, 520.0),
+    "Amazon Prime": (635.0, 215.0), "Fox": (425.0, 315.0)
+}
 
-# 4. Hardcoded Audited Baselines (Do Not Alter)
-fr_all = {"France TV": 510.0, "YouTube": 485.0, "TF1 Group": 440.0, "Netflix": 390.0, "TikTok": 335.0, "Groupe M6": 265.0, "Instagram": 215.0, "Canal+ Group": 195.0, "Facebook": 165.0, "Amazon Prime": 155.0}
-fr_55  = {"France TV": 385.0, "TF1 Group": 270.0, "Groupe M6": 145.0, "Canal+ Group": 115.0, "YouTube": 95.0, "Facebook": 92.0, "Netflix": 85.0, "Amazon Prime": 48.0, "Instagram": 20.0, "TikTok": 12.0}
+# UPDATED: France Core Market Ecosystem Structural Parameters (Canal+ Core Adjusted)
+FR_RAW = {
+    "France Télévisions": (510.0, 385.0),
+    "YouTube": (485.0, 95.0),
+    "TF1 Group": (440.0, 270.0),
+    "Netflix": (390.0, 85.0),
+    "TikTok": (335.0, 12.0),
+    "Groupe M6": (265.0, 145.0),
+    "Instagram": (215.0, 20.0),
+    "Canal+ Group (Vivendi)": (195.0, 115.0),
+    "Facebook": (165.0, 92.0),
+    "Amazon Prime Video": (155.0, 48.0)
+}
 
-us_all = {"YouTube": 2110.0, "Disney": 1945.0, "Netflix": 1540.0, "TikTok": 1480.0, "Paramount": 1290.0, "NBCUniversal": 1265.0, "Instagram": 1120.0, "Warner Bros. Discovery": 1040.0, "Facebook": 995.0, "Amazon Prime": 635.0, "Fox Corporation": 425.0}
-us_55  = {"Disney": 1080.0, "Paramount": 810.0, "NBCUniversal": 795.0, "Warner Bros. Discovery": 685.0, "Facebook": 520.0, "YouTube": 490.0, "Netflix": 380.0, "Fox Corporation": 315.0, "Amazon Prime": 215.0, "Instagram": 110.0, "TikTok": 65.0}
+# Youth Fractional Decay Vectors (Derived from baseline curves)
+DECAY = {"13-44": 0.78, "13-34": 0.54, "13-24": 0.32}
 
-base_all = fr_all if is_fr else us_all
-base_55  = fr_55 if is_fr else us_55
-
-# 5. Bulletproof Reset Trigger Logic via Dynamic Keys
+# Session State Tracker for Slider Resets
 if "reset_id" not in st.session_state:
     st.session_state.reset_id = 0
 
-# Sidebar Instantiation Header
-st.sidebar.markdown("---")
-st.sidebar.markdown("### **Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated**")
+# ==============================================================================
+# 2. COMPUTATION ENGINE (WITH FUNNEL SAFETY GUARDS)
+# ==============================================================================
+def build_demographic_matrix(raw_data, shifts=None):
+    matrix = []
+    for entity, (p13, p55) in raw_data.items():
+        # Apply Zero-Sum Shift modifications from sidebar sliders if active
+        shift_val = shifts.get(entity, 0.0) if shifts else 0.0
+        adj_p13 = max(0.0, p13 + shift_val)
+        
+        # 13-54 Workforce direct subtraction derivation
+        w13_54 = max(0.0, adj_p13 - p55)
+        
+        # Youth cohort calculation using fractional decay vectors
+        w13_44 = w13_54 * DECAY["13-44"]
+        w13_34 = w13_54 * DECAY["13-34"]
+        w13_24 = w13_54 * DECAY["13-24"]
+        
+        # NESTED FUNNEL SAFETY GUARD (Monotonicity Check)
+        w13_54 = min(w13_54, adj_p13)
+        w13_44 = min(w13_44, w13_54)
+        w13_34 = min(w13_34, w13_44)
+        w13_24 = min(w13_24, w13_34)
+        
+        # UPDATED: Enforced structural renaming schema matching master criteria
+        matrix.append({
+            "Platform/Publisher": entity, 
+            "All P13+": adj_p13, 
+            "55+ GenX+": p55,
+            "13-54 Workforce": w13_54, 
+            "13-44 Youth": w13_44, 
+            "13-34 NextGen": w13_34, 
+            "13-24 Gen A/Z": w13_24
+        })
+    return pd.DataFrame(matrix)
+
+# ==============================================================================
+# 3. INTERFACE & SIDEBAR SIMULATION CONTROL
+# ==============================================================================
+st.title("ESHAP Cross-Screen Attention Index (CSAI)")
+market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France"])
+raw_set = US_RAW if market_choice == "United States" else FR_RAW
+
+st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
 st.sidebar.markdown("## **MILLIONS OF HOURS**")
 
-# Generate Dynamic Sliders tied to the dynamic reset tracker ID
-user_inputs = {}
-for k, v in base_all.items():
-    user_inputs[k] = st.sidebar.slider(f"{k} (P13+)", int(v * 0.2), int(v * 2.0), int(v), key=f"sl_{k}_{st.session_state.reset_id}")
+# Interactive Sliders with dynamic state key tracking to handle instant resets cleanly
+user_shifts = {}
+for entity in raw_set.keys():
+    user_shifts[entity] = st.sidebar.slider(
+        f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0,
+        key=f"{entity}_slider_{st.session_state.reset_id}"
+    )
 
-# The Reset Execution
-if st.sidebar.button("🔄 Reset Defaults", use_container_width=True):
+if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id += 1
     st.rerun()
 
-# 6. FIXED PERFORMANCE MULTIPLIERS (With Tightly Calibrated Local French Friction Curves)
-sc_44 = {"Instagram": 0.87, "Amazon Prime": 0.82, "TikTok": 0.78, "Canal+ Group": 0.69, "Disney": 0.76, "Paramount": 0.69, "NBCUniversal": 0.68, "Warner Bros. Discovery": 0.68, "France TV": 0.77 if is_fr else 0.70, "Groupe M6": 0.74 if is_fr else 0.69, "Netflix": 0.73, "TF1 Group": 0.75 if is_fr else 0.68, "YouTube": 0.70, "Facebook": 0.55, "Fox Corporation": 0.50}
-sc_34 = {"TikTok": 0.82, "Instagram": 0.81, "YouTube": 0.78, "Canal+ Group": 0.68, "Disney": 0.68, "Paramount": 0.59, "NBCUniversal": 0.58, "Warner Bros. Discovery": 0.50, "France TV": 0.78, "Groupe M6": 0.64 if is_fr else 0.59, "Netflix": 0.63, "TF1 Group": 0.72 if is_fr else 0.68, "Amazon Prime": 0.62, "Facebook": 0.37, "Fox Corporation": 0.45}
-sc_24 = {"TikTok": 0.73, "YouTube": 0.61, "Instagram": 0.55, "Canal+ Group": 0.30, "Disney": 0.51, "Paramount": 0.44, "NBCUniversal": 0.41, "Warner Bros. Discovery": 0.42, "France TV": 0.64 if is_fr else 0.61, "Groupe M6": 0.46 if is_fr else 0.44, "Netflix": 0.51, "TF1 Group": 0.51, "Amazon Prime": 0.42, "Facebook": 0.19, "Fox Corporation": 0.20}
+# Calculate active dataset matrix
+df_matrix = build_demographic_matrix(raw_set, user_shifts)
 
-# 7. Matrix Computation & Nested Funnel Rules Enforcements
-matrix = []
-for k in user_inputs.keys():
-    wf_54 = max(0.0, user_inputs[k] - base_55.get(k, 0.0))
-    y_44  = round(wf_54 * sc_44.get(k, 1.0), 1)
-    y_34  = round(y_44 * sc_34.get(k, 1.0), 1)
-    y_24  = round(y_34 * sc_24.get(k, 1.0), 1)
-    
-    y_44, y_34, y_24 = min(y_44, wf_54), min(y_34, y_44), min(y_24, y_34)
-    
-    matrix.append({
-        "Ecosystem Structure": k, "All P13+ Baseline": user_inputs[k], "55+ Layer": base_55.get(k, 0.0),
-        "13-54 Workforce": wf_54, "13-44 Youth": y_44, "13-34 Core": y_34, "13-24 Gen Z": y_24
-    })
+# Net-zero balance verification monitor
+net_balance = sum(user_shifts.values())
+if abs(net_balance) > 0.001:
+    st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
+else:
+    st.sidebar.success("Zero-Sum Balance Maintained")
 
-# 8. Dynamic Main App Tab Setup
-tab1, tab2 = st.tabs(["📊 Interactive Data Engine", "📑 Methodology & Sourcing"])
+# ==============================================================================
+# 4. PRIMARY DASHBOARD PRESENTATION TABS
+# ==============================================================================
+tab1, tab2 = st.tabs(["📊 CSAI Interactive Index Matrix", "📄 Index Architecture & Methodology"])
 
 with tab1:
-    df = pd.DataFrame(matrix).sort_values(by="All P13+ Baseline", ascending=False)
-    st.subheader("📋 Live Recalculated Matrix Engine")
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
     
-    st.subheader("📊 Cross-Screen Visual Attention Drop-Off")
-    df_melted = df.melt(id_vars=["Ecosystem Structure"], value_vars=["All P13+ Baseline", "13-54 Workforce", "13-44 Youth", "13-34 Core", "13-24 Gen Z"], var_name="Cohort", value_name="Hours")
-    fig = px.bar(df_melted, x="Ecosystem Structure", y="Hours", color="Cohort", barmode="group", color_discrete_sequence=px.colors.qualitative.Safe)
-    st.plotly_chart(fig, use_container_width=True)
+    # 1. Main interactive database spreadsheet view
+    st.dataframe(
+        df_matrix.style.format({col: "{:,.1f}" for col in df_matrix.columns if col != "Platform/Publisher"}),
+        use_container_width=True, hide_index=True
+    )
+    
+    # 2. Convert active dataframe matrix into a standard CSV download string
+    csv_data = df_matrix.to_csv(index=False).encode('utf-8')
+    
+    # 3. Render the utility download engine inside a configured two-column block
+    col_dl, col_empty = st.columns(2)
+    with col_dl:
+        st.download_button(
+            label="📥 Export Current Ledger to CSV",
+            data=csv_data,
+            file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+        
+    st.write("") # Structural layout spacer
+    st.write("") 
+    
+    # 4. UPDATED: Chart interaction configuration matching explicit naming schema
+    st.markdown("#### 📊 Interactive Visual Share Map")
+    demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
+    
+    selected_demo = st.radio(
+        "Select Demographic Cohort to Isolate in Bar Chart:",
+        options=["Show All Cohorts Overlaid"] + demo_columns,
+        horizontal=True
+    )
+    
+    # Format and isolate the graphing metrics array dynamically
+    chart_df = df_matrix.set_index("Platform/Publisher")
+    if selected_demo == "Show All Cohorts Overlaid":
+        chart_metrics = ["All P13+", "13-54 Workforce", "55+ GenX+"]
+    else:
+        chart_metrics = [selected_demo]
+        
+    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 with tab2:
-    if is_fr:
-        st.markdown("### **ESHAP Cross-Screen Attention Index: France Territory Blueprint**")
-        st.markdown("**Territorial Demographic Weight:** 65.1% of Population is ≤ 54 Years Old (34.9% is ≥ 55)")
-        st.markdown("---")
-        st.markdown("### 🔍 DATA SOURCES")
-        st.markdown("MÉDIAMÉTRIE MÉDIAMAT, CENTRE NATIONAL DU CINÉMA ET DE L'IMAGE ANIMÉE (CNC), SENSOR TOWER FRANCE, DATA.AI EUROPE, META INTERNAL AUDIENCE DATA, GOOGLE INVESTOR RELATIONS, VIVENDI FINANCIAL REPORTS, INSTITUT NATIONAL DE LA STATISTIQUE ET DES ÉTUDES ÉCONOMIQUES (INSEE), U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, DENTSU & LUMEN ATTENTION ECONOMY PANELS, EDISON RESEARCH CO-ACTIVE AUDIO TELEMETRY")
-        st.markdown("---")
+    sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
+    
+    with sub_method:
         st.markdown("### 🔍 METHODOLOGY")
-        st.markdown("Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using territorial population data from the Institut National de la Statistique et des Études Économiques (INSEE) and GWI daily consumer diaries, applying an empirical duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Médiamétrie’s Médiamat and application session tracking from Sensor Tower France and data.ai Europe telemetry are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds). To isolate the commercially vital workforce pool and eliminate legacy reach distortions, the index applies an unyielding zero-sum filter that strips the heavy 55+ demographic retirement layer directly out of the gen-pop baseline. The narrower, nested generational cohorts (13–44, 13–34, and 13–24) are then programmatically processed through a proprietary mathematical curve. This curve uses established transitional benchmarks to calculate historical territory lag and local market friction—such as state cultural subsidies and local content quotas—while automatically enforcing a nested safety guard that guarantees strict downward monotonicity across all sub-tables. This data covers the December 2025 through May 2026 cycle, tracking absolute volume of attention across both total video and active social media usage.")
-    else:
-        st.markdown("### **ESHAP Cross-Screen Attention Index: United States Blueprint**")
+        if market_choice == "United States":
+            st.markdown("**Territorial Demographic Weight:** 64.2% of Population is ≤ 54 Years Old (35.8% is ≥ 55)")
+            st.write(load_text_asset("methodology_us.txt", "US methodology text asset file missing from repository."))
+        else:
+            st.markdown("**Territorial Demographic Weight:** 65.1% of Population is ≤ 54 Years Old (34.9% is ≥ 55)")
+            st.write(load_text_asset("methodology_fr.txt", "France methodology text asset file missing from repository."))
+        
+    with sub_source:
+        st.markdown("### 🔍 DATA SOURCES")
+        if market_choice == "United States":
+            st.write(load_text_asset("sources_us.txt", "US data sources text asset file missing from repository."))
+        else:
+            st.write(load_text_asset("sources_fr.txt", "France data sources text asset file missing from repository."))
