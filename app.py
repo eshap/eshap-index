@@ -20,26 +20,29 @@ us_55  = {"Disney": 1080.0, "Paramount": 810.0, "NBCUniversal": 795.0, "Warner B
 base_all = fr_all if is_fr else us_all
 base_55  = fr_55 if is_fr else us_55
 
-# 4. Streamlit Explicit State Memory (The Bulletproof Reset Engine)
-if "current_region" not in st.session_state or st.session_state.current_region != region:
-    st.session_state.current_region = region
-    for k, v in base_all.items():
-        st.session_state[f"slider_{k}"] = int(v)
+# 4. Bulletproof Reset Trigger Logic via Dynamic Keys
+if "reset_id" not in st.session_state:
+    st.session_state.reset_id = 0
 
 # Sidebar Instantiation Header
 st.sidebar.markdown("---")
 st.sidebar.markdown("### **Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated**")
 st.sidebar.markdown("## **MILLIONS OF HOURS**")
 
-# Generate Dynamic Sliders Pointed to Explicit Memory States
+# Generate Dynamic Sliders tied to the dynamic reset tracker ID
 user_inputs = {}
 for k, v in base_all.items():
-    user_inputs[k] = st.sidebar.slider(f"{k} (P13+)", int(v * 0.2), int(v * 2.0), key=f"slider_{k}")
+    user_inputs[k] = st.sidebar.slider(
+        f"{k} (P13+)", 
+        int(v * 0.2), 
+        int(v * 2.0), 
+        int(v),
+        key=f"sl_{k}_{st.session_state.reset_id}"
+    )
 
-# The Global Reset Button Execution Trigger
+# The Reset Execution: Bypasses the Streamlit state mutation restriction
 if st.sidebar.button("🔄 Reset Defaults", use_container_width=True):
-    for k, v in base_all.items():
-        st.session_state[f"slider_{k}"] = int(v)
+    st.session_state.reset_id += 1
     st.rerun()
 
 # 5. Fixed Performance Multipliers
