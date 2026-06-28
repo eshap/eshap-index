@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-import base64, os
+import base64
+import os
 
 def load_text_asset(filename, default_text=""):
     if os.path.exists(filename):
@@ -52,52 +53,6 @@ st.write("")
 
 market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom", "Italy"])
 df_matrix = fetch_complete_matrix_from_excel("eshap_index_data.xlsx", market_choice)
-df_static_base = df_matrix.copy()
-
-st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
-user_shifts = {}
-for entity in df_matrix["Platform/Publisher"].unique():
-    user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
-
-if st.sidebar.button("Reset Defaults"):
-    st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
-    st.rerun()
-
-active_shifts = {k: v for k, v in user_shifts.items() if v != 0.0}
-if active_shifts:
-    for entity, shift_val in active_shifts.items():
-        idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-        if len(idx) > 0:
-            p13_orig = float(df_static_base.loc[idx, "All P13+"].iloc[0])
-            adj_p13 = max(0.0, p13_orig + shift_val)
-            ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-            df_matrix.loc[idx, "All P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
-            df_matrix.loc[idx, "13-44 Youth"] = max(0.0, float(df_static_base.loc[idx, "13-44 Youth"].iloc[0]) * ratio)
-            df_matrix.loc[idx, "13-34 NextGen"] = max(0.0, float(df_static_base.loc[idx, "13-34 NextGen"].iloc[0]) * ratio)
-            df_matrix.loc[idx, "13-24 Gen A/Z"] = max(0.0, float(df_static_base.loc[idx, "13-24 Gen A/Z"].iloc[0]) * ratio)
-
-    total_shifted_hours = sum(active_shifts.values())
-    non_shifted_df = df_static_base[~df_static_base["Platform/Publisher"].isin(active_shifts.keys())]
-    total_non_shifted_pool = non_shifted_df["All P13+"].sum()
-
-    if total_non_shifted_pool > 0 and abs(total_shifted_hours) > 0.01:
-        for entity in non_shifted_df["Platform/Publisher"].unique():
-            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            p13_orig = float(df_static_base.loc[idx, "All P13+"].iloc[0])
-            pro_rata_weight = p13_orig / total_non_shifted_pool
-            absorbed_share = -total_shifted_hours * pro_rata_weight
-            adj_p13 = max(0.0, p13_orig + absorbed_share)
-            ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-            df_matrix.loc[idx, "All P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
-            df_matrix.loc[idx, "13-44 Youth"] = max(0.0, float(df_static_base.loc[idx, "13-44 Youth"].iloc[0]) * ratio)
-            df_matrix.loc[idx, "13-34 NextGen"] = max(0.0, float(df_static_base.loc[idx, "13-34 NextGen"].iloc[0]) * ratio)
-            df_matrix.loc[idx, "13-24 Gen A/Z"] = max(0.0, float(df_static_base.loc[idx, "13-24 Gen A/Z"].iloc[0]) * ratio)
-
-net_balance = df_matrix["All P13+"].sum() - df_static_base["All P13+"].sum()
-if abs(net_balance) > 0.1: st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
-else: st.sidebar.success("Zero-Sum Balance Maintained")
 
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
