@@ -10,7 +10,38 @@ st.title("📊 ESHAP Cross-Screen Attention Index")
 region = st.sidebar.selectbox("🌍 Select Market Region", ["United States (All Media Attention)", "France (Video Only)"])
 is_fr = "France" in region
 
-# 3. Hardcoded Audited Baselines (Do Not Alter)
+# 3. Dynamic Methodology Headnote Rendering Based on Active Selection
+if is_fr:
+    st.markdown("""
+        Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, 
+        platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, 
+        smartphones, and computers. The baseline establishes total available time allocation parameters using Institut 
+        National de la Statistique et des Études Économiques (INSEE) headcounts and GWI daily consumer diaries, applying a 
+        duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not 
+        double-counted. Television glass viewing shares from Médiamétrie’s Médiamat and application session tracking from 
+        Sensor Tower France and data.ai Europe telemetry are collapsed back into their unified parent corporate holding 
+        structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final 
+        matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size 
+        and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from 
+        December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other 
+        social media.
+    """)
+else:
+    st.markdown("""
+        Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, 
+        platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, 
+        smartphones, and computers. The baseline establishes total available time allocation parameters using U.S. Census 
+        Bureau headcounts and GWI daily consumer diaries, applying a duplication coefficient to filter out simultaneous 
+        multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from 
+        Nielsen’s Media Distributor Gauge and application session tracking from Comscore Mobile Metrix are collapsed 
+        back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer 
+        streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that 
+        caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact 
+        demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all 
+        attention, including time spent watching video and consuming other social media.
+    """)
+
+# 4. Hardcoded Audited Baselines (Do Not Alter)
 fr_all = {"France TV": 510.0, "YouTube": 485.0, "TF1 Group": 440.0, "Netflix": 390.0, "TikTok": 335.0, "Groupe M6": 265.0, "Instagram": 215.0, "Canal+ Group": 195.0, "Facebook": 165.0, "Amazon Prime": 155.0}
 fr_55  = {"France TV": 385.0, "TF1 Group": 270.0, "Groupe M6": 145.0, "Canal+ Group": 115.0, "YouTube": 95.0, "Facebook": 92.0, "Netflix": 85.0, "Amazon Prime": 48.0, "Instagram": 20.0, "TikTok": 12.0}
 
@@ -20,7 +51,7 @@ us_55  = {"Disney": 1080.0, "Paramount": 810.0, "NBCUniversal": 795.0, "Warner B
 base_all = fr_all if is_fr else us_all
 base_55  = fr_55 if is_fr else us_55
 
-# 4. Bulletproof Reset Trigger Logic via Dynamic Keys
+# 5. Bulletproof Reset Trigger Logic via Dynamic Keys
 if "reset_id" not in st.session_state:
     st.session_state.reset_id = 0
 
@@ -45,12 +76,12 @@ if st.sidebar.button("🔄 Reset Defaults", use_container_width=True):
     st.session_state.reset_id += 1
     st.rerun()
 
-# 5. Fixed Performance Multipliers
+# 6. Fixed Performance Multipliers
 sc_44 = {"Instagram": 0.87, "Amazon Prime": 0.82, "TikTok": 0.78, "Canal+ Group": 0.69, "Disney": 0.76, "Paramount": 0.69, "NBCUniversal": 0.68, "Warner Bros. Discovery": 0.68, "France TV": 0.70, "Groupe M6": 0.69, "Netflix": 0.73, "TF1 Group": 0.68, "YouTube": 0.70, "Facebook": 0.55, "Fox Corporation": 0.50}
 sc_34 = {"TikTok": 0.82, "Instagram": 0.81, "YouTube": 0.78, "Canal+ Group": 0.68, "Disney": 0.68, "Paramount": 0.59, "NBCUniversal": 0.58, "Warner Bros. Discovery": 0.50, "France TV": 0.78, "Groupe M6": 0.59, "Netflix": 0.63, "TF1 Group": 0.68, "Amazon Prime": 0.62, "Facebook": 0.37, "Fox Corporation": 0.45}
 sc_24 = {"TikTok": 0.73, "YouTube": 0.61, "Instagram": 0.55, "Canal+ Group": 0.30, "Disney": 0.51, "Paramount": 0.44, "NBCUniversal": 0.41, "Warner Bros. Discovery": 0.42, "France TV": 0.61, "Groupe M6": 0.44, "Netflix": 0.51, "TF1 Group": 0.51, "Amazon Prime": 0.42, "Facebook": 0.19, "Fox Corporation": 0.20}
 
-# 6. Matrix Computation & Nested Funnel Rules Enforcements
+# 7. Matrix Computation & Nested Funnel Rules Enforcements
 matrix = []
 for k in user_inputs.keys():
     wf_54 = max(0.0, user_inputs[k] - base_55.get(k, 0.0))
@@ -65,7 +96,7 @@ for k in user_inputs.keys():
         "13-54 Workforce": wf_54, "13-44 Youth": y_44, "13-34 Core": y_34, "13-24 Gen Z": y_24
     })
 
-# 7. Dynamic Main App Tab Setup
+# 8. Dynamic Main App Tab Setup
 tab1, tab2 = st.tabs(["📊 Interactive Data Engine", "📑 Methodology & Sourcing"])
 
 with tab1:
@@ -73,10 +104,8 @@ with tab1:
     st.subheader("📋 Live Recalculated Matrix Engine")
     st.dataframe(df, use_container_width=True, hide_index=True)
     
-    st.subheader("📊 Cross-Cohort Visual Attention Drop-Off")
-    df_melted = df.melt(id_vars=["Ecosystem Structure"], value_vars=["All P13+ Baseline", "13-54 Workforce", "13-44 Youth", "13-34 Core", "13-24 Gen Z"], var_name="Cohort", value_name="Hours")
-    fig = px.bar(df_melted, x="Ecosystem Structure", y="Hours", color="Cohort", barmode="group", color_discrete_sequence=px.colors.qualitative.Safe)
-    st.plotly_chart(fig, use_container_width=True)
+    st.subheader("📊 Cross-Screen Spatial Map")
+    st.image("eshap_map.png", use_container_width=True)
 
 with tab2:
     if is_fr:
@@ -98,21 +127,3 @@ with tab2:
         The core engine establishes its competitive moat by separating retirement-age leisure time from active workforce time. According to official **INSEE** data for the territory, **65.1% of the French population is 54 or younger**, leaving a **34.9% minority aged 55 or older**. Traditional tracking currencies rely heavily on this 34.9% minority to inflate their macro video reach. This index applies a strict zero-sum subtraction rule: *13–54 Workforce Pool = 13+ All Consumers Baseline - 55+ Heavy Linear Layer*. This filter isolates the commercially vital workforce pool, stripping away the older demographic layer that shields legacy networks from modern market realities.
 
         #### **3. The Age Bracket Safety Guard (The Nested Funnel Rule)**
-        To keep the model realistic, the calculation script enforces a strict common-sense rule: a narrower, younger age bracket can never contain more attention hours than the larger parent group above it. A room simply cannot hold more people than the building it sits inside. The engine continuously audits the demographic columns from left to right to ensure they continuously drop in volume. To execute a 'Maximum Advantage' model for traditional media, the engine implants your established U.S. transitional curves directly onto the French workforce baseline. This conservative approach grants legacy European networks the ultimate benefit of the doubt regarding youth retention, yet still exposes their structural hollowing.
-        """)
-    else:
-        st.markdown("### **ESHAP Cross-Screen Attention Index: United States Blueprint**")
-        st.markdown("---")
-        st.markdown("### 🔍 DATA SOURCES")
-        st.markdown("U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, NIELSEN MEDIA DISTRIBUTOR GAUGE, COMSCORE MOBILE METRIX, SENSOR TOWER, DATA.AI, META INTERNAL AUDIENCE METRICS, ALPHABET INVESTOR RELATIONS, WALT DISNEY COMPANY FINANCIAL REPORTS, NETFLIX QUARTERLY EARNINGS, DENTSU & LUMEN ATTENTION ECONOMY PANELS")
-        st.markdown("---")
-        st.markdown("""
-        #### **1. Corporate Ecosystem Consolidation**
-        All standalone and siloed delivery platforms are programmatically collapsed back into their master corporate parent holding entities. Linear television broadcast feeds, cable properties, standalone direct-to-consumer (DTC) streaming apps, and native social platform ecosystems are unified to stop media conglomerates from hiding underlying target audience erosion.
-        
-        #### **2. The 55+ Workforce Subtraction Rule**
-        The framework isolates the highly coveted economic engine of the active workforce by executing an unyielding zero-sum subtraction filter. Total aggregate monthly attention hours recorded within the 55+ demographic layer are stripped clean out of the total population baseline. This exposes the unvarnished realities of modern workforce attention distribution, removing the historical audience aging cushion that legacy television holding networks utilize to artificially pad macro currency totals.
-        
-        #### **3. The Age Bracket Safety Guard (The Nested Funnel Rule)**
-        The application script executes strict relational baseline checking across all narrowing nested demographic sub-tables. The model operates under the fundamental reality that a narrower generational cohort cannot possess more absolute attention volume than the macro parent demographic pool that encapsulates it. If a user sets an alternative input parameter that threatens to break this structural boundary, the Python safety engine automatically caps younger cohorts to guarantee error-free mathematical consistency.
-        """)
