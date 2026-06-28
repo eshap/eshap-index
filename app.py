@@ -14,31 +14,34 @@ def load_text_asset(filename, default_text=""):
 # ==============================================================================
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# Configured directly to fetch your image asset from your public GitHub repository
-WATERMARK_URL = "https://githubusercontent.com"
+# Locked directly to your Substack hosted S3 CDN image asset pipeline
+WATERMARK_URL = (
+    "https://substackcdn.com"
+    "https%3A%2F%://amazonaws.com%2Fpublic%2Fimages%2F9182a07b-bf51-4084-b79b-76f29416d989_7250x4708.png"
+)
 
-# FIXED: Removed the f-string prefix and replaced it with a safe string format map
+# Render the background watermark safely by embedding the variable cleanly into HTML
 st.html(
-    """
+    f"""
     <style>
-    [data-testid="stAppViewContainer"] {
+    [data-testid="stAppViewContainer"] {{
         opacity: 1.0;
-    }
-    /* Renders the background watermark from your live repository source instantly */
-    [data-testid="stAppViewContainer"]::before {
+    }}
+    /* Renders your Substack CDN source smoothly as a full canvas background asset */
+    [data-testid="stAppViewContainer"]::before {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        background-image: url("%s") !important;
+        background-image: url("{WATERMARK_URL}") !important;
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        opacity: 0.03; /* Maintains the premium dim watermark look */
+        opacity: 0.03; /* Premium dim watermark setting for data legibility */
         z-index: -1;
     }
     </style>
-    """ % WATERMARK_URL
+    """
 )
 
 # ==============================================================================
@@ -77,7 +80,6 @@ if "reset_id" not in st.session_state:
 def build_demographic_matrix(raw_data, shifts=None):
     matrix = []
     for entity, (p13, p55) in raw_data.items():
-        # Apply Zero-Sum Shift modifications from sidebar sliders if active
         shift_val = shifts.get(entity, 0.0) if shifts else 0.0
         adj_p13 = max(0.0, p13 + shift_val)
         w13_54 = max(0.0, adj_p13 - p55)
