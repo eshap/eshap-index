@@ -12,30 +12,69 @@ def load_text_asset(filename, default_text=""):
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-@st.cache_data
-def fetch_complete_matrix_from_excel(file_path, sheet_name):
-    fb = pd.DataFrame(columns=["Platform/Publisher", "All P13+", "55+ GenX+", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen A/Z"])
-    if not os.path.exists(file_path): return fb
-    try:
-        df = pd.read_excel(file_path, sheet_name=sheet_name)
-        df.columns = df.columns.str.strip()
-        cl = {}
-        for col in df.columns:
-            low = col.lower()
-            if "platform" in low or "publisher" in low or "entity" in low: cl[col] = "Platform/Publisher"
-            elif "p13" in low or "all" in low: cl[col] = "All P13+"
-            elif "55+" in low or "layer" in low or "retirement" in low or "genx" in low: cl[col] = "55+ GenX+"
-            elif "13-54" in low or "workforce" in low or "labor" in low: cl[col] = "13-54 Workforce"
-            elif "13-44" in low or "youth" in low: cl[col] = "13-44 Youth"
-            elif "13-34" in low or "core" in low or "nextgen" in low: cl[col] = "13-34 NextGen"
-            elif "13-24" in low or "z" in low or "a/z" in low: cl[col] = "13-24 Gen A/Z"
-        df = df.rename(columns=cl)
-        df["Platform/Publisher"] = df["Platform/Publisher"].astype(str).str.strip().str.upper()
-        num_cols = ["All P13+", "55+ GenX+", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen A/Z"]
-        for c in num_cols:
-            if c in df.columns: df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0.0)
-        return df[["Platform/Publisher"] + [col for col in num_cols if col in df.columns]]
-    except: return fb
+# ==============================================================================
+# MASTER EXACT BASES DIRECTLY ENFORCED FROM YOUR FIXED PARAMETERS
+# ==============================================================================
+US_BASE = [
+    ["YOUTUBE", 2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5],
+    ["DISNEY", 1945.0, 1080.0, 865.0, 657.4, 447.0, 228.0],
+    ["NETFLIX", 1540.0, 380.0, 1160.0, 846.8, 533.5, 272.1],
+    ["TIKTOK", 1480.0, 65.0, 1415.0, 1103.7, 905.0, 660.7],
+    ["PARAMOUNT", 1290.0, 810.0, 480.0, 331.2, 195.4, 86.0],
+    ["NBCU", 1265.0, 795.0, 470.0, 319.6, 185.4, 76.0],
+    ["INSTAGRAM", 1120.0, 110.0, 1010.0, 878.7, 711.7, 391.4],
+    ["WBD", 1040.0, 685.0, 355.0, 241.4, 120.7, 50.7],
+    ["FACEBOOK", 995.0, 520.0, 475.0, 261.3, 96.7, 18.4],
+    ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
+    ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
+]
+
+FR_BASE = [
+    ["YOUTUBE", 485.0, 95.0, 390.0, 273.0, 212.9, 129.9],
+    ["TIKTOK", 335.0, 12.0, 323.0, 251.9, 206.6, 150.8],
+    ["NETFLIX", 390.0, 85.0, 305.0, 222.7, 140.3, 71.6],
+    ["INSTAGRAM", 215.0, 20.0, 195.0, 169.7, 137.5, 75.6],
+    ["TF1", 440.0, 270.0, 170.0, 136.0, 102.0, 51.8],
+    ["DISNEY", 180.0, 42.0, 138.0, 104.9, 66.1, 27.3],
+    ["FRANCE TV", 510.0, 385.0, 125.0, 102.5, 82.0, 54.2],
+    ["ARTE", 120.0, 57.6, 62.4, 48.0, 33.6, 10.1],
+    ["GROUP M6", 265.0, 145.0, 120.0, 93.6, 65.5, 29.5],
+    ["AMAZON", 155.0, 48.0, 107.0, 87.7, 54.4, 22.8],
+    ["WBD", 170.0, 95.0, 75.0, 54.8, 34.5, 14.3],
+    ["L'ÉQUIPE", 65.0, 19.5, 45.5, 33.7, 21.6, 8.9],
+    ["CANAL+ GROUP", 195.0, 115.0, 80.0, 58.4, 40.9, 13.9],
+    ["FACEBOOK", 165.0, 92.0, 73.0, 40.2, 14.9, 2.8],
+    ["DAZN", 20.0, 2.0, 18.0, 16.2, 12.8, 7.7]
+]
+
+UK_BASE = [
+    ["BBC", 640.0, 460.0, 180.0, 122.4, 85.7, 45.4],
+    ["YOUTUBE", 590.0, 110.0, 480.0, 336.0, 262.1, 159.9],
+    ["ITV", 510.0, 335.0, 175.0, 113.8, 75.1, 36.8],
+    ["NETFLIX", 495.0, 105.0, 390.0, 284.7, 179.4, 91.5],
+    ["TIKTOK", 410.0, 18.0, 392.0, 305.8, 250.7, 183.0],
+    ["SKY GROUP", 385.0, 210.0, 175.0, 119.0, 70.2, 28.8],
+    ["INSTAGRAM", 275.0, 28.0, 247.0, 214.9, 174.1, 95.8],
+    ["PARAMOUNT", 245.0, 155.0, 90.0, 61.2, 36.1, 14.8],
+    ["DISNEY", 235.0, 52.0, 183.0, 139.1, 87.6, 36.2],
+    ["WBD", 220.0, 128.0, 92.0, 62.6, 31.3, 13.1],
+    ["FACEBOOK", 210.0, 115.0, 95.0, 52.3, 19.3, 3.7],
+    ["AMAZON", 195.0, 62.0, 133.0, 109.1, 67.6, 28.4]
+]
+
+IT_BASE = [
+    ["Rai", 520.0, 415.0, 105.0, 80.9, 58.2, 37.2],
+    ["YOUTUBE", 440.0, 110.0, 330.0, 231.0, 180.2, 109.9],
+    ["MFE (Mediaset)", 415.0, 265.0, 150.0, 112.5, 81.0, 40.8],
+    ["TIKTOK", 295.0, 12.0, 283.0, 220.7, 181.0, 132.1],
+    ["NETFLIX", 310.0, 70.0, 240.0, 175.2, 110.4, 56.3],
+    ["INSTAGRAM", 250.0, 25.0, 225.0, 195.8, 158.6, 87.2],
+    ["SKY ITALIA", 175.0, 102.0, 73.0, 50.4, 29.7, 12.2],
+    ["DISNEY", 170.0, 38.0, 132.0, 100.3, 63.2, 26.1],
+    ["WBD", 165.0, 92.0, 73.0, 51.1, 31.7, 12.9],
+    ["FACEBOOK", 160.0, 101.0, 59.0, 32.5, 12.0, 2.3],
+    ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
+]
 
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
@@ -52,7 +91,40 @@ else: st.title("ESHAP Cross-Screen Attention Index (CSAI)")
 st.write("")
 
 market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom", "Italy"])
-df_matrix = fetch_complete_matrix_from_excel("eshap_index_data.xlsx", market_choice)
+cols = ["Platform/Publisher", "All P13+", "55+ GenX+", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen A/Z"]
+
+if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
+elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
+elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
+else: df_matrix = pd.DataFrame(IT_BASE, columns=cols)
+
+st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
+user_shifts = {}
+for entity in df_matrix["Platform/Publisher"].unique():
+    user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
+
+if st.sidebar.button("Reset Defaults"):
+    st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
+    st.rerun()
+
+if user_shifts:
+    for entity, shift_val in user_shifts.items():
+        if shift_val != 0.0:
+            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
+            if len(idx) > 0:
+                p13_orig = float(df_matrix.loc[idx, "All P13+"].values[0])
+                if p13_orig > 0:
+                    adj_p13 = max(0.0, p13_orig + shift_val)
+                    ratio = adj_p13 / p13_orig
+                    df_matrix.loc[idx, "All P13+"] = adj_p13
+                    df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - float(df_matrix.loc[idx, "55+ GenX+"].values[0]))
+                    df_matrix.loc[idx, "13-44 Youth"] = max(0.0, float(df_matrix.loc[idx, "13-44 Youth"].values[0]) * ratio)
+                    df_matrix.loc[idx, "13-34 NextGen"] = max(0.0, float(df_matrix.loc[idx, "13-34 NextGen"].values[0]) * ratio)
+                    df_matrix.loc[idx, "13-24 Gen A/Z"] = max(0.0, float(df_matrix.loc[idx, "13-24 Gen A/Z"].values[0]) * ratio)
+
+net_balance = sum(user_shifts.values()) if user_shifts else 0.0
+if abs(net_balance) > 0.001: st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
+else: st.sidebar.success("Zero-Sum Balance Maintained")
 
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
