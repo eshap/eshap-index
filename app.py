@@ -74,7 +74,7 @@ IT_BASE = [
     ["WBD", 165.0, 92.0, 73.0, 51.1, 31.7, 12.9],
     ["FACEBOOK", 160.0, 101.0, 59.0, 32.5, 12.0, 2.3],
     ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
-}
+]
 
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
