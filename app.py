@@ -15,7 +15,7 @@ US_RAW = {
     "Amazon Prime": (635.0, 215.0), "Fox": (425.0, 315.0)
 }
 
-# UPDATED: France Core Market Ecosystem Structural Parameters
+# France Core Market Ecosystem Structural Parameters
 FR_RAW = {
     "France Télévisions": (510.0, 385.0),
     "YouTube": (485.0, 95.0),
@@ -130,9 +130,25 @@ with tab1:
     st.write("") # Structural padding layout spacer
     st.write("") 
     
-    # 4. Bar chart anchored cleanly at the absolute base of the page workspace
-    chart_data = df_matrix.set_index("Platform/Publisher")[["All P13+", "13-54 Workforce", "55+ Retirement"]]
-    st.bar_chart(chart_data, horizontal=True, height=380)
+    # 4. INTERACTIVE VISUALIZATION LAYER (Demographic Isolation Filter)
+    st.markdown("#### 📊 Interactive Visual Share Map")
+    demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
+    
+    # Dynamic radio selector lets users isolate views instantly
+    selected_demo = st.radio(
+        "Select Demographic Cohort to Isolate in Bar Chart:",
+        options=["Show All Cohorts Overlaid"] + demo_columns,
+        horizontal=True
+    )
+    
+    # Format and isolate the graphing metrics array dynamically
+    chart_df = df_matrix.set_index("Platform/Publisher")
+    if selected_demo == "Show All Cohorts Overlaid":
+        chart_metrics = ["All P13+", "13-54 Workforce", "55+ Retirement"]
+    else:
+        chart_metrics = [selected_demo]
+        
+    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
@@ -151,4 +167,3 @@ with tab2:
         if market_choice == "United States":
             st.write("U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, NIELSEN MEDIA DISTRIBUTOR GAUGE, COMSCORE MOBILE METRIX, SENSOR TOWER, DATA.AI, META INTERNAL AUDIENCE METRICS, ALPHABET INVESTOR RELATIONS, WALT DISNEY COMPANY FINANCIAL REPORTS, NETFLIX QUARTERLY EARNINGS, DENTSU & LUMEN ATTENTION ECONOMY PANELS")
         else:
-            st.write("MÉDIAMÉTRIE MÉDIAMAT, CENTRE NATIONAL DU CINÉMA ET DE L'IMAGE ANIMÉE (CNC), SENSOR TOWER FRANCE, DATA.AI EUROPE, META INTERNAL AUDIENCE DATA, GOOGLE INVESTOR RELATIONS, VIVENDI FINANCIAL REPORTS, INSTITUT NATIONAL DE LA STATISTIQUE ET DES ÉTUDES ÉCONOMIQUES (INSEE), U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, DENTSU & LUMEN ATTENTION ECONOMY PANELS, EDISON RESEARCH CO-ACTIVE AUDIO TELEMETRY")
