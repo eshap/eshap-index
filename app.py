@@ -92,14 +92,14 @@ else:
     st.sidebar.success("Zero-Sum Balance Maintained")
 
 # ==============================================================================
-# 4. PRIMARY DASHBOARD PRESENTATION TABS (FIXED & CHART RE-POSITIONED)
+# 4. PRIMARY DASHBOARD PRESENTATION TABS
 # ==============================================================================
 tab1, tab2 = st.tabs(["📊 CSAI Interactive Index Matrix", "📄 Index Architecture & Methodology"])
 
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
     
-    # 1. Render the main interactive database view
+    # 1. Main interactive database spreadsheet view
     st.dataframe(
         df_matrix.style.format({col: "{:,.1f}" for col in df_matrix.columns if col != "Platform/Publisher"}),
         use_container_width=True, hide_index=True
@@ -108,7 +108,7 @@ with tab1:
     # 2. Convert active dataframe matrix into a standard CSV download string
     csv_data = df_matrix.to_csv(index=False).encode('utf-8')
     
-    # 3. FIXED: Create a balanced 2-column layout for the download button tool
+    # 3. Render the utility download engine inside a configured two-column block
     col_dl, col_empty = st.columns(2)
     with col_dl:
         st.download_button(
@@ -120,10 +120,10 @@ with tab1:
             help="Downloads a clean spreadsheet matching your active territory and simulated shift values."
         )
         
-    st.write("") # Layout spacing element
+    st.write("") # Structural padding layout spacer
     st.write("") 
     
-    # 4. RE-POSITIONED: Render the bar chart at the bottom of the ledger workspace
+    # 4. Bar chart anchored cleanly at the absolute base of the page workspace
     chart_data = df_matrix.set_index("Platform/Publisher")[["All P13+", "13-54 Workforce", "55+ Retirement"]]
     st.bar_chart(chart_data, horizontal=True, height=380)
 
