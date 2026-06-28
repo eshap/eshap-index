@@ -1,2 +1,3 @@
 pandas
 plotly
+pypdf==4.2.0
