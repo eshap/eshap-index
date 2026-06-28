@@ -16,7 +16,6 @@ def load_text_asset(filename, default_text=""):
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
 # Base Market Footprints (December 2025 - May 2026 Cycle)
-# UPDATED: TikTok converted cleanly to all-caps TIKTOK for the US demographic array
 US_RAW = {
     "YOUTUBE": (2110.0, 490.0), 
     "DISNEY": (1945.0, 1080.0), 
@@ -43,6 +42,20 @@ FR_RAW = {
     "AMAZON": (155.0, 48.0),
     "CANAL+ GROUP": (195.0, 115.0),
     "FACEBOOK": (165.0, 92.0)
+}
+
+# NEW: United Kingdom Core Market Ecosystem Structural Parameters
+UK_RAW = {
+    "BBC": (640.0, 460.0),
+    "YOUTUBE": (590.0, 110.0),
+    "ITV plc": (510.0, 335.0),
+    "NETFLIX": (495.0, 105.0),
+    "TIKTOK": (410.0, 18.0),
+    "SKY GROUP": (385.0, 210.0),
+    "CHANNEL 4": (290.0, 165.0),
+    "INSTAGRAM": (275.0, 28.0),
+    "FACEBOOK": (210.0, 115.0),
+    "AMAZON": (195.0, 62.0)
 }
 
 # Youth Fractional Decay Vectors
@@ -137,8 +150,15 @@ st.write("")
 # ==============================================================================
 # 4. INTERFACE & SIDEBAR SIMULATION CONTROL
 # ==============================================================================
-market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France"])
-raw_set = US_RAW if market_choice == "United States" else FR_RAW
+# UPDATED: Added United Kingdom option selection map layout
+market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom"])
+
+if market_choice == "United States":
+    raw_set = US_RAW
+elif market_choice == "France":
+    raw_set = FR_RAW
+else:
+    raw_set = UK_RAW
 
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
 st.sidebar.markdown("## **MILLIONS OF HOURS**")
@@ -200,6 +220,9 @@ with tab1:
     chart_metrics = ["All P13+", "13-54 Workforce", "55+ GenX+"] if selected_demo == "Show All Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
+# ==============================================================================
+# 6. ARCHITECTURE, SOURCING & METHODOLOGY DOCUMENTATION BLOCKS
+# ==============================================================================
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
     
@@ -208,13 +231,19 @@ with tab2:
         if market_choice == "United States":
             st.markdown("**Territorial Demographic Weight:** 64.2% of Population is ≤ 54 Years Old (35.8% is ≥ 55)")
             st.write(load_text_asset("methodology_us.txt", "US methodology text asset file missing from repository."))
-        else:
+        elif market_choice == "France":
             st.markdown("**Territorial Demographic Weight:** 65.1% of Population is ≤ 54 Years Old (34.9% is ≥ 55)")
             st.write(load_text_asset("methodology_fr.txt", "France methodology text asset file missing from repository."))
+        else:
+            # United Kingdom exact operational weight metric derived parameters
+            st.markdown("**Territorial Demographic Weight:** 63.8% of Population is ≤ 54 Years Old (36.2% is ≥ 55)")
+            st.write(load_text_asset("methodology_uk.txt", "UK methodology text asset file missing from repository."))
         
     with sub_source:
         st.markdown("### DATA SOURCES")
         if market_choice == "United States":
             st.write(load_text_asset("sources_us.txt", "US data sources text asset file missing from repository."))
-        else:
+        elif market_choice == "France":
             st.write(load_text_asset("sources_fr.txt", "France data sources text asset file missing from repository."))
+        else:
+            st.write(load_text_asset("sources_uk.txt", "UK data sources text asset file missing from repository."))
