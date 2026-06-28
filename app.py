@@ -17,8 +17,8 @@ def load_text_asset(filename, default_text=""):
 # ==============================================================================
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# Master Absolute Baseline Matrices Hardcoded Directly From eshap_index_data.pdf
-# Format: { Platform: (All P13+, 55+ GenX+, 13-54 Workfo, 13-44 Youth, 13-34 NextGe, 13-24 Gen A/Z) }
+# Master Absolute Baseline Matrices Hardcoded From Corrected eshap_index_data.pdf
+# Format: { Platform: (All P13+, 55+ Layer, 13-54 Workfc, 13-44 Youth, 13-34 Core, 13-24 Gen Z) }
 US_BASE = {
     "YOUTUBE": (2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5),
     "DISNEY": (1945.0, 1080.0, 865.0, 657.4, 447.0, 228.0),
