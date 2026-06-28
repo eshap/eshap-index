@@ -16,25 +16,33 @@ def load_text_asset(filename, default_text=""):
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
 # Base Market Footprints (December 2025 - May 2026 Cycle)
+# UPDATED: Matched to explicit upper/lower case styling parameters
 US_RAW = {
-    "YouTube": (2110.0, 490.0), "Disney": (1945.0, 1080.0), "Netflix": (1540.0, 380.0),
-    "TikTok": (1480.0, 65.0), "Paramount": (1290.0, 810.0), "NBCU": (1265.0, 795.0),
-    "Instagram": (1120.0, 110.0), "WBD": (1040.0, 685.0), "Facebook": (995.0, 520.0),
-    "Amazon Prime": (635.0, 215.0), "Fox": (425.0, 315.0)
+    "YOUTUBE": (2110.0, 490.0), 
+    "DISNEY": (1945.0, 1080.0), 
+    "NETFLIX": (1540.0, 380.0),
+    "TikTok": (1480.0, 65.0), 
+    "PARAMOUNT": (1290.0, 810.0), 
+    "NBCU": (1265.0, 795.0),
+    "INSTAGRAM": (1120.0, 110.0), 
+    "WBD": (1040.0, 685.0), 
+    "FACEBOOK": (995.0, 520.0),
+    "AMAZON": (635.0, 215.0), 
+    "FOX": (425.0, 315.0)
 }
 
-# France Core Market Ecosystem Structural Parameters
+# UPDATED: Re-ordered and renamed to track your exact configuration layout
 FR_RAW = {
-    "France Télévisions": (510.0, 385.0),
-    "YouTube": (485.0, 95.0),
-    "TF1 Group": (440.0, 270.0),
-    "Netflix": (390.0, 85.0),
-    "TikTok": (335.0, 12.0),
-    "Groupe M6": (265.0, 145.0),
-    "Instagram": (215.0, 20.0),
-    "Canal+ Group (Vivendi)": (195.0, 115.0),
-    "Facebook": (165.0, 92.0),
-    "Amazon Prime Video": (155.0, 48.0)
+    "YOUTUBE": (485.0, 95.0),
+    "TIKTOK": (335.0, 12.0),
+    "NETFLIX": (390.0, 85.0),
+    "INSTAGRAM": (215.0, 20.0),
+    "TF1": (440.0, 270.0),
+    "FRANCE TV": (510.0, 385.0),
+    "GROUP M6": (265.0, 145.0),
+    "AMAZON": (155.0, 48.0),
+    "CANAL+ GROUP": (195.0, 115.0),
+    "FACEBOOK": (165.0, 92.0)
 }
 
 # Youth Fractional Decay Vectors
@@ -87,11 +95,9 @@ if os.path.exists("planet_bullet.png"):
     with open("planet_bullet.png", "rb") as b_f:
         bullet_base64 = base64.b64encode(b_f.read()).decode()
 
-# FIXED: Replaced string formatting with standard text maps to avoid percent symbol bugs
 if bullet_base64:
     css_injection = """
     <style>
-    /* Automatically handles target spacing for custom bullet placement */
     span[data-testid="stWidgetLabel"] p, button[data-testid="stBaseButton-secondary"] p, [data-baseweb="tab"] p {
         position: relative;
         padding-left: 1.5rem !important;
@@ -126,7 +132,7 @@ if logo_base64:
 else:
     st.title("ESHAP Cross-Screen Attention Index (CSAI)")
 
-st.write("") # Layout visual separator lines
+st.write("") 
 
 # ==============================================================================
 # 4. INTERFACE & SIDEBAR SIMULATION CONTROL
