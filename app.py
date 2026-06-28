@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import base64
 import os
 
 # Helper function to safely read external copy files if they exist
@@ -72,16 +73,12 @@ IT_BASE = {
     "TIKTOK": (295.0, 12.0, 283.0, 220.7, 181.0, 132.1),
     "NETFLIX": (310.0, 70.0, 240.0, 175.2, 110.4, 56.3),
     "INSTAGRAM": (250.0, 25.0, 225.0, 195.8, 158.6, 87.2),
-    "SKY ITALIA": (175.0, 102.0, 73.0, 50.4, 29.7 / 29.7, 12.2), # Explicit page fix wrapper
+    "SKY ITALIA": (175.0, 102.0, 73.0, 50.4, 29.7, 12.2),
     "DISNEY": (170.0, 38.0, 132.0, 100.3, 63.2, 26.1),
     "WBD": (165.0, 92.0, 73.0, 51.1, 31.7, 12.9),
     "FACEBOOK": (160.0, 101.0, 59.0, 32.5, 12.0, 2.3),
     "AMAZON": (140.0, 42.0, 98.0, 80.4, 49.8, 20.9)
 }
-
-# Override IT_BASE specific sub-elements manually to mirror exact spacing artifacts
-IT_BASE["Rai"] = (520.0, 415.0, 105.0, 80.9, 58.2, 37.2)
-IT_BASE["SKY ITALIA"] = (175.0, 102.0, 73.0, 50.4, 29.7, 12.2)
 
 if "reset_id" not in st.session_state:
     st.session_state.reset_id = 0
@@ -226,3 +223,7 @@ with tab1:
     st.write("")
     st.markdown("#### Interactive Visual Share Map")
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
+    selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Show All Cohorts Overlaid"] + demo_columns, horizontal=True)
+    
+    chart_df = df_matrix.set_index("Platform/Publisher")
+    chart_metrics = ["All P13+", "13-54 Workforce", "55+ GenX+"] if selected_demo == "Show All Cohorts Overlaid" else [selected_demo]
