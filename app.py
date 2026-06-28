@@ -87,31 +87,30 @@ if os.path.exists("planet_bullet.png"):
     with open("planet_bullet.png", "rb") as b_f:
         bullet_base64 = base64.b64encode(b_f.read()).decode()
 
-# Inject global CSS rules that cleanly swap text emojis out for your planet graphic
+# FIXED: Replaced string formatting with standard text maps to avoid percent symbol bugs
 if bullet_base64:
-    st.html(
-        """
-        <style>
-        /* Automatically hides text emojis inside the UI and swaps in the custom planet link */
-        span[data-testid="stWidgetLabel"] p, button[data-testid="stBaseButton-secondary"] p, [data-baseweb="tab"] p {
-            position: relative;
-            padding-left: 1.5rem !important;
-        }
-        span[data-testid="stWidgetLabel"] p::before, button[data-testid="stBaseButton-secondary"] p::before, [data-baseweb="tab"] p::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            background-image: url("data:image/png;base64,%s") !important;
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
-        </style>
-        """ % bullet_base64
-    )
+    css_injection = """
+    <style>
+    /* Automatically handles target spacing for custom bullet placement */
+    span[data-testid="stWidgetLabel"] p, button[data-testid="stBaseButton-secondary"] p, [data-baseweb="tab"] p {
+        position: relative;
+        padding-left: 1.5rem !important;
+    }
+    span[data-testid="stWidgetLabel"] p::before, button[data-testid="stBaseButton-secondary"] p::before, [data-baseweb="tab"] p::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        background-image: url("data:image/png;base64,""" + bullet_base64 + """") !important;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    </style>
+    """
+    st.html(css_injection)
 
 # Render vertically centered interface header map next to your index title
 if logo_base64:
@@ -158,7 +157,7 @@ else:
     st.sidebar.success("Zero-Sum Balance Maintained")
 
 # ==============================================================================
-# 5. PRIMARY DASHBOARD PRESENTATION TABS (EMOJIS SWAPPED VIA OVERLAY STYLES)
+# 5. PRIMARY DASHBOARD PRESENTATION TABS
 # ==============================================================================
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 
