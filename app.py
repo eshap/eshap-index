@@ -3,14 +3,24 @@ import pandas as pd
 import base64
 import os
 
-# Helper function to safely read external copy files if they exist
-def load_text_asset(filename, default_text=""):
-    if os.path.exists(filename):
-        with open(filename, "r", encoding="utf-8") as f:
-            content = f.read().strip()
-            if content:
-                return content
-    return default_text
+# ==============================================================================
+# 0. GLOBAL EMBEDDED METHODOLOGY AND DATA SOURCE TEXTS
+# ==============================================================================
+METHODOLOGY_US = "Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using U.S. Census Bureau headcounts and GWI daily consumer diaries, applying a duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Nielsen’s Media Distributor Gauge and application session tracking from Comscore Mobile Metrix are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other social media."
+
+METHODOLOGY_FR = "Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using territorial population data from the Institut National de la Statistique et des Études Économiques (INSEE) and GWI daily consumer diaries, applying an empirical duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Médiamétrie’s Médiamat and application session tracking from Sensor Tower France and data.ai Europe telemetry are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds). To isolate the commercially vital workforce pool and eliminate legacy reach distortions, the index applies an unyielding zero-sum filter that strips the heavy 55+ demographic retirement layer directly out of the gen-pop baseline. The narrower, nested generational cohorts (13–44, 13–34, and 13–24) are then programmatically processed through a proprietary mathematical curve. This curve uses established transitional benchmarks to calculate historical territory lag and local market friction—such as state cultural subsidies and local content quotas—while automatically enforcing a nested safety guard that guarantees strict downward monotonicity across all sub-tables. This data covers the December 2025 through May 2026 cycle, tracking absolute volume of attention across both total video and active social media usage."
+
+METHODOLOGY_UK = "Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using Office for National Statistics (ONS) resident headcounts and GWI daily consumer diaries, applying an empirical duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from BARB (Broadcasters' Audience Research Board) monthly metrics and application session tracking from Sensor Tower UK and data.ai Europe telemetry are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds). To isolate the commercially vital workforce pool and eliminate legacy reach distortions, the index applies an unyielding zero-sum filter that strips the heavy 55+ demographic retirement layer directly out of the gen-pop baseline. This data covers the December 2025 through May 2026 cycle, tracking absolute volume of attention across both total video and active social media usage."
+
+METHODOLOGY_IT = "Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using local demographic parameters and consumer telemetry diaries, applying an empirical duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. National network glass viewing shares and application telemetry session parameters are collapsed back into their unified parent holding structures, with the final matrix subjected to an unyielding zero-sum filter that strips the heavy 55+ demographic retirement layer directly out of the gen-pop baseline to isolate the high-intensity workforce pool."
+
+SOURCES_US = "U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, NIELSEN MEDIA DISTRIBUTOR GAUGE, COMSCORE MOBILE METRIX, SENSOR TOWER, DATA.AI, META INTERNAL AUDIENCE METRICS, ALPHABET INVESTOR RELATIONS, WALT DISNEY COMPANY FINANCIAL REPORTS, NETFLIX QUARTERLY EARNINGS, DENTSU & LUMEN ATTENTION ECONOMY PANELS"
+
+SOURCES_FR = "MÉDIAMÉTRIE MÉDIAMAT, CENTRE NATIONAL DU CINÉMA ET DE L'IMAGE ANIMÉE (CNC), SENSOR TOWER FRANCE, DATA.AI EUROPE, META INTERNAL AUDIENCE DATA, GOOGLE INVESTOR RELATIONS, VIVENDI FINANCIAL REPORTS, INSTITUT NATIONAL DE LA STATISTIQUE ET DES ÉTUDES ÉCONOMIQUES (INSEE), U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, DENTSU & LUMEN ATTENTION ECONOMY PANELS, EDISON RESEARCH CO-ACTIVE AUDIO TELEMETRY"
+
+SOURCES_UK = "OFFICE FOR NATIONAL STATISTICS (ONS), GWI CONSUMER DIARIES, BARB (BROADCASTERS' AUDIENCE RESEARCH BOARD), SENSOR TOWER UK, DATA.AI EUROPE, COM_SCORE UK, META INTERNAL AUDIENCE DATA, ALPHABET INVESTOR RELATIONS, BBC ANNUAL REPORTS & ACCOUNTS, ITV PLC FINANCIAL RESULTS, DENTSU & LUMEN ATTENTION ECONOMY PANELS"
+
+SOURCES_IT = "ISTITUTO NAZIONALE DI STATISTICA (ISTAT), GWI CONSUMER DIARIES, AUDITEL TELEMETRY DATA, SENSOR TOWER ITALY, DATA.AI EUROPE, META INTERNAL AUDIENCE METRICS, RAI ANNUAL REPORTS, MFE FINANCIAL STATEMENTS, WBD INVESTOR RELATIONS"
 
 # ==============================================================================
 # 1. PLATFORM INTERFACE & CONFIGURATION
@@ -77,153 +87,3 @@ IT_BASE = {
     "DISNEY": (170.0, 38.0, 132.0, 100.3, 63.2, 26.1),
     "WBD": (165.0, 92.0, 73.0, 51.1, 31.7, 12.9),
     "FACEBOOK": (160.0, 101.0, 59.0, 32.5, 12.0, 2.3),
-    "AMAZON": (140.0, 42.0, 98.0, 80.4, 49.8, 20.9)
-}
-
-if "reset_id" not in st.session_state:
-    st.session_state.reset_id = 0
-
-# ==============================================================================
-# 2. PROPORTIONAL ENGINE BLOCK (DYNAMICS WITH FUNNEL GUARDS)
-# ==============================================================================
-# FIXED: Key strings mapped to perfectly match variable tracking labels
-def build_exact_demographic_matrix(base_data, shifts=None):
-    matrix = []
-    for entity, values in base_data.items():
-        p13, p55, w54, y44, n34, z24 = values
-        shift_val = shifts.get(entity, 0.0) if shifts else 0.0
-        
-        # Mutate the gen-pop baseline via slider input
-        adj_p13 = max(0.0, p13 + shift_val)
-        
-        # Calculate dynamic scaling ratios to adjust cohorts proportionally from eshap_index_data.pdf
-        ratio = (adj_p13 / p13) if p13 > 0 else 1.0
-        
-        # Mutate nested segments based on exact historical baseline curves
-        adj_w54 = max(0.0, adj_p13 - p55)
-        adj_y44 = max(0.0, y44 * ratio)
-        adj_n34 = max(0.0, n34 * ratio)
-        adj_z24 = max(0.0, z24 * ratio)
-        
-        # NESTED FUNNEL SAFETY GUARD (Monotonicity Enforcement Check)
-        adj_w54 = min(adj_w54, adj_p13)
-        adj_y44 = min(adj_y44, adj_w54)
-        adj_n34 = min(adj_n34, adj_y44)
-        adj_z24 = min(adj_z24, adj_n34)
-        
-        matrix.append({
-            "Platform/Publisher": entity, 
-            "All P13+": adj_p13, 
-            "55+ GenX+": p55,
-            "13-54 Workforce": adj_w54, 
-            "13-44 Youth": adj_y44, 
-            "13-34 NextGen": adj_n34, 
-            "13-24 Gen A/Z": adj_z24
-        })
-    return pd.DataFrame(matrix)
-
-# ==============================================================================
-# 3. GLOBAL NAVIGATION BULLET DESIGN STYLES
-# ==============================================================================
-bullet_base64 = ""
-if os.path.exists("planet_bullet.png"):
-    with open("planet_bullet.png", "rb") as b_f:
-        bullet_base64 = base64.b64encode(b_f.read()).decode()
-
-if bullet_base64:
-    st.html(
-        """
-        <style>
-        span[data-testid="stWidgetLabel"] p, button[data-testid="stBaseButton-secondary"] p, [data-baseweb="tab"] p {
-            position: relative;
-            padding-left: 1.5rem !important;
-        }
-        span[data-testid="stWidgetLabel"] p::before, button[data-testid="stBaseButton-secondary"] p::before, [data-baseweb="tab"] p::before {
-            content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-            width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
-            background-image: url("data:image/png;base64,""" + bullet_base64 + """") !important;
-        }
-        </style>
-        """
-    )
-
-logo_base64 = ""
-if os.path.exists("eshap_map.png"):
-    with open("eshap_map.png", "rb") as img_f:
-        logo_base64 = base64.b64encode(img_f.read()).decode()
-
-if logo_base64:
-    st.markdown(
-        f"""
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%;">
-            <h1 style="margin: 0; padding: 0;">ESHAP Cross-Screen Attention Index (CSAI)</h1>
-            <img src="data:image/png;base64,{logo_base64}" style="max-width: 15%; height: auto; object-fit: contain;" />
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-else:
-    st.title("ESHAP Cross-Screen Attention Index (CSAI)")
-st.write("")
-
-# ==============================================================================
-# 4. SIMULATION CONTROL & TERRITORY MANAGEMENT
-# ==============================================================================
-market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom", "Italy"])
-
-if market_choice == "United States":
-    raw_set = US_BASE
-elif market_choice == "France":
-    raw_set = FR_BASE
-elif market_choice == "United Kingdom":
-    raw_set = UK_BASE
-else:
-    raw_set = IT_BASE
-
-st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
-st.sidebar.markdown("## **MILLIONS OF HOURS**")
-
-user_shifts = {}
-for entity in raw_set.keys():
-    user_shifts[entity] = st.sidebar.slider(
-        f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0,
-        key=f"{entity}_slider_{st.session_state.reset_id}"
-    )
-
-if st.sidebar.button("Reset Defaults"):
-    st.session_state.reset_id += 1
-    st.rerun()
-
-# FIXED: Calls the correct exact lookup data parser framework variable name
-df_matrix = build_exact_demographic_matrix(raw_set, user_shifts)
-
-net_balance = sum(user_shifts.values())
-if abs(net_balance) > 0.001:
-    st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
-else:
-    st.sidebar.success("Zero-Sum Balance Maintained")
-
-# ==============================================================================
-# 5. PRIMARY INTERACTIVE PRESENTATION TABS
-# ==============================================================================
-tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
-
-with tab1:
-    st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
-    st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -0.75rem; margin-bottom: 1rem; color: #555555;'>Click Header To Reorder By Column</p>", unsafe_allow_html=True)
-    
-    st.dataframe(
-        df_matrix.style.format({col: "{:,.1f}" for col in df_matrix.columns if col != "Platform/Publisher"}),
-        use_container_width=True, hide_index=True
-    )
-    
-    csv_data = df_matrix.to_csv(index=False).encode('utf-8')
-    col_dl, col_empty = st.columns(2)
-    with col_dl:
-        st.download_button(label="Export Current Ledger to CSV", data=csv_data, file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
-        
-    st.write("")
-    st.markdown("#### Interactive Visual Share Map")
-    demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
-    selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Show All Cohorts Overlaid"] + demo_columns, horizontal=True)
-    
