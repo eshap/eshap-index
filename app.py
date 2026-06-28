@@ -44,7 +44,7 @@ FR_RAW = {
     "FACEBOOK": (165.0, 92.0)
 }
 
-# NEW: United Kingdom Core Market Ecosystem Structural Parameters
+# UPDATED: Expanded UK Market Framework incorporating Paramount and WBD parameters
 UK_RAW = {
     "BBC": (640.0, 460.0),
     "YOUTUBE": (590.0, 110.0),
@@ -52,10 +52,26 @@ UK_RAW = {
     "NETFLIX": (495.0, 105.0),
     "TIKTOK": (410.0, 18.0),
     "SKY GROUP": (385.0, 210.0),
+    "PARAMOUNT": (245.0, 155.0),
     "CHANNEL 4": (290.0, 165.0),
     "INSTAGRAM": (275.0, 28.0),
+    "WBD": (220.0, 128.0),
     "FACEBOOK": (210.0, 115.0),
     "AMAZON": (195.0, 62.0)
+}
+
+# Italy Core Market Ecosystem Structural Parameters
+IT_RAW = {
+    "Rai (Radiotelevisione Italiana)": (520.0, 415.0),
+    "YOUTUBE": (440.0, 110.0),
+    "MFE (MediaForEurope / Mediaset)": (415.0, 265.0),
+    "NETFLIX": (310.0, 70.0),
+    "TIKTOK": (295.0, 12.0),
+    "INSTAGRAM": (250.0, 25.0),
+    "SKY ITALIA": (175.0, 102.0),
+    "FACEBOOK": (160.0, 101.0),
+    "AMAZON": (140.0, 42.0),
+    "WBD": (115.0, 65.0)
 }
 
 # Youth Fractional Decay Vectors
@@ -150,15 +166,16 @@ st.write("")
 # ==============================================================================
 # 4. INTERFACE & SIDEBAR SIMULATION CONTROL
 # ==============================================================================
-# UPDATED: Added United Kingdom option selection map layout
-market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom"])
+market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom", "Italy"])
 
 if market_choice == "United States":
     raw_set = US_RAW
 elif market_choice == "France":
     raw_set = FR_RAW
-else:
+elif market_choice == "United Kingdom":
     raw_set = UK_RAW
+else:
+    raw_set = IT_RAW
 
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
 st.sidebar.markdown("## **MILLIONS OF HOURS**")
@@ -234,16 +251,12 @@ with tab2:
         elif market_choice == "France":
             st.markdown("**Territorial Demographic Weight:** 65.1% of Population is ≤ 54 Years Old (34.9% is ≥ 55)")
             st.write(load_text_asset("methodology_fr.txt", "France methodology text asset file missing from repository."))
-        else:
-            # United Kingdom exact operational weight metric derived parameters
+        elif market_choice == "United Kingdom":
             st.markdown("**Territorial Demographic Weight:** 63.8% of Population is ≤ 54 Years Old (36.2% is ≥ 55)")
             st.write(load_text_asset("methodology_uk.txt", "UK methodology text asset file missing from repository."))
+        else:
+            st.markdown("**Territorial Demographic Weight:** 59.8% of Population is ≤ 54 Years Old (40.2% is ≥ 55)")
+            st.write(load_text_asset("methodology_it.txt", "Italy methodology text asset file missing from repository."))
         
     with sub_source:
         st.markdown("### DATA SOURCES")
-        if market_choice == "United States":
-            st.write(load_text_asset("sources_us.txt", "US data sources text asset file missing from repository."))
-        elif market_choice == "France":
-            st.write(load_text_asset("sources_fr.txt", "France data sources text asset file missing from repository."))
-        else:
-            st.write(load_text_asset("sources_uk.txt", "UK data sources text asset file missing from repository."))
