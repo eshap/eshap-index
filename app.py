@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
 # 1. Page Configuration & Custom ESHAP Branding
 st.set_page_config(page_title="ESHAP CSAI", layout="wide")
@@ -65,6 +66,11 @@ with tab1:
     df = pd.DataFrame(matrix).sort_values(by="All P13+ Baseline", ascending=False)
     st.subheader("📋 Live Recalculated Matrix Engine")
     st.dataframe(df, use_container_width=True, hide_index=True)
+    
+    st.subheader("📊 Cross-Cohort Visual Attention Drop-Off")
+    df_melted = df.melt(id_vars=["Ecosystem Structure"], value_vars=["All P13+ Baseline", "13-54 Workforce", "13-44 Youth", "13-34 Core", "13-24 Gen Z"], var_name="Cohort", value_name="Hours")
+    fig = px.bar(df_melted, x="Ecosystem Structure", y="Hours", color="Cohort", barmode="group", color_discrete_sequence=px.colors.qualitative.Safe)
+    st.plotly_chart(fig, use_container_width=True)
 
 with tab2:
     if is_fr:
