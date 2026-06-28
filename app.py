@@ -32,27 +32,30 @@ US_RAW = {
     "FOX": (425.0, 315.0)
 }
 
-# France Core Market Ecosystem Standardized Parameters
+# UPDATED: Expanded France Ecosystem Parameters with custom ranking layout
 FR_RAW = {
-    "FRANCE TV": (510.0, 385.0),
     "YOUTUBE": (485.0, 95.0),
-    "TF1": (440.0, 270.0),
-    "NETFLIX": (390.0, 85.0),
     "TIKTOK": (335.0, 12.0),
-    "GROUP M6": (265.0, 145.0),
+    "NETFLIX": (390.0, 85.0),
     "INSTAGRAM": (215.0, 20.0),
-    "CANAL+ GROUP": (195.0, 115.0),
+    "TF1": (440.0, 270.0),
     "DISNEY": (180.0, 42.0),
+    "FRANCE TV": (510.0, 385.0),
+    "ARTE": (120.0, 57.6),
+    "GROUP M6": (265.0, 145.0),
+    "AMAZON": (155.0, 48.0),
     "WBD": (170.0, 95.0),
+    "L'ÉQUIPE": (65.0, 19.5),
+    "CANAL+ GROUP": (195.0, 115.0),
     "FACEBOOK": (165.0, 92.0),
-    "AMAZON": (155.0, 48.0)
+    "DAZN": (20.0, 2.0)
 }
 
 # United Kingdom Core Market Ecosystem Standardized Parameters
 UK_RAW = {
     "BBC": (640.0, 460.0),
     "YOUTUBE": (590.0, 110.0),
-    "ITV plc": (510.0, 335.0),
+    "ITV": (510.0, 335.0),
     "NETFLIX": (495.0, 105.0),
     "TIKTOK": (410.0, 18.0),
     "SKY GROUP": (385.0, 210.0),
@@ -261,5 +264,3 @@ with tab2:
             st.write(load_text_asset("methodology_uk.txt", "United Kingdom architecture documentation placeholder."))
         else:
             st.markdown("**Territorial Demographic Weight:** 59.8% of Population is ≤ 54 Years Old (40.2% is ≥ 55)")
-            st.write(load_text_asset("methodology_it.txt", "Italy architecture documentation placeholder."))
-        
