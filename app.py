@@ -10,7 +10,7 @@ def load_text_asset(filename, default_text=""):
             content = f.read().strip()
             if content:
                 return content
-    return default_text
+    return default_text  
 
 # ==============================================================================
 # 1. PLATFORM INTERFACE & CONFIGURATION
