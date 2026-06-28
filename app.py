@@ -4,7 +4,7 @@ import base64
 import os
 
 # ==============================================================================
-# 0. GLOBAL EMBEDDED METHODOLOGY AND DATA SOURCE TEXTS
+# 0. GLOBAL EMBEDDED METHODOLOGY AND DATA SOURCE COPY TEXTS
 # ==============================================================================
 METHODOLOGY_US = "Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using U.S. Census Bureau headcounts and GWI daily consumer diaries, applying a duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Nielsen’s Media Distributor Gauge and application session tracking from Comscore Mobile Metrix are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other social media."
 
@@ -27,8 +27,7 @@ SOURCES_IT = "ISTITUTO NAZIONALE DI STATISTICA (ISTAT), GWI CONSUMER DIARIES, AU
 # ==============================================================================
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# Master Absolute Baseline Matrices Hardcoded Directly From eshap_index_data.pdf
-# Standardized mapping keys: All P13+, 55+ GenX+, 13-54 Workforce, 13-44 Youth, 13-34 NextGen, 13-24 Gen A/Z
+# Master Baseline Arrays mapping exactly to eshap_index_data.pdf
 US_BASE = {
     "YOUTUBE": (2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5),
     "DISNEY": (1945.0, 1080.0, 865.0, 657.4, 447.0, 228.0),
@@ -61,7 +60,6 @@ FR_BASE = {
     "DAZN": (20.0, 2.0, 18.0, 16.2, 12.8, 7.7)
 }
 
-# FIXED: Rebalanced parenthesis on lines 64 and 65 to close the dictionary correctly
 UK_BASE = {
     "BBC": (640.0, 460.0, 180.0, 122.4, 85.7, 45.4),
     "YOUTUBE": (590.0, 110.0, 480.0, 336.0, 262.1, 159.9),
@@ -86,3 +84,9 @@ IT_BASE = {
     "INSTAGRAM": (250.0, 25.0, 225.0, 195.8, 158.6, 87.2),
     "SKY ITALIA": (175.0, 102.0, 73.0, 50.4, 29.7, 12.2),
     "DISNEY": (170.0, 38.0, 132.0, 100.3, 63.2, 26.1),
+    "WBD": (165.0, 92.0, 73.0, 51.1, 31.7, 12.9),
+    "FACEBOOK": (160.0, 101.0, 59.0, 32.5, 12.0, 2.3),
+    "AMAZON": (140.0, 42.0, 98.0, 80.4, 49.8, 20.9)
+}
+
+if "reset_id" not in st.session_state:
