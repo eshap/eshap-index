@@ -71,8 +71,6 @@ with tab1:
     df = pd.DataFrame(matrix).sort_values(by="All P13+ Baseline", ascending=False)
     st.subheader("📋 Live Recalculated Matrix Engine")
     st.dataframe(df, use_container_width=True, hide_index=True)
-    st.subheader("📊 Cross-Screen Spatial Map")
-    st.image("eshap_map.png", use_container_width=True)
 
 with tab2:
     if is_fr:
@@ -91,3 +89,4 @@ with tab2:
         st.markdown("### 🔍 DATA SOURCES")
         st.markdown("U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, NIELSEN MEDIA DISTRIBUTOR GAUGE, COMSCORE MOBILE METRIX, SENSOR TOWER, DATA.AI, META INTERNAL AUDIENCE METRICS, ALPHABET INVESTOR RELATIONS, WALT DISNEY COMPANY FINANCIAL REPORTS, NETFLIX QUARTERLY EARNINGS, DENTSU & LUMEN ATTENTION ECONOMY PANELS")
         st.markdown("---")
+        st.markdown("**1. Corporate Ecosystem Consolidation:** All standalone and siloed delivery platforms are programmatically collapsed back into their master corporate parent holding entities. Linear television broadcast feeds, cable properties, standalone direct-to-consumer (DTC) streaming apps, and native social platform ecosystems are unified to stop media conglomerates from hiding underlying target audience erosion.")
