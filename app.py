@@ -11,6 +11,7 @@ def load_text_asset(filename, default_text=""):
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
+# Compressed Parameter Arrays Explicitly Formatted as Floats to Prevent Casting Exceptions
 US_BASE = [["YOUTUBE",2110.0,490.0,1620.0,1134.0,884.5,539.5],["DISNEY",1945.0,1080.0,865.0,657.4,447.0,228.0],["NETFLIX",1540.0,380.0,1160.0,846.8,533.5,272.1],["TIKTOK",1480.0,65.0,1415.0,1103.7,905.0,660.7],["PARAMOUNT",1290.0,810.0,480.0,331.2,195.4,86.0],["NBCU",1265.0,795.0,470.0,319.6,185.4,76.0],["INSTAGRAM",1120.0,110.0,1010.0,878.7,711.7,391.4],["WBD",1040.0,685.0,355.0,241.4,120.7,50.7],["FACEBOOK",995.0,520.0,475.0,261.3,96.7,18.4],["AMAZON",635.0,215.0,420.0,344.4,213.5,89.7],["FOX",425.0,315.0,110.0,55.0,24.8,5.0]]
 FR_BASE = [["YOUTUBE",485.0,95.0,390.0,273.0,212.9,129.9],["TIKTOK",335.0,12.0,323.0,251.9,206.6,150.8],["NETFLIX",390.0,85.0,305.0,222.7,140.3,71.6],["INSTAGRAM",215.0,20.0,195.0,169.7,137.5,75.6],["TF1",440.0,270.0,170.0,136.0,102.0,51.8],["DISNEY",180.0,42.0,138.0,104.9,66.1,27.3],["FRANCE TV",510.0,385.0,125.0,102.5,82.0,54.2],["ARTE",120.0,57.6,62.4,48.0,33.6,10.1],["GROUP M6",265.0,145.0,120.0,93.6,65.5,29.5],["AMAZON",155.0,48.0,107.0,87.7,54.4,22.8],["WBD",170.0,95.0,75.0,54.8,34.5,14.3],["L'ÉQUIPE",65.0,19.5,45.5,33.7,21.6,8.9],["CANAL+ GROUP",195.0,115.0,80.0,58.4,40.9,13.9],["FACEBOOK",165.0,92.0,73.0,40.2,14.9,2.8],["DAZN",20.0,2.0,18.0,16.2,12.8,7.7]]
 UK_BASE = [["BBC",640.0,460.0,180.0,122.4,85.7,45.4],["YOUTUBE",590.0,110.0,480.0,336.0,262.1,159.9],["ITV",510.0,335.0,175.0,113.8,75.1,36.8],["NETFLIX",495.0,105.0,390.0,284.7,179.4,91.5],["TIKTOK",410.0,18.0,392.0,305.8,250.7,183.0],["SKY GROUP",385.0,210.0,175.0,119.0,70.2,28.8],["INSTAGRAM",275.0,28.0,247.0,214.9,174.1,95.8],["PARAMOUNT",245.0,155.0,90.0,61.2,36.1,14.8],["DISNEY",235.0,52.0,183.0,139.1,87.6,36.2],["WBD",220.0,128.0,92.0,62.6,31.3,13.1],["FACEBOOK",210.0,115.0,95.0,52.3,19.3,3.7],["AMAZON",195.0,62.0,133.0,109.1,67.6,28.4]]
@@ -55,14 +56,14 @@ if active_shifts:
     for entity, shift_val in active_shifts.items():
         idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
         if len(idx) > 0:
-            p13_orig = df_static_base.loc[idx, "All P13+"].values[0]
+            p13_orig = df_static_base.loc[idx, "All P13+"].values
             adj_p13 = max(0.0, p13_orig + shift_val)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
             df_matrix.loc[idx, "All P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Workfc"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values[0])
-            df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values[0] * ratio
-            df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values[0] * ratio
-            df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values[0] * ratio
+            df_matrix.loc[idx, "13-54 Workfc"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values)
+            df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values * ratio
+            df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values * ratio
+            df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values * ratio
 
     total_shifted_hours = sum(active_shifts.values())
     non_shifted_df = df_static_base[~df_static_base["Platform/Publisher"].isin(active_shifts.keys())]
@@ -71,16 +72,16 @@ if active_shifts:
     if total_non_shifted_pool > 0 and abs(total_shifted_hours) > 0.01:
         for entity in non_shifted_df["Platform/Publisher"].unique():
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            p13_orig = df_static_base.loc[idx, "All P13+"].values[0]
+            p13_orig = df_static_base.loc[idx, "All P13+"].values
             pro_rata_weight = p13_orig / total_non_shifted_pool
             absorbed_share = -total_shifted_hours * pro_rata_weight
             adj_p13 = max(0.0, p13_orig + absorbed_share)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
             df_matrix.loc[idx, "All P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Workfc"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values[0])
-            df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values[0] * ratio
-            df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values[0] * ratio
-            df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values[0] * ratio
+            df_matrix.loc[idx, "13-54 Workfc"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values)
+            df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values * ratio
+            df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values * ratio
+            df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values * ratio
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 net_balance = df_matrix["All P13+"].sum() - df_static_base["All P13+"].sum()
@@ -103,12 +104,12 @@ with tab1:
 
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
+    w_map = {"United States": ("64.2%", "35.8%", "us"), "France": ("65.1%", "34.9%", "fr"), "United Kingdom": ("63.8%", "36.2%", "uk"), "Italy": ("59.8%", "40.2%", "it")}
+    weight_info = w_map.get(market_choice, ("64.2%", "35.8%", "us"))
     with sub_method:
         st.markdown("### METHODOLOGY")
-        w_map = {"United States": ("64.2%", "35.8%", "us"), "France": ("65.1%", "34.9%", "fr"), "United Kingdom": ("63.8%", "36.2%", "uk"), "Italy": ("59.8%", "40.2%", "it")}
-        weight_info = w_map.get(market_choice, ("64.2%", "35.8%", "us"))
-        st.markdown(f"**Territorial Demographic Weight:** {weight_info} of Population is ≤ 54 Years Old ({weight_info} is ≥ 55)")
-        st.write(load_text_asset(f"methodology_{weight_info}.txt", f"{market_choice} methodology asset file missing."))
+        st.markdown(f"**Territorial Demographic Weight:** {weight_info[0]} of Population is ≤ 54 Years Old ({weight_info[1]} is ≥ 55)")
+        st.write(load_text_asset(f"methodology_{weight_info[2]}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
         st.markdown("### DATA SOURCES")
-        st.write(load_text_asset(f"sources_{w_map.get(market_choice, ('','','us'))}.txt", f"{market_choice} sources asset file missing."))
+        st.write(load_text_asset(f"sources_{weight_info[2]}.txt", f"{market_choice} sourcing data loading..."))
