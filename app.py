@@ -19,7 +19,7 @@ st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
 @st.cache_data
 def fetch_complete_matrix_from_excel(file_path, sheet_name):
-    """Safely extracts all 6 hardcoded demographic columns from your repository spreadsheet tab."""
+    """Extracts data from Excel and forcefully binds it to standardized app headers."""
     fallback_df = pd.DataFrame(columns=[
         "Platform/Publisher", "All P13+", "55+ GenX+", 
         "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen A/Z"
@@ -29,16 +29,45 @@ def fetch_complete_matrix_from_excel(file_path, sheet_name):
         
     try:
         df = pd.read_excel(file_path, sheet_name=sheet_name)
+        
+        # Strip all hidden whitespaces from column headers and clean case strings
         df.columns = df.columns.str.strip()
         
-        # Standardize spreadsheet column header variants to match user-facing labels perfectly
-        rename_map = {
-            "55+ Layer": "55+ GenX+",
-            "13-34 Core": "13-34 NextGen",
-            "13-24 Gen Z": "13-24 Gen A/Z"
-        }
-        df = df.rename(columns=rename_map)
-        return df
+        # AIRTIGHT FORCED MAPPING MATRIX LOGIC
+        # Scans your spreadsheet to bind columns to UI fields regardless of typo shifts
+        cleaned_columns = {}
+        for col in df.columns:
+            c_low = col.lower()
+            if "platform" in c_low or "publisher" in c_low or "entity" in c_low:
+                cleaned_columns[col] = "Platform/Publisher"
+            elif "p13" in c_low or "all" in c_low:
+                cleaned_columns[col] = "All P13+"
+            elif "55+" in c_low or "layer" in c_low or "retirement" in c_low or "genx" in c_low:
+                cleaned_columns[col] = "55+ GenX+"
+            elif "13-54" in c_low or "workforce" in c_low or "labor" in c_low:
+                cleaned_columns[col] = "13-54 Workforce"
+            elif "13-44" in c_low or "youth" in c_low:
+                cleaned_columns[col] = "13-44 Youth"
+            elif "13-34" in c_low or "core" in c_low or "nextgen" in c_low:
+                cleaned_columns[col] = "13-34 NextGen"
+            elif "13-24" in c_low or "z" in c_low or "a/z" in c_low:
+                cleaned_columns[col] = "13-24 Gen A/Z"
+                
+        df = df.rename(columns=cleaned_columns)
+        
+        # Enforce uniform baseline string casing for platform publisher row fields
+        if "Platform/Publisher" in df.columns:
+            df["Platform/Publisher"] = df["Platform/Publisher"].astype(str).str.strip().str.upper()
+            
+        # Ensure all numeric data outputs treat numbers as floats safely
+        numeric_cols = ["All P13+", "55+ GenX+", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen A/Z"]
+        for n_col in numeric_cols:
+            if n_col in df.columns:
+                df[n_col] = pd.to_numeric(df[n_col], errors='coerce').fillna(0.0)
+                
+        # Re-verify and filter to only present standardized target tracking matrix columns
+        final_cols = ["Platform/Publisher"] + [c for c in numeric_cols if c in df.columns]
+        return df[final_cols]
     except Exception:
         return fallback_df
 
@@ -97,15 +126,15 @@ st.write("")
 market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom", "Italy"])
 
 # Dynamically read the active country data matrix tab from the Excel spreadsheet file
-base_df = fetch_complete_matrix_from_excel(EXCEL_FILE_NAME, market_choice)
+df_matrix_base = fetch_complete_matrix_from_excel(EXCEL_FILE_NAME, market_choice)
 
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
 st.sidebar.markdown("## **MILLIONS OF HOURS**")
 
 # Generate responsive simulation sliders using the platforms listed in the spreadsheet
 user_shifts = {}
-if not base_df.empty and "Platform/Publisher" in base_df.columns:
-    for entity in base_df["Platform/Publisher"].unique():
+if not df_matrix_base.empty and "Platform/Publisher" in df_matrix_base.columns:
+    for entity in df_matrix_base["Platform/Publisher"].unique():
         user_shifts[entity] = st.sidebar.slider(
             f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0,
             key=f"{entity}_slider_{st.session_state.reset_id}"
@@ -116,22 +145,22 @@ if st.sidebar.button("Reset Defaults"):
     st.rerun()
 
 # Proportional shift computation loop working off your exact spreadsheet baselines
-df_matrix = base_df.copy()
+df_matrix = df_matrix_base.copy()
 if not df_matrix.empty and user_shifts:
     for entity, shift_val in user_shifts.items():
         if shift_val != 0.0:
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
             if len(idx) > 0:
                 p13_orig = df_matrix.loc[idx, "All P13+"].values[0]
-                adj_p13 = max(0.0, p13_orig + shift_val)
-                ratio = (adj_p13 / p13_orig) if p13_orig > 0 else 1.0
-                
-                # Mutate cells proportionally while applying safety guards
-                df_matrix.loc[idx, "All P13+"] = adj_p13
-                df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_matrix.loc[idx, "55+ GenX+"].values[0])
-                df_matrix.loc[idx, "13-44 Youth"] = max(0.0, df_matrix.loc[idx, "13-44 Youth"].values[0] * ratio)
-                df_matrix.loc[idx, "13-34 NextGen"] = max(0.0, df_matrix.loc[idx, "13-34 NextGen"].values[0] * ratio)
-                df_matrix.loc[idx, "13-24 Gen A/Z"] = max(0.0, df_matrix.loc[idx, "13-24 Gen A/Z"].values[0] * ratio)
+                if p13_orig > 0:
+                    adj_p13 = max(0.0, p13_orig + shift_val)
+                    ratio = adj_p13 / p13_orig
+                    
+                    df_matrix.loc[idx, "All P13+"] = adj_p13
+                    df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_matrix.loc[idx, "55+ GenX+"].values[0])
+                    df_matrix.loc[idx, "13-44 Youth"] = max(0.0, df_matrix.loc[idx, "13-44 Youth"].values[0] * ratio)
+                    df_matrix.loc[idx, "13-34 NextGen"] = max(0.0, df_matrix.loc[idx, "13-34 NextGen"].values[0] * ratio)
+                    df_matrix.loc[idx, "13-24 Gen A/Z"] = max(0.0, df_matrix.loc[idx, "13-24 Gen A/Z"].values[0] * ratio)
 
 net_balance = sum(user_shifts.values()) if user_shifts else 0.0
 if abs(net_balance) > 0.001:
@@ -172,25 +201,3 @@ with tab2:
     with sub_method:
         st.markdown("### METHODOLOGY")
         if market_choice == "United States":
-            st.markdown("**Territorial Demographic Weight:** 64.2% of Population is ≤ 54 Years Old (35.8% is ≥ 55)")
-            st.write(load_text_asset("methodology_us.txt", "US methodology asset file missing."))
-        elif market_choice == "France":
-            st.markdown("**Territorial Demographic Weight:** 65.1% of Population is ≤ 54 Years Old (34.9% is ≥ 55)")
-            st.write(load_text_asset("methodology_fr.txt", "France methodology asset file missing."))
-        elif market_choice == "United Kingdom":
-            st.markdown("**Territorial Demographic Weight:** 63.8% of Population is ≤ 54 Years Old (36.2% is ≥ 55)")
-            st.write(load_text_asset("methodology_uk.txt", "UK methodology asset file missing."))
-        else:
-            st.markdown("**Territorial Demographic Weight:** 59.8% of Population is ≤ 54 Years Old (40.2% is ≥ 55)")
-            st.write(load_text_asset("methodology_it.txt", "Italy methodology asset file missing."))
-        
-    with sub_source:
-        st.markdown("### DATA SOURCES")
-        if market_choice == "United States":
-            st.write(load_text_asset("sources_us.txt", "US sources asset file missing."))
-        elif market_choice == "France":
-            st.write(load_text_asset("sources_fr.txt", "France sources asset file missing."))
-        elif market_choice == "United Kingdom":
-            st.write(load_text_asset("sources_uk.txt", "UK sources asset file missing."))
-        else:
-            st.write(load_text_asset("sources_it.txt", "Italy sources asset file missing."))
