@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 
 # 1. Page Configuration & Custom ESHAP Branding
 st.set_page_config(page_title="ESHAP CSAI", layout="wide")
@@ -12,34 +11,9 @@ is_fr = "France" in region
 
 # 3. Dynamic Methodology Headnote Rendering Based on Active Selection
 if is_fr:
-    st.markdown("""
-        Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, 
-        platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, 
-        smartphones, and computers. The baseline establishes total available time allocation parameters using Institut 
-        National de la Statistique et des Études Économiques (INSEE) headcounts and GWI daily consumer diaries, applying a 
-        duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not 
-        double-counted. Television glass viewing shares from Médiamétrie’s Médiamat and application session tracking from 
-        Sensor Tower France and data.ai Europe telemetry are collapsed back into their unified parent corporate holding 
-        structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final 
-        matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size 
-        and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from 
-        December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other 
-        social media.
-    """)
+    st.markdown("Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using Institut National de la Statistique et des Études Économiques (INSEE) headcounts and GWI daily consumer diaries, applying a duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Médiamétrie’s Médiamat and application session tracking from Sensor Tower France and data.ai Europe telemetry are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other social media.")
 else:
-    st.markdown("""
-        Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, 
-        platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, 
-        smartphones, and computers. The baseline establishes total available time allocation parameters using U.S. Census 
-        Bureau headcounts and GWI daily consumer diaries, applying a duplication coefficient to filter out simultaneous 
-        multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from 
-        Nielsen’s Media Distributor Gauge and application session tracking from Comscore Mobile Metrix are collapsed 
-        back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer 
-        streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that 
-        caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact 
-        demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all 
-        attention, including time spent watching video and consuming other social media.
-    """)
+    st.markdown("Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using U.S. Census Bureau headcounts and GWI daily consumer diaries, applying a duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Nielsen’s Media Distributor Gauge and application session tracking from Comscore Mobile Metrix are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other social media.")
 
 # 4. Hardcoded Audited Baselines (Do Not Alter)
 fr_all = {"France TV": 510.0, "YouTube": 485.0, "TF1 Group": 440.0, "Netflix": 390.0, "TikTok": 335.0, "Groupe M6": 265.0, "Instagram": 215.0, "Canal+ Group": 195.0, "Facebook": 165.0, "Amazon Prime": 155.0}
@@ -63,15 +37,9 @@ st.sidebar.markdown("## **MILLIONS OF HOURS**")
 # Generate Dynamic Sliders tied to the dynamic reset tracker ID
 user_inputs = {}
 for k, v in base_all.items():
-    user_inputs[k] = st.sidebar.slider(
-        f"{k} (P13+)", 
-        int(v * 0.2), 
-        int(v * 2.0), 
-        int(v),
-        key=f"sl_{k}_{st.session_state.reset_id}"
-    )
+    user_inputs[k] = st.sidebar.slider(f"{k} (P13+)", int(v * 0.2), int(v * 2.0), int(v), key=f"sl_{k}_{st.session_state.reset_id}")
 
-# The Reset Execution: Bypasses the Streamlit state mutation restriction
+# The Reset Execution
 if st.sidebar.button("🔄 Reset Defaults", use_container_width=True):
     st.session_state.reset_id += 1
     st.rerun()
@@ -103,7 +71,6 @@ with tab1:
     df = pd.DataFrame(matrix).sort_values(by="All P13+ Baseline", ascending=False)
     st.subheader("📋 Live Recalculated Matrix Engine")
     st.dataframe(df, use_container_width=True, hide_index=True)
-    
     st.subheader("📊 Cross-Screen Spatial Map")
     st.image("eshap_map.png", use_container_width=True)
 
@@ -115,15 +82,12 @@ with tab2:
         st.markdown("### 🔍 DATA SOURCES")
         st.markdown("MÉDIAMÉTRIE MÉDIAMAT, CENTRE NATIONAL DU CINÉMA ET DE L'IMAGE ANIMÉE (CNC), SENSOR TOWER FRANCE, DATA.AI EUROPE, META INTERNAL AUDIENCE DATA, GOOGLE INVESTOR RELATIONS, VIVENDI FINANCIAL REPORTS, INSTITUT NATIONAL DE LA STATISTIQUE ET DES ÉTUDES ÉCONOMIQUES (INSEE), U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, DENTSU & LUMEN ATTENTION ECONOMY PANELS, EDISON RESEARCH CO-ACTIVE AUDIO TELEMETRY")
         st.markdown("---")
-        st.markdown("""
-        #### **1. Corporate Ecosystem Consolidation**
-        Delivery mechanisms are stripped of their standalone vanity metrics and folded back into their parent corporate holding structures. Traditional networks are forbidden from masking linear audience attrition behind separate digital plays:
-        * **France Télévisions:** Combines all public broadcast channels (France 2, France 3, France 5) natively with the france.tv streaming player.
-        * **TF1 Group:** Consolidates flagship TF1 linear glass with TF1+ streaming consumption.
-        * **Canal+ Group:** Combines premium pay-TV channels, the MyCanal aggregator app, and Ciné+ digital footprints.
-        * **Groupe M6:** Merges M6 linear broadcast video with the M6+ platform.
-
-        #### **2. The 55+ Demographic Weighting Filter**
-        The core engine establishes its competitive moat by separating retirement-age leisure time from active workforce time. According to official **INSEE** data for the territory, **65.1% of the French population is 54 or younger**, leaving a **34.9% minority aged 55 or older**. Traditional tracking currencies rely heavily on this 34.9% minority to inflate their macro video reach. This index applies a strict zero-sum subtraction rule: *13–54 Workforce Pool = 13+ All Consumers Baseline - 55+ Heavy Linear Layer*. This filter isolates the commercially vital workforce pool, stripping away the older demographic layer that shields legacy networks from modern market realities.
-
-        #### **3. The Age Bracket Safety Guard (The Nested Funnel Rule)**
+        st.markdown("**1. Corporate Ecosystem Consolidation:** Delivery mechanisms are stripped of their standalone vanity metrics and folded back into their parent corporate holding structures. Traditional networks are forbidden from masking linear audience attrition behind separate digital plays: France Télévisions merges broadcast channels natively with france.tv; TF1 Group combines linear glass with TF1+; Canal+ Group unifies linear, MyCanal, and Ciné+; Groupe M6 wraps linear with M6+.")
+        st.markdown("**2. The 55+ Demographic Weighting Filter:** The core engine establishes its competitive moat by separating retirement-age leisure time from active workforce time. According to official INSEE data, 65.1% of the French population is 54 or younger, leaving a 34.9% minority aged 55 or older. Traditional tracking currencies rely heavily on this minority to inflate reach. This index applies a strict zero-sum subtraction rule to isolate the commercially vital workforce pool, stripping away the older demographic layer.")
+        st.markdown("**3. The Age Bracket Safety Guard (The Nested Funnel Rule):** To keep the model realistic, the calculation script enforces a strict common-sense rule: a narrower, younger age bracket can never contain more attention hours than the larger parent group above it. A room simply cannot hold more people than the building it sits inside. To execute a 'Maximum Advantage' model for traditional media, the engine implants your established U.S. transitional curves directly onto the French workforce baseline.")
+    else:
+        st.markdown("### **ESHAP Cross-Screen Attention Index: United States Blueprint**")
+        st.markdown("---")
+        st.markdown("### 🔍 DATA SOURCES")
+        st.markdown("U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, NIELSEN MEDIA DISTRIBUTOR GAUGE, COMSCORE MOBILE METRIX, SENSOR TOWER, DATA.AI, META INTERNAL AUDIENCE METRICS, ALPHABET INVESTOR RELATIONS, WALT DISNEY COMPANY FINANCIAL REPORTS, NETFLIX QUARTERLY EARNINGS, DENTSU & LUMEN ATTENTION ECONOMY PANELS")
+        st.markdown("---")
