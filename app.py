@@ -32,7 +32,7 @@ US_RAW = {
     "FOX": (425.0, 315.0)
 }
 
-# UPDATED: Expanded France Ecosystem Parameters with custom ranking layout
+# France Core Market Ecosystem Standardized Parameters
 FR_RAW = {
     "YOUTUBE": (485.0, 95.0),
     "TIKTOK": (335.0, 12.0),
@@ -214,6 +214,10 @@ tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Met
 
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
+    
+    # NEW: Small, bold caption instruction layer directly beneath the country header text
+    st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -0.75rem; margin-bottom: 1rem; color: #555555;'>Click Header To Reorder By Column</p>", unsafe_allow_html=True)
+    
     st.dataframe(
         df_matrix.style.format({col: "{:,.1f}" for col in df_matrix.columns if col != "Platform/Publisher"}),
         use_container_width=True, hide_index=True
@@ -261,6 +265,3 @@ with tab2:
             st.write(load_text_asset("methodology_fr.txt", "France architecture documentation placeholder."))
         elif market_choice == "United Kingdom":
             st.markdown("**Territorial Demographic Weight:** 63.8% of Population is ≤ 54 Years Old (36.2% is ≥ 55)")
-            st.write(load_text_asset("methodology_uk.txt", "United Kingdom architecture documentation placeholder."))
-        else:
-            st.markdown("**Territorial Demographic Weight:** 59.8% of Population is ≤ 54 Years Old (40.2% is ≥ 55)")
