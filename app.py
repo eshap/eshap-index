@@ -75,15 +75,45 @@ def build_demographic_matrix(raw_data, shifts=None):
     return pd.DataFrame(matrix)
 
 # ==============================================================================
-# 3. INTERFACE HEADER WITH FLOATING LOGO ELEMENT (VERTICALLY CENTERED)
+# 3. GLOBAL CUSTOM BULLET AND BRAND LOGO STYLES SHEET
 # ==============================================================================
-# Read image file to binary bytes to build a web-safe embedded string link natively
 logo_base64 = ""
 if os.path.exists("eshap_map.png"):
-    with open("eshap_map.png", "rb") as image_file:
-        logo_base64 = base64.b64encode(image_file.read()).decode()
+    with open("eshap_map.png", "rb") as img_f:
+        logo_base64 = base64.b64encode(img_f.read()).decode()
 
-# Inject modern CSS Flex-box properties to handle clean horizontal centering parameters
+bullet_base64 = ""
+if os.path.exists("planet_bullet.png"):
+    with open("planet_bullet.png", "rb") as b_f:
+        bullet_base64 = base64.b64encode(b_f.read()).decode()
+
+# Inject global CSS rules that cleanly swap text emojis out for your planet graphic
+if bullet_base64:
+    st.html(
+        """
+        <style>
+        /* Automatically hides text emojis inside the UI and swaps in the custom planet link */
+        span[data-testid="stWidgetLabel"] p, button[data-testid="stBaseButton-secondary"] p, [data-baseweb="tab"] p {
+            position: relative;
+            padding-left: 1.5rem !important;
+        }
+        span[data-testid="stWidgetLabel"] p::before, button[data-testid="stBaseButton-secondary"] p::before, [data-baseweb="tab"] p::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/png;base64,%s") !important;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        </style>
+        """ % bullet_base64
+    )
+
+# Render vertically centered interface header map next to your index title
 if logo_base64:
     st.markdown(
         f"""
@@ -97,7 +127,7 @@ if logo_base64:
 else:
     st.title("ESHAP Cross-Screen Attention Index (CSAI)")
 
-st.write("") # Structural visual separator buffer line
+st.write("") # Layout visual separator lines
 
 # ==============================================================================
 # 4. INTERFACE & SIDEBAR SIMULATION CONTROL
@@ -128,9 +158,9 @@ else:
     st.sidebar.success("Zero-Sum Balance Maintained")
 
 # ==============================================================================
-# 5. PRIMARY DASHBOARD PRESENTATION TABS
+# 5. PRIMARY DASHBOARD PRESENTATION TABS (EMOJIS SWAPPED VIA OVERLAY STYLES)
 # ==============================================================================
-tab1, tab2 = st.tabs(["📊 CSAI Interactive Index Matrix", "📄 Index Architecture & Methodology"])
+tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
@@ -143,7 +173,7 @@ with tab1:
     col_dl, col_empty = st.columns(2)
     with col_dl:
         st.download_button(
-            label="📥 Export Current Ledger to CSV",
+            label="Export Current Ledger to CSV",
             data=csv_data,
             file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv",
             mime="text/csv",
@@ -153,7 +183,7 @@ with tab1:
     st.write("") 
     st.write("") 
     
-    st.markdown("#### 📊 Interactive Visual Share Map")
+    st.markdown("#### Interactive Visual Share Map")
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio(
         "Select Demographic Cohort to Isolate in Bar Chart:",
@@ -169,7 +199,7 @@ with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
     
     with sub_method:
-        st.markdown("### 🔍 METHODOLOGY")
+        st.markdown("### METHODOLOGY")
         if market_choice == "United States":
             st.markdown("**Territorial Demographic Weight:** 64.2% of Population is ≤ 54 Years Old (35.8% is ≥ 55)")
             st.write(load_text_asset("methodology_us.txt", "US methodology text asset file missing from repository."))
@@ -178,7 +208,7 @@ with tab2:
             st.write(load_text_asset("methodology_fr.txt", "France methodology text asset file missing from repository."))
         
     with sub_source:
-        st.markdown("### 🔍 DATA SOURCES")
+        st.markdown("### DATA SOURCES")
         if market_choice == "United States":
             st.write(load_text_asset("sources_us.txt", "US data sources text asset file missing from repository."))
         else:
