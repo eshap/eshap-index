@@ -3,7 +3,7 @@ import pandas as pd
 import base64
 import os
 
-# Helper function to safely read external copy files if they exist
+# Helper function to safely read external methodology text copies if they exist
 def load_text_asset(filename, default_text=""):
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as f:
@@ -13,70 +13,43 @@ def load_text_asset(filename, default_text=""):
     return default_text
 
 # ==============================================================================
-# 1. PLATFORM INTERFACE & CONFIGURATION
+# 1. PLATFORM INTERFACE & EXCEL DATA PIPELINE CONFIGURATION
 # ==============================================================================
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# Base Market Footprints (December 2025 - May 2026 Cycle)
-US_RAW = {
-    "YOUTUBE": (2110.0, 490.0), "DISNEY": (1945.0, 1080.0), "NETFLIX": (1540.0, 380.0),
-    "TIKTOK": (1480.0, 65.0), "PARAMOUNT": (1290.0, 810.0), "NBCU": (1265.0, 795.0),
-    "INSTAGRAM": (1120.0, 110.0), "WBD": (1040.0, 685.0), "FACEBOOK": (995.0, 520.0),
-    "AMAZON": (635.0, 215.0), "FOX": (425.0, 315.0)
-}
+@st.cache_data
+def fetch_complete_matrix_from_excel(file_path, sheet_name):
+    """Safely extracts all 6 hardcoded demographic columns from your repository spreadsheet tab."""
+    fallback_df = pd.DataFrame(columns=[
+        "Platform/Publisher", "All P13+", "55+ GenX+", 
+        "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen A/Z"
+    ])
+    if not os.path.exists(file_path):
+        return fallback_df
+        
+    try:
+        df = pd.read_excel(file_path, sheet_name=sheet_name)
+        df.columns = df.columns.str.strip()
+        
+        # Standardize spreadsheet column header variants to match user-facing labels perfectly
+        rename_map = {
+            "55+ Layer": "55+ GenX+",
+            "13-34 Core": "13-34 NextGen",
+            "13-24 Gen Z": "13-24 Gen A/Z"
+        }
+        df = df.rename(columns=rename_map)
+        return df
+    except Exception:
+        return fallback_df
 
-FR_RAW = {
-    "YOUTUBE": (485.0, 95.0), "TIKTOK": (335.0, 12.0), "NETFLIX": (390.0, 85.0),
-    "INSTAGRAM": (215.0, 20.0), "TF1": (440.0, 270.0), "FRANCE TV": (510.0, 385.0),
-    "GROUP M6": (265.0, 145.0), "AMAZON": (155.0, 48.0), "CANAL+ GROUP": (195.0, 115.0),
-    "FACEBOOK": (165.0, 92.0)
-}
-
-UK_RAW = {
-    "BBC": (640.0, 460.0), "YOUTUBE": (590.0, 110.0), "ITV": (510.0, 335.0),
-    "NETFLIX": (495.0, 105.0), "TIKTOK": (410.0, 18.0), "SKY GROUP": (385.0, 210.0),
-    "INSTAGRAM": (275.0, 28.0), "FACEBOOK": (210.0, 115.0), "AMAZON": (195.0, 62.0)
-}
-
-IT_RAW = {
-    "Rai": (520.0, 415.0), "YOUTUBE": (440.0, 110.0), "MFE (Mediaset)": (415.0, 265.0),
-    "TIKTOK": (295.0, 12.0), "NETFLIX": (310.0, 70.0), "INSTAGRAM": (250.0, 25.0),
-    "SKY ITALIA": (175.0, 102.0), "FACEBOOK": (160.0, 101.0), "AMAZON": (140.0, 42.0)
-}
-
-# Youth Fractional Decay Vectors
-DECAY = {"13-44": 0.78, "13-34": 0.54, "13-24": 0.32}
+# Reference token mapped exactly to your file name in the root repository folder
+EXCEL_FILE_NAME = "eshap_index_data.xlsx"
 
 if "reset_id" not in st.session_state:
     st.session_state.reset_id = 0
 
 # ==============================================================================
-# 2. COMPUTATION ENGINE (WITH FUNNEL SAFETY GUARDS)
-# ==============================================================================
-def build_demographic_matrix(raw_data, shifts=None):
-    matrix = []
-    for entity, (p13, p55) in raw_data.items():
-        shift_val = shifts.get(entity, 0.0) if shifts else 0.0
-        adj_p13 = max(0.0, p13 + shift_val)
-        w13_54 = max(0.0, adj_p13 - p55)
-        
-        w13_44 = w13_54 * DECAY["13-44"]
-        w13_34 = w13_54 * DECAY["13-34"]
-        w13_24 = w13_54 * DECAY["13-24"]
-        
-        w13_54 = min(w13_54, adj_p13)
-        w13_44 = min(w13_44, w13_54)
-        w13_34 = min(w13_34, w13_44)
-        w13_24 = min(w13_24, w13_34)
-        
-        matrix.append({
-            "Platform/Publisher": entity, "All P13+": adj_p13, "55+ GenX+": p55,
-            "13-54 Workforce": w13_54, "13-44 Youth": w13_44, "13-34 NextGen": w13_34, "13-24 Gen A/Z": w13_24
-        })
-    return pd.DataFrame(matrix)
-
-# ==============================================================================
-# 3. GLOBAL CUSTOM BULLET STYLES SHEET
+# 2. GLOBAL NAVIGATION BULLET DESIGN STYLES
 # ==============================================================================
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
@@ -119,43 +92,55 @@ else:
 st.write("") 
 
 # ==============================================================================
-# 4. INTERFACE & SIDEBAR SIMULATION CONTROL
+# 3. INTERFACE & SIDEBAR SIMULATION CONTROL
 # ==============================================================================
 market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom", "Italy"])
 
-if market_choice == "United States":
-    raw_set = US_RAW
-elif market_choice == "France":
-    raw_set = FR_RAW
-elif market_choice == "United Kingdom":
-    raw_set = UK_RAW
-else:
-    raw_set = IT_RAW
+# Dynamically read the active country data matrix tab from the Excel spreadsheet file
+base_df = fetch_complete_matrix_from_excel(EXCEL_FILE_NAME, market_choice)
 
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
 st.sidebar.markdown("## **MILLIONS OF HOURS**")
 
+# Generate responsive simulation sliders using the platforms listed in the spreadsheet
 user_shifts = {}
-for entity in raw_set.keys():
-    user_shifts[entity] = st.sidebar.slider(
-        f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0,
-        key=f"{entity}_slider_{st.session_state.reset_id}"
-    )
+if not base_df.empty and "Platform/Publisher" in base_df.columns:
+    for entity in base_df["Platform/Publisher"].unique():
+        user_shifts[entity] = st.sidebar.slider(
+            f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0,
+            key=f"{entity}_slider_{st.session_state.reset_id}"
+        )
 
 if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id += 1
     st.rerun()
 
-df_matrix = build_demographic_matrix(raw_set, user_shifts)
+# Proportional shift computation loop working off your exact spreadsheet baselines
+df_matrix = base_df.copy()
+if not df_matrix.empty and user_shifts:
+    for entity, shift_val in user_shifts.items():
+        if shift_val != 0.0:
+            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
+            if len(idx) > 0:
+                p13_orig = df_matrix.loc[idx, "All P13+"].values[0]
+                adj_p13 = max(0.0, p13_orig + shift_val)
+                ratio = (adj_p13 / p13_orig) if p13_orig > 0 else 1.0
+                
+                # Mutate cells proportionally while applying safety guards
+                df_matrix.loc[idx, "All P13+"] = adj_p13
+                df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_matrix.loc[idx, "55+ GenX+"].values[0])
+                df_matrix.loc[idx, "13-44 Youth"] = max(0.0, df_matrix.loc[idx, "13-44 Youth"].values[0] * ratio)
+                df_matrix.loc[idx, "13-34 NextGen"] = max(0.0, df_matrix.loc[idx, "13-34 NextGen"].values[0] * ratio)
+                df_matrix.loc[idx, "13-24 Gen A/Z"] = max(0.0, df_matrix.loc[idx, "13-24 Gen A/Z"].values[0] * ratio)
 
-net_balance = sum(user_shifts.values())
+net_balance = sum(user_shifts.values()) if user_shifts else 0.0
 if abs(net_balance) > 0.001:
     st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
 else:
     st.sidebar.success("Zero-Sum Balance Maintained")
 
 # ==============================================================================
-# 5. PRIMARY DASHBOARD PRESENTATION TABS
+# 4. PRIMARY DASHBOARD PRESENTATION TABS
 # ==============================================================================
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 
@@ -179,7 +164,7 @@ with tab1:
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 # ==============================================================================
-# 6. ARCHITECTURE DOCUMENTATION BLOCKS
+# 5. ARCHITECTURE DOCUMENTATION BLOCKS
 # ==============================================================================
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
