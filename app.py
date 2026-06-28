@@ -4,7 +4,6 @@ import base64
 import os
 
 # Helper function to safely read external copy files if they exist
-# FIXED: Guaranteed to return text strings to prevent nested indentation loop crashes
 def load_text_asset(filename, default_text=""):
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as f:
@@ -33,48 +32,51 @@ US_RAW = {
     "FOX": (425.0, 315.0)
 }
 
-# France Core Market Ecosystem Structural Parameters
+# France Core Market Ecosystem Standardized Parameters
 FR_RAW = {
-    "YOUTUBE": (485.0, 95.0),
-    "TIKTOK": (335.0, 12.0),
-    "NETFLIX": (390.0, 85.0),
-    "INSTAGRAM": (215.0, 20.0),
-    "TF1": (440.0, 270.0),
     "FRANCE TV": (510.0, 385.0),
+    "YOUTUBE": (485.0, 95.0),
+    "TF1": (440.0, 270.0),
+    "NETFLIX": (390.0, 85.0),
+    "TIKTOK": (335.0, 12.0),
     "GROUP M6": (265.0, 145.0),
-    "AMAZON": (155.0, 48.0),
+    "INSTAGRAM": (215.0, 20.0),
     "CANAL+ GROUP": (195.0, 115.0),
-    "FACEBOOK": (165.0, 92.0)
+    "DISNEY": (180.0, 42.0),
+    "WBD": (170.0, 95.0),
+    "FACEBOOK": (165.0, 92.0),
+    "AMAZON": (155.0, 48.0)
 }
 
-# United Kingdom Core Market Ecosystem Structural Parameters
+# United Kingdom Core Market Ecosystem Standardized Parameters
 UK_RAW = {
     "BBC": (640.0, 460.0),
     "YOUTUBE": (590.0, 110.0),
-    "ITV": (510.0, 335.0),
+    "ITV plc": (510.0, 335.0),
     "NETFLIX": (495.0, 105.0),
     "TIKTOK": (410.0, 18.0),
     "SKY GROUP": (385.0, 210.0),
-    "PARAMOUNT": (245.0, 155.0),
-    "CHANNEL 4": (290.0, 165.0),
     "INSTAGRAM": (275.0, 28.0),
+    "PARAMOUNT": (245.0, 155.0),
+    "DISNEY": (235.0, 52.0),
     "WBD": (220.0, 128.0),
     "FACEBOOK": (210.0, 115.0),
     "AMAZON": (195.0, 62.0)
 }
 
-# Italy Core Market Ecosystem Structural Parameters
+# Italy Core Market Ecosystem Standardized Parameters
 IT_RAW = {
-    "Rai (Radiotelevisione Italiana)": (520.0, 415.0),
+    "Rai": (520.0, 415.0),
     "YOUTUBE": (440.0, 110.0),
-    "MFE (MediaForEurope / Mediaset)": (415.0, 265.0),
-    "NETFLIX": (310.0, 70.0),
+    "MFE (Mediaset)": (415.0, 265.0),
     "TIKTOK": (295.0, 12.0),
+    "NETFLIX": (310.0, 70.0),
     "INSTAGRAM": (250.0, 25.0),
     "SKY ITALIA": (175.0, 102.0),
+    "DISNEY": (170.0, 38.0),
+    "WBD": (165.0, 92.0),
     "FACEBOOK": (160.0, 101.0),
-    "AMAZON": (140.0, 42.0),
-    "WBD": (115.0, 65.0)
+    "AMAZON": (140.0, 42.0)
 }
 
 # Youth Fractional Decay Vectors
@@ -259,3 +261,5 @@ with tab2:
             st.write(load_text_asset("methodology_uk.txt", "United Kingdom architecture documentation placeholder."))
         else:
             st.markdown("**Territorial Demographic Weight:** 59.8% of Population is ≤ 54 Years Old (40.2% is ≥ 55)")
+            st.write(load_text_asset("methodology_it.txt", "Italy architecture documentation placeholder."))
+        
