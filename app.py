@@ -44,11 +44,12 @@ FR_RAW = {
     "FACEBOOK": (165.0, 92.0)
 }
 
-# UPDATED: Expanded UK Market Framework incorporating Paramount and WBD parameters
+# United Kingdom Core Market Ecosystem Structural Parameters
+# UPDATED: Cleaned ITV plc token to uniform ITV naming convention
 UK_RAW = {
     "BBC": (640.0, 460.0),
     "YOUTUBE": (590.0, 110.0),
-    "ITV plc": (510.0, 335.0),
+    "ITV": (510.0, 335.0),
     "NETFLIX": (495.0, 105.0),
     "TIKTOK": (410.0, 18.0),
     "SKY GROUP": (385.0, 210.0),
@@ -259,4 +260,3 @@ with tab2:
             st.write(load_text_asset("methodology_it.txt", "Italy methodology text asset file missing from repository."))
         
     with sub_source:
-        st.markdown("### DATA SOURCES")
