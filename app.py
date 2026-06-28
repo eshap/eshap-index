@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import base64
 import os
 
 # Helper function to safely read external copy files if they exist
@@ -10,7 +11,7 @@ def load_text_asset(filename, default_text=""):
     return default_text
 
 # ==============================================================================
-# 1. CORE DATA STRUCTURES & INTERFACE CONFIGURATION
+# 1. PLATFORM INTERFACE & CONFIGURATION
 # ==============================================================================
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
@@ -74,19 +75,29 @@ def build_demographic_matrix(raw_data, shifts=None):
     return pd.DataFrame(matrix)
 
 # ==============================================================================
-# 3. INTERFACE HEADER WITH FLOATING LOGO ELEMENT
+# 3. INTERFACE HEADER WITH FLOATING LOGO ELEMENT (VERTICALLY CENTERED)
 # ==============================================================================
-# Splitting layout into a weighted row so the map scales perfectly next to text
-col_title, col_logo = st.columns([4, 1])
+# Read image file to binary bytes to build a web-safe embedded string link natively
+logo_base64 = ""
+if os.path.exists("eshap_map.png"):
+    with open("eshap_map.png", "rb") as image_file:
+        logo_base64 = base64.b64encode(image_file.read()).decode()
 
-with col_title:
-    st.write("") # Structural visual padding alignment
+# Inject modern CSS Flex-box properties to handle clean horizontal centering parameters
+if logo_base64:
+    st.markdown(
+        f"""
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%;">
+            <h1 style="margin: 0; padding: 0;">ESHAP Cross-Screen Attention Index (CSAI)</h1>
+            <img src="data:image/png;base64,{logo_base64}" style="max-width: 15%; height: auto; object-fit: contain;" />
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+else:
     st.title("ESHAP Cross-Screen Attention Index (CSAI)")
 
-with col_logo:
-    # Safely targets the image sitting in your root repository folder
-    if os.path.exists("eshap_map.png"):
-        st.image("eshap_map.png", use_container_width=True)
+st.write("") # Structural visual separator buffer line
 
 # ==============================================================================
 # 4. INTERFACE & SIDEBAR SIMULATION CONTROL
