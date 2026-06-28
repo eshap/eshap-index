@@ -15,11 +15,18 @@ US_RAW = {
     "Amazon Prime": (635.0, 215.0), "Fox": (425.0, 315.0)
 }
 
+# UPDATED: France Core Market Ecosystem Structural Parameters
 FR_RAW = {
-    "France TV": (510.0, 385.0), "YouTube": (485.0, 95.0), "TF1 Group": (440.0, 270.0),
-    "Netflix": (390.0, 85.0), "TikTok": (335.0, 12.0), "Groupe M6": (265.0, 145.0),
-    "Instagram": (215.0, 20.0), "Canal+ Group": (195.0, 115.0), "Facebook": (165.0, 92.0),
-    "Amazon Prime": (155.0, 48.0)
+    "France Télévisions": (510.0, 385.0),
+    "YouTube": (485.0, 95.0),
+    "TF1 Group": (440.0, 270.0),
+    "Netflix": (390.0, 85.0),
+    "TikTok": (335.0, 12.0),
+    "Groupe M6": (265.0, 145.0),
+    "Instagram": (215.0, 20.0),
+    "Canal+ Group (Vivendi)": (195.0, 115.0),
+    "Facebook": (165.0, 92.0),
+    "Amazon Prime Video": (155.0, 48.0)
 }
 
 # Youth Fractional Decay Vectors (Derived from baseline curves)
