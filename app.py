@@ -8,7 +8,7 @@ def load_text_asset(filename, default_text=""):
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as f:
             content = f.read().strip()
-            if content then:
+            if content:
                 return content
     return default_text
 
