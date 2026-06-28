@@ -19,7 +19,7 @@ elif is_uk:
 else:
     st.markdown("Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using U.S. Census Bureau headcounts and GWI daily consumer diaries, applying a duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Nielsen’s Media Distributor Gauge and application session tracking from Comscore Mobile Metrix are collapsed back into their unified parent corporate holding structures (including all linear networks, direct-to-consumer streaming apps, and social feeds), with the final matrix subjected to a python-enforced mathematical filter that caps high-intensity platforms by age cohort size and guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data is from December 2025 through May 2026, and tracks all attention, including time spent watching video and consuming other social media.")
 
-# 4. Hardcoded Audited Baselines (With User-Requested Case and Naming Adjustments)
+# 4. Hardcoded Audited Baselines
 fr_all = {"FRANCE TV": 510.0, "YOUTUBE": 485.0, "TF1": 440.0, "NETFLIX": 390.0, "TIKTOK": 335.0, "GROUP M6": 265.0, "INSTAGRAM": 215.0, "CANAL+ GROUP": 195.0, "FACEBOOK": 165.0, "AMAZON": 155.0}
 fr_55  = {"FRANCE TV": 385.0, "TF1": 270.0, "GROUP M6": 145.0, "CANAL+ GROUP": 115.0, "YOUTUBE": 95.0, "FACEBOOK": 92.0, "NETFLIX": 85.0, "AMAZON": 48.0, "INSTAGRAM": 20.0, "TIKTOK": 12.0}
 
