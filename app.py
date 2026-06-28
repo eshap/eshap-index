@@ -53,9 +53,9 @@ if st.sidebar.button("🔄 Reset Defaults", use_container_width=True):
     st.rerun()
 
 # 6. FIXED PERFORMANCE MULTIPLIERS (Enforcing Naming Conventions for Matrix Layouts)
-sc_44 = {"INSTAGRAM": 0.87, "AMAZON": 0.82, "TIKTOK": 0.78, "TikTok": 0.78, "CANAL+ GROUP": 0.69, "DISNEY": 0.76, "PARAMOUNT": 0.69, "NBCU": 0.68, "WBD": 0.68, "FRANCE TV": 0.77, "GROUP M6": 0.74, "NETFLIX": 0.73, "TF1": 0.75, "YOUTUBE": 0.70, "FACEBOOK": 0.55, "FOX": 0.50, "BBC": 0.68, "ITV plc": 0.65, "SKY GROUP": 0.68, "CHANNEL 4": 0.68}
-sc_34 = {"TIKTOK": 0.82, "TikTok": 0.82, "INSTAGRAM": 0.81, "YOUTUBE": 0.78, "CANAL+ GROUP": 0.68, "DISNEY": 0.68, "PARAMOUNT": 0.59, "NBCU": 0.58, "WBD": 0.50, "FRANCE TV": 0.78, "GROUP M6": 0.64, "NETFLIX": 0.63, "TF1": 0.72, "AMAZON": 0.62, "FACEBOOK": 0.37, "FOX": 0.45, "BBC": 0.70, "ITV plc": 0.66, "SKY GROUP": 0.59, "CHANNEL 4": 0.59}
-sc_24 = {"TIKTOK": 0.73, "TikTok": 0.73, "YOUTUBE": 0.61, "INSTAGRAM": 0.55, "FACEBOOK": 0.19, "DISNEY": 0.51, "NETFLIX": 0.51, "FRANCE TV": 0.64, "TF1": 0.51, "AMAZON": 0.42, "GROUP M6": 0.46, "CANAL+ GROUP": 0.30, "PARAMOUNT": 0.44, "NBCU": 0.41, "WBD": 0.42, "FOX": 0.20, "BBC": 0.53, "ITV plc": 0.51, "SKY GROUP": 0.41, "CHANNEL 4": 0.41}
+sc_44 = {"INSTAGRAM": 0.87, "AMAZON": 0.82, "TIKTOK": 0.78, "TikTok": 0.78, "CANAL+ GROUP": 0.69, "DISNEY": 0.76, "PARAMOUNT": 0.69, "NBCU": 0.68, "WBD": 0.68, "FRANCE TV": 0.77, "GROUP M6": 0.74, "NETFLIX": 0.73, "TF1": 0.75, "YOUTUBE": 0.70, "FACEBOOK": 0.55, "FOX": 0.50, "BBC": 0.68, "ITV plc": 0.65, "SKY GROUP": 0.68, "CHANNEL 4": 0.68, "Instagram": 0.87, "Amazon Prime": 0.82, "YouTube": 0.70, "Facebook": 0.55}
+sc_34 = {"TIKTOK": 0.82, "TikTok": 0.82, "INSTAGRAM": 0.81, "YOUTUBE": 0.78, "CANAL+ GROUP": 0.68, "DISNEY": 0.68, "PARAMOUNT": 0.59, "NBCU": 0.58, "WBD": 0.50, "FRANCE TV": 0.78, "GROUP M6": 0.64, "NETFLIX": 0.63, "TF1": 0.72, "AMAZON": 0.62, "FACEBOOK": 0.37, "FOX": 0.45, "BBC": 0.70, "ITV plc": 0.66, "SKY GROUP": 0.59, "CHANNEL 4": 0.59, "Instagram": 0.81, "YouTube": 0.78, "Amazon Prime": 0.62, "Facebook": 0.37}
+sc_24 = {"TIKTOK": 0.73, "TikTok": 0.73, "YOUTUBE": 0.61, "INSTAGRAM": 0.55, "FACEBOOK": 0.19, "DISNEY": 0.51, "NETFLIX": 0.51, "FRANCE TV": 0.64, "TF1": 0.51, "AMAZON": 0.42, "GROUP M6": 0.46, "CANAL+ GROUP": 0.30, "PARAMOUNT": 0.44, "NBCU": 0.41, "WBD": 0.42, "FOX": 0.20, "BBC": 0.53, "ITV plc": 0.51, "SKY GROUP": 0.41, "CHANNEL 4": 0.41, "Instagram": 0.55, "YouTube": 0.61, "Amazon Prime": 0.42, "Facebook": 0.19}
 
 # 7. Matrix Computation & Nested Funnel Rules Enforcements
 matrix = []
@@ -82,8 +82,3 @@ with tab1:
     
     st.subheader("📊 Cross-Screen Visual Attention Drop-Off")
     df_melted = df.melt(id_vars=["Ecosystem Structure"], value_vars=["All P13+ Baseline", "13-54 Workforce", "13-44 Youth", "13-34 Core", "13-24 Gen Z"], var_name="Cohort", value_name="Hours")
-    fig = px.bar(df_melted, x="Ecosystem Structure", y="Hours", color="Cohort", barmode="group", color_discrete_sequence=px.colors.qualitative.Safe)
-    st.plotly_chart(fig, use_container_width=True)
-
-with tab2:
-    if is_fr:
