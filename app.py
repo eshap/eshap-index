@@ -92,13 +92,19 @@ else:
     st.sidebar.success("Zero-Sum Balance Maintained")
 
 # ==============================================================================
-# 4. PRIMARY DASHBOARD PRESENTATION TABS (WITH INTEGRATED DOWNLOAD FUNCTION)
+# 4. PRIMARY DASHBOARD PRESENTATION TABS (WITH RESTORED VISUALIZATIONS)
 # ==============================================================================
 tab1, tab2 = st.tabs(["📊 CSAI Interactive Index Matrix", "📄 Index Architecture & Methodology"])
 
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
     
+    # --- RESTORED VISUALIZATION LAYER ---
+    # Isolating baseline viewing allocations in a horizontal layout bar chart
+    chart_data = df_matrix.set_index("Platform/Publisher")[["All P13+", "13-54 Workforce", "55+ Retirement"]]
+    st.bar_chart(chart_data, horizontal=True, height=380)
+    # ------------------------------------
+
     # Render the main interactive database view
     st.dataframe(
         df_matrix.style.format({col: "{:,.1f}" for col in df_matrix.columns if col != "Platform/Publisher"}),
@@ -109,7 +115,7 @@ with tab1:
     csv_data = df_matrix.to_csv(index=False).encode('utf-8')
     
     # Responsive container layout for the download button tool
-    col_dl, col_empty = st.columns([1, 2])
+    col_dl, col_empty = st.columns()
     with col_dl:
         st.download_button(
             label="📥 Export Current Ledger to CSV",
