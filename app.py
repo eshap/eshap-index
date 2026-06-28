@@ -10,43 +10,12 @@ def load_text_asset(filename, default_text=""):
     return default_text
 
 # ==============================================================================
-# 1. OPTIMIZED DIRECT WEB-URL WATERMARK LAYER
+# 1. CORE DATA STRUCTURES & CONFIGURATION
 # ==============================================================================
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# Locked directly to your Substack hosted S3 CDN image asset pipeline
-WATERMARK_URL = (
-    "https://substackcdn.com"
-    "https%3A%2F%://amazonaws.com%2Fpublic%2Fimages%2F9182a07b-bf51-4084-b79b-76f29416d989_7250x4708.png"
-)
-
-# FIXED: Removed the f-string prefix entirely to allow raw CSS curly braces
-st.html(
-    """
-    <style>
-    [data-testid="stAppViewContainer"] {
-        opacity: 1.0;
-    }
-    /* Renders your Substack CDN source smoothly as a full canvas background asset */
-    [data-testid="stAppViewContainer"]::before {
-        content: "";
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-image: url("%s") !important;
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        opacity: 0.03; /* Premium dim watermark setting for data legibility */
-        z-index: -1;
-    }
-    </style>
-    """ % WATERMARK_URL
-)
-
-# ==============================================================================
-# 2. CORE DATA STRUCTURES & CONFIGURATION
-# ==============================================================================
+# Base Market Footprints (December 2025 - May 2026 Cycle)
+# Structure: { Entity: (P13+ Baseline, 55+ Retirement Layer) }
 US_RAW = {
     "YouTube": (2110.0, 490.0), "Disney": (1945.0, 1080.0), "Netflix": (1540.0, 380.0),
     "TikTok": (1480.0, 65.0), "Paramount": (1290.0, 810.0), "NBCU": (1265.0, 795.0),
@@ -54,7 +23,7 @@ US_RAW = {
     "Amazon Prime": (635.0, 215.0), "Fox": (425.0, 315.0)
 }
 
-# France Core Market Ecosystem Structural Parameters
+# UPDATED: France Core Market Ecosystem Structural Parameters (Canal+ Core Adjusted)
 FR_RAW = {
     "France Télévisions": (510.0, 385.0),
     "YouTube": (485.0, 95.0),
@@ -68,14 +37,15 @@ FR_RAW = {
     "Amazon Prime Video": (155.0, 48.0)
 }
 
-# Youth Fractional Decay Vectors
+# Youth Fractional Decay Vectors (Derived from baseline curves)
 DECAY = {"13-44": 0.78, "13-34": 0.54, "13-24": 0.32}
 
+# Session State Tracker for Slider Resets
 if "reset_id" not in st.session_state:
     st.session_state.reset_id = 0
 
 # ==============================================================================
-# 3. COMPUTATION ENGINE (WITH FUNNEL SAFETY GUARDS)
+# 2. COMPUTATION ENGINE (WITH FUNNEL SAFETY GUARDS)
 # ==============================================================================
 def build_demographic_matrix(raw_data, shifts=None):
     matrix = []
@@ -83,17 +53,22 @@ def build_demographic_matrix(raw_data, shifts=None):
         # Apply Zero-Sum Shift modifications from sidebar sliders if active
         shift_val = shifts.get(entity, 0.0) if shifts else 0.0
         adj_p13 = max(0.0, p13 + shift_val)
+        
+        # 13-54 Workforce direct subtraction derivation
         w13_54 = max(0.0, adj_p13 - p55)
         
+        # Youth cohort calculation using fractional decay vectors
         w13_44 = w13_54 * DECAY["13-44"]
         w13_34 = w13_54 * DECAY["13-34"]
         w13_24 = w13_54 * DECAY["13-24"]
         
+        # NESTED FUNNEL SAFETY GUARD (Monotonicity Check)
         w13_54 = min(w13_54, adj_p13)
         w13_44 = min(w13_44, w13_54)
         w13_34 = min(w13_34, w13_44)
         w13_24 = min(w13_24, w13_34)
         
+        # UPDATED: Enforced structural renaming schema matching master criteria
         matrix.append({
             "Platform/Publisher": entity, 
             "All P13+": adj_p13, 
@@ -106,7 +81,7 @@ def build_demographic_matrix(raw_data, shifts=None):
     return pd.DataFrame(matrix)
 
 # ==============================================================================
-# 4. INTERFACE & SIDEBAR SIMULATION CONTROL
+# 3. INTERFACE & SIDEBAR SIMULATION CONTROL
 # ==============================================================================
 st.title("ESHAP Cross-Screen Attention Index (CSAI)")
 market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France"])
@@ -115,6 +90,7 @@ raw_set = US_RAW if market_choice == "United States" else FR_RAW
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
 st.sidebar.markdown("## **MILLIONS OF HOURS**")
 
+# Interactive Sliders with dynamic state key tracking to handle instant resets cleanly
 user_shifts = {}
 for entity in raw_set.keys():
     user_shifts[entity] = st.sidebar.slider(
@@ -126,8 +102,10 @@ if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id += 1
     st.rerun()
 
+# Calculate active dataset matrix
 df_matrix = build_demographic_matrix(raw_set, user_shifts)
 
+# Net-zero balance verification monitor
 net_balance = sum(user_shifts.values())
 if abs(net_balance) > 0.001:
     st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
@@ -135,18 +113,23 @@ else:
     st.sidebar.success("Zero-Sum Balance Maintained")
 
 # ==============================================================================
-# 5. PRIMARY DASHBOARD PRESENTATION TABS
+# 4. PRIMARY DASHBOARD PRESENTATION TABS
 # ==============================================================================
 tab1, tab2 = st.tabs(["📊 CSAI Interactive Index Matrix", "📄 Index Architecture & Methodology"])
 
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
+    
+    # 1. Main interactive database spreadsheet view
     st.dataframe(
         df_matrix.style.format({col: "{:,.1f}" for col in df_matrix.columns if col != "Platform/Publisher"}),
         use_container_width=True, hide_index=True
     )
     
+    # 2. Convert active dataframe matrix into a standard CSV download string
     csv_data = df_matrix.to_csv(index=False).encode('utf-8')
+    
+    # 3. Render the utility download engine inside a configured two-column block
     col_dl, col_empty = st.columns(2)
     with col_dl:
         st.download_button(
@@ -157,19 +140,26 @@ with tab1:
             use_container_width=True
         )
         
-    st.write("") 
+    st.write("") # Structural layout spacer
     st.write("") 
     
+    # 4. UPDATED: Chart interaction configuration matching explicit naming schema
     st.markdown("#### 📊 Interactive Visual Share Map")
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
+    
     selected_demo = st.radio(
         "Select Demographic Cohort to Isolate in Bar Chart:",
         options=["Show All Cohorts Overlaid"] + demo_columns,
         horizontal=True
     )
     
+    # Format and isolate the graphing metrics array dynamically
     chart_df = df_matrix.set_index("Platform/Publisher")
-    chart_metrics = ["All P13+", "13-54 Workforce", "55+ GenX+"] if selected_demo == "Show All Cohorts Overlaid" else [selected_demo]
+    if selected_demo == "Show All Cohorts Overlaid":
+        chart_metrics = ["All P13+", "13-54 Workforce", "55+ GenX+"]
+    else:
+        chart_metrics = [selected_demo]
+        
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 with tab2:
