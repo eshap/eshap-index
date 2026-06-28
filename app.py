@@ -144,23 +144,23 @@ if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id += 1
     st.rerun()
 
-# Proportional shift computation loop working off your exact spreadsheet baselines
+# FIXED: Re-factored shift index scalars to safely prevent array comparison exceptions
 df_matrix = df_matrix_base.copy()
 if not df_matrix.empty and user_shifts:
     for entity, shift_val in user_shifts.items():
         if shift_val != 0.0:
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
             if len(idx) > 0:
-                p13_orig = df_matrix.loc[idx, "All P13+"].values[0]
+                p13_orig = float(df_matrix.loc[idx[0], "All P13+"])
                 if p13_orig > 0:
                     adj_p13 = max(0.0, p13_orig + shift_val)
                     ratio = adj_p13 / p13_orig
                     
-                    df_matrix.loc[idx, "All P13+"] = adj_p13
-                    df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_matrix.loc[idx, "55+ GenX+"].values[0])
-                    df_matrix.loc[idx, "13-44 Youth"] = max(0.0, df_matrix.loc[idx, "13-44 Youth"].values[0] * ratio)
-                    df_matrix.loc[idx, "13-34 NextGen"] = max(0.0, df_matrix.loc[idx, "13-34 NextGen"].values[0] * ratio)
-                    df_matrix.loc[idx, "13-24 Gen A/Z"] = max(0.0, df_matrix.loc[idx, "13-24 Gen A/Z"].values[0] * ratio)
+                    df_matrix.loc[idx[0], "All P13+"] = adj_p13
+                    df_matrix.loc[idx[0], "13-54 Workforce"] = max(0.0, adj_p13 - float(df_matrix.loc[idx[0], "55+ GenX+"]))
+                    df_matrix.loc[idx[0], "13-44 Youth"] = max(0.0, float(df_matrix.loc[idx[0], "13-44 Youth"]) * ratio)
+                    df_matrix.loc[idx[0], "13-34 NextGen"] = max(0.0, float(df_matrix.loc[idx[0], "13-34 NextGen"]) * ratio)
+                    df_matrix.loc[idx[0], "13-24 Gen A/Z"] = max(0.0, float(df_matrix.loc[idx[0], "13-24 Gen A/Z"]) * ratio)
 
 net_balance = sum(user_shifts.values()) if user_shifts else 0.0
 if abs(net_balance) > 0.001:
@@ -200,4 +200,3 @@ with tab2:
     
     with sub_method:
         st.markdown("### METHODOLOGY")
-        if market_choice == "United States":
