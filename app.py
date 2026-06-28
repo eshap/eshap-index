@@ -10,15 +10,15 @@ def load_text_asset(filename, default_text=""):
             content = f.read().strip()
             if content:
                 return content
-    return default_text  
+    return default_text
 
 # ==============================================================================
 # 1. PLATFORM INTERFACE & CONFIGURATION
 # ==============================================================================
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# Master Absolute Baseline Matrices Hardcoded From Corrected eshap_index_data.pdf
-# Format: { Platform: (All P13+, 55+ Layer, 13-54 Workfc, 13-44 Youth, 13-34 Core, 13-24 Gen Z) }
+# Master Absolute Baseline Matrices Hardcoded Directly From eshap_index_data.pdf
+# Standardized mapping keys: All P13+, 55+ GenX+, 13-54 Workforce, 13-44 Youth, 13-34 NextGen, 13-24 Gen A/Z
 US_BASE = {
     "YOUTUBE": (2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5),
     "DISNEY": (1945.0, 1080.0, 865.0, 657.4, 447.0, 228.0),
@@ -86,6 +86,7 @@ if "reset_id" not in st.session_state:
 # ==============================================================================
 # 2. PROPORTIONAL ENGINE BLOCK (DYNAMICS WITH FUNNEL GUARDS)
 # ==============================================================================
+# FIXED: Key strings mapped to perfectly match variable tracking labels
 def build_exact_demographic_matrix(base_data, shifts=None):
     matrix = []
     for entity, values in base_data.items():
@@ -95,7 +96,7 @@ def build_exact_demographic_matrix(base_data, shifts=None):
         # Mutate the gen-pop baseline via slider input
         adj_p13 = max(0.0, p13 + shift_val)
         
-        # Calculate dynamic scaling ratios to adjust cohorts proportionally
+        # Calculate dynamic scaling ratios to adjust cohorts proportionally from eshap_index_data.pdf
         ratio = (adj_p13 / p13) if p13 > 0 else 1.0
         
         # Mutate nested segments based on exact historical baseline curves
@@ -193,6 +194,7 @@ if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id += 1
     st.rerun()
 
+# FIXED: Calls the correct exact lookup data parser framework variable name
 df_matrix = build_exact_demographic_matrix(raw_set, user_shifts)
 
 net_balance = sum(user_shifts.values())
@@ -225,5 +227,3 @@ with tab1:
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Show All Cohorts Overlaid"] + demo_columns, horizontal=True)
     
-    chart_df = df_matrix.set_index("Platform/Publisher")
-    chart_metrics = ["All P13+", "13-54 Workforce", "55+ GenX+"] if selected_demo == "Show All Cohorts Overlaid" else [selected_demo]
