@@ -92,30 +92,24 @@ else:
     st.sidebar.success("Zero-Sum Balance Maintained")
 
 # ==============================================================================
-# 4. PRIMARY DASHBOARD PRESENTATION TABS (WITH RESTORED VISUALIZATIONS)
+# 4. PRIMARY DASHBOARD PRESENTATION TABS (FIXED & CHART RE-POSITIONED)
 # ==============================================================================
 tab1, tab2 = st.tabs(["📊 CSAI Interactive Index Matrix", "📄 Index Architecture & Methodology"])
 
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
     
-    # --- RESTORED VISUALIZATION LAYER ---
-    # Isolating baseline viewing allocations in a horizontal layout bar chart
-    chart_data = df_matrix.set_index("Platform/Publisher")[["All P13+", "13-54 Workforce", "55+ Retirement"]]
-    st.bar_chart(chart_data, horizontal=True, height=380)
-    # ------------------------------------
-
-    # Render the main interactive database view
+    # 1. Render the main interactive database view
     st.dataframe(
         df_matrix.style.format({col: "{:,.1f}" for col in df_matrix.columns if col != "Platform/Publisher"}),
         use_container_width=True, hide_index=True
     )
     
-    # Convert active dataframe matrix into a standard CSV download string
+    # 2. Convert active dataframe matrix into a standard CSV download string
     csv_data = df_matrix.to_csv(index=False).encode('utf-8')
     
-    # Responsive container layout for the download button tool
-    col_dl, col_empty = st.columns()
+    # 3. FIXED: Create a balanced 2-column layout for the download button tool
+    col_dl, col_empty = st.columns(2)
     with col_dl:
         st.download_button(
             label="📥 Export Current Ledger to CSV",
@@ -125,6 +119,13 @@ with tab1:
             use_container_width=True,
             help="Downloads a clean spreadsheet matching your active territory and simulated shift values."
         )
+        
+    st.write("") # Layout spacing element
+    st.write("") 
+    
+    # 4. RE-POSITIONED: Render the bar chart at the bottom of the ledger workspace
+    chart_data = df_matrix.set_index("Platform/Publisher")[["All P13+", "13-54 Workforce", "55+ Retirement"]]
+    st.bar_chart(chart_data, horizontal=True, height=380)
 
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
