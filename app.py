@@ -10,41 +10,39 @@ def load_text_asset(filename, default_text=""):
     return default_text
 
 # ==============================================================================
-# 1. CORE DATA STRUCTURES & CONFIGURATION
+# 1. OPTIMIZED DIRECT WEB-URL WATERMARK LAYER
 # ==============================================================================
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# INJECT VERY DIM WATERMARK BACKGROUND STYLE SHEET LAYER
-# Explicitly targets 'eshap_map.png' using safe stream container isolation routing
+# Configured directly to fetch your image asset from your public GitHub repository
+WATERMARK_URL = "https://githubusercontent.com"
+
 st.html(
-    """
+    f"""
     <style>
-    [data-testid="stAppViewContainer"] {
-        background-image: url("app/static/eshap_map.png");
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
+    [data-testid="stAppViewContainer"] {{
         opacity: 1.0;
-    }
-    /* Creates a subtle backdrop overlay layer to keep data high-contrast */
-    [data-testid="stAppViewContainer"]::before {
+    }}
+    /* Renders the background watermark from your live repository source instantly */
+    [data-testid="stAppViewContainer"]::before {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        background-image: url("app/static/eshap_map.png") !important;
+        background-image: url("{WATERMARK_URL}") !important;
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        opacity: 0.03; /* Controls the exact dim intensity */
+        opacity: 0.03; /* Maintains the premium dim watermark look */
         z-index: -1;
     }
     </style>
     """
 )
 
-# Base Market Footprints (December 2025 - May 2026 Cycle)
+# ==============================================================================
+# 2. CORE DATA STRUCTURES & CONFIGURATION
+# ==============================================================================
 US_RAW = {
     "YouTube": (2110.0, 490.0), "Disney": (1945.0, 1080.0), "Netflix": (1540.0, 380.0),
     "TikTok": (1480.0, 65.0), "Paramount": (1290.0, 810.0), "NBCU": (1265.0, 795.0),
@@ -73,11 +71,12 @@ if "reset_id" not in st.session_state:
     st.session_state.reset_id = 0
 
 # ==============================================================================
-# 2. COMPUTATION ENGINE (WITH FUNNEL SAFETY GUARDS)
+# 3. COMPUTATION ENGINE (WITH FUNNEL SAFETY GUARDS)
 # ==============================================================================
 def build_demographic_matrix(raw_data, shifts=None):
     matrix = []
     for entity, (p13, p55) in raw_data.items():
+        # Apply Zero-Sum Shift modifications from sidebar sliders if active
         shift_val = shifts.get(entity, 0.0) if shifts else 0.0
         adj_p13 = max(0.0, p13 + shift_val)
         w13_54 = max(0.0, adj_p13 - p55)
@@ -103,7 +102,7 @@ def build_demographic_matrix(raw_data, shifts=None):
     return pd.DataFrame(matrix)
 
 # ==============================================================================
-# 3. INTERFACE & SIDEBAR SIMULATION CONTROL
+# 4. INTERFACE & SIDEBAR SIMULATION CONTROL
 # ==============================================================================
 st.title("ESHAP Cross-Screen Attention Index (CSAI)")
 market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France"])
@@ -132,7 +131,7 @@ else:
     st.sidebar.success("Zero-Sum Balance Maintained")
 
 # ==============================================================================
-# 4. PRIMARY DASHBOARD PRESENTATION TABS
+# 5. PRIMARY DASHBOARD PRESENTATION TABS
 # ==============================================================================
 tab1, tab2 = st.tabs(["📊 CSAI Interactive Index Matrix", "📄 Index Architecture & Methodology"])
 
