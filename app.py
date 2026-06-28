@@ -18,6 +18,7 @@ def load_text_asset(filename, default_text=""):
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
 # Base Market Footprints (December 2025 - May 2026 Cycle)
+# UPDATED: Revised United States parameter dictionary tracking curves
 US_RAW = {
     "YOUTUBE": (2110.0, 490.0), 
     "DISNEY": (1945.0, 1080.0), 
@@ -214,8 +215,6 @@ tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Met
 
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
-    
-    # NEW: Small, bold caption instruction layer directly beneath the country header text
     st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -0.75rem; margin-bottom: 1rem; color: #555555;'>Click Header To Reorder By Column</p>", unsafe_allow_html=True)
     
     st.dataframe(
