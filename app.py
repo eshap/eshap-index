@@ -34,12 +34,7 @@ st.sidebar.markdown("## **MILLIONS OF HOURS**")
 # Generate Dynamic Sliders Pointed to Explicit Memory States
 user_inputs = {}
 for k, v in base_all.items():
-    user_inputs[k] = st.sidebar.slider(
-        f"{k} (P13+)", 
-        int(v * 0.2), 
-        int(v * 2.0), 
-        key=f"slider_{k}"
-    )
+    user_inputs[k] = st.sidebar.slider(f"{k} (P13+)", int(v * 0.2), int(v * 2.0), key=f"slider_{k}")
 
 # The Global Reset Button Execution Trigger
 if st.sidebar.button("🔄 Reset Defaults", use_container_width=True):
@@ -116,3 +111,5 @@ with tab2:
         The framework isolates the highly coveted economic engine of the active workforce by executing an unyielding zero-sum subtraction filter. Total aggregate monthly attention hours recorded within the 55+ demographic layer are stripped clean out of the total population baseline. This exposes the unvarnished realities of modern workforce attention distribution, removing the historical audience aging cushion that legacy television holding networks utilize to artificially pad macro currency totals.
         
         #### **3. The Age Bracket Safety Guard (The Nested Funnel Rule)**
+        The application script executes strict relational baseline checking across all narrowing nested demographic sub-tables. The model operates under the fundamental reality that a narrower generational cohort cannot possess more absolute attention volume than the macro parent demographic pool that encapsulates it. If a user sets an alternative input parameter that threatens to break this structural boundary, the Python safety engine automatically caps younger cohorts to guarantee error-free mathematical consistency.
+        """)
