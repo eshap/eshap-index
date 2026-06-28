@@ -16,12 +16,12 @@ def load_text_asset(filename, default_text=""):
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
 # Base Market Footprints (December 2025 - May 2026 Cycle)
-# UPDATED: Matched to explicit upper/lower case styling parameters
+# UPDATED: TikTok converted cleanly to all-caps TIKTOK for the US demographic array
 US_RAW = {
     "YOUTUBE": (2110.0, 490.0), 
     "DISNEY": (1945.0, 1080.0), 
     "NETFLIX": (1540.0, 380.0),
-    "TikTok": (1480.0, 65.0), 
+    "TIKTOK": (1480.0, 65.0), 
     "PARAMOUNT": (1290.0, 810.0), 
     "NBCU": (1265.0, 795.0),
     "INSTAGRAM": (1120.0, 110.0), 
@@ -31,7 +31,7 @@ US_RAW = {
     "FOX": (425.0, 315.0)
 }
 
-# UPDATED: Re-ordered and renamed to track your exact configuration layout
+# France Core Market Ecosystem Structural Parameters
 FR_RAW = {
     "YOUTUBE": (485.0, 95.0),
     "TIKTOK": (335.0, 12.0),
