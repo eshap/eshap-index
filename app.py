@@ -2,48 +2,57 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# 1. Page Configuration & Custom ESHAP Branding
 st.set_page_config(page_title="ESHAP CSAI", layout="wide")
 st.title("📊 ESHAP Cross-Screen Attention Index")
-st.markdown("""
-    Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis 
-    that models independent, platform-specific measurement panels into a singular, logic-enforced 
-    zero-sum market budget across televisions, smartphones, and computers.
-""")
 
-# 1. Unified Regional Setup
+# 2. Regional Selection Hub
 region = st.sidebar.selectbox("🌍 Select Market Region", ["United States (All Media Attention)", "France (Video Only)"])
+is_fr = "France" in region
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### **Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated**")
-
-# 2. Hardcoded Audited Baselines
+# 3. Hardcoded Audited Baselines (Do Not Alter)
 fr_all = {"France TV": 510.0, "YouTube": 485.0, "TF1 Group": 440.0, "Netflix": 390.0, "TikTok": 335.0, "Groupe M6": 265.0, "Instagram": 215.0, "Canal+ Group": 195.0, "Facebook": 165.0, "Amazon Prime": 155.0}
 fr_55  = {"France TV": 385.0, "TF1 Group": 270.0, "Groupe M6": 145.0, "Canal+ Group": 115.0, "YouTube": 95.0, "Facebook": 92.0, "Netflix": 85.0, "Amazon Prime": 48.0, "Instagram": 20.0, "TikTok": 12.0}
 
 us_all = {"YouTube": 2110.0, "Disney": 1945.0, "Netflix": 1540.0, "TikTok": 1480.0, "Paramount": 1290.0, "NBCUniversal": 1265.0, "Instagram": 1120.0, "Warner Bros. Discovery": 1040.0, "Facebook": 995.0, "Amazon Prime": 635.0, "Fox Corporation": 425.0}
 us_55  = {"Disney": 1080.0, "Paramount": 810.0, "NBCUniversal": 795.0, "Warner Bros. Discovery": 685.0, "Facebook": 520.0, "YouTube": 490.0, "Netflix": 380.0, "Fox Corporation": 315.0, "Amazon Prime": 215.0, "Instagram": 110.0, "TikTok": 65.0}
 
-is_fr = "France" in region
 base_all = fr_all if is_fr else us_all
 base_55  = fr_55 if is_fr else us_55
 
-# 3. Dynamic Reset Button Implementation
-if "reset" not in st.session_state or st.sidebar.button("🔄 Reset Defaults"):
-    st.session_state.reset = False
+# 4. Streamlit Explicit State Memory (The Bulletproof Reset Engine)
+if "current_region" not in st.session_state or st.session_state.current_region != region:
+    st.session_state.current_region = region
     for k, v in base_all.items():
-        st.session_state[f"val_{k}"] = int(v)
+        st.session_state[f"slider_{k}"] = int(v)
 
-# 4. Generate User Sliders
+# Sidebar Instantiation Header
+st.sidebar.markdown("---")
+st.sidebar.markdown("### **Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated**")
+st.sidebar.markdown("## **MILLIONS OF HOURS**")
+
+# Generate Dynamic Sliders Pointed to Explicit Memory States
 user_inputs = {}
 for k, v in base_all.items():
-    user_inputs[k] = st.sidebar.slider(f"{k} (P13+)", int(v*0.2), int(v*2.0), key=f"val_{k}")
+    user_inputs[k] = st.sidebar.slider(
+        f"{k} (P13+)", 
+        int(v * 0.2), 
+        int(v * 2.0), 
+        key=f"slider_{k}"
+    )
 
-# 5. Fixed Scaling Vectors
+# The Global Reset Button Execution Trigger
+if st.sidebar.button("🔄 Reset Defaults", use_container_width=True):
+    for k, v in base_all.items():
+        st.session_state[f"slider_{k}"] = int(v)
+    st.rerun()
+
+# 5. Fixed Performance Multipliers
 sc_44 = {"Instagram": 0.87, "Amazon Prime": 0.82, "TikTok": 0.78, "Canal+ Group": 0.69, "Disney": 0.76, "Paramount": 0.69, "NBCUniversal": 0.68, "Warner Bros. Discovery": 0.68, "France TV": 0.70, "Groupe M6": 0.69, "Netflix": 0.73, "TF1 Group": 0.68, "YouTube": 0.70, "Facebook": 0.55, "Fox Corporation": 0.50}
 sc_34 = {"TikTok": 0.82, "Instagram": 0.81, "YouTube": 0.78, "Canal+ Group": 0.68, "Disney": 0.68, "Paramount": 0.59, "NBCUniversal": 0.58, "Warner Bros. Discovery": 0.50, "France TV": 0.78, "Groupe M6": 0.59, "Netflix": 0.63, "TF1 Group": 0.68, "Amazon Prime": 0.62, "Facebook": 0.37, "Fox Corporation": 0.45}
 sc_24 = {"TikTok": 0.73, "YouTube": 0.61, "Instagram": 0.55, "Canal+ Group": 0.30, "Disney": 0.51, "Paramount": 0.44, "NBCUniversal": 0.41, "Warner Bros. Discovery": 0.42, "France TV": 0.61, "Groupe M6": 0.44, "Netflix": 0.51, "TF1 Group": 0.51, "Amazon Prime": 0.42, "Facebook": 0.19, "Fox Corporation": 0.20}
 
-# 6. Compute Data Matrix with Safety Funnel Guard
+# 6. Matrix Computation & Nested Funnel Rules Enforcements
 matrix = []
 for k in user_inputs.keys():
     wf_54 = max(0.0, user_inputs[k] - base_55.get(k, 0.0))
@@ -51,21 +60,59 @@ for k in user_inputs.keys():
     y_34  = round(y_44 * sc_34.get(k, 1.0), 1)
     y_24  = round(y_34 * sc_24.get(k, 1.0), 1)
     
-    # Nested Funnel Guard check
     y_44, y_34, y_24 = min(y_44, wf_54), min(y_34, y_44), min(y_24, y_34)
     
-    matrix.append({"Ecosystem": k, "All P13+": user_inputs[k], "55+": base_55.get(k, 0.0), "13-54": wf_54, "13-44": y_44, "13-34": y_34, "13-24": y_24})
+    matrix.append({
+        "Ecosystem Structure": k, "All P13+ Baseline": user_inputs[k], "55+ Layer": base_55.get(k, 0.0),
+        "13-54 Workforce": wf_54, "13-44 Youth": y_44, "13-34 Core": y_34, "13-24 Gen Z": y_24
+    })
 
-# 7. Render UI Visualizations
-df = pd.DataFrame(matrix).sort_values(by="All P13+", ascending=False)
-st.subheader("📋 Live Recalculated Matrix Engine")
-st.dataframe(df, use_container_width=True, hide_index=True)
+# 7. Dynamic Main App Tab Setup
+tab1, tab2 = st.tabs(["📊 Interactive Data Engine", "📑 Methodology & Sourcing"])
 
-st.subheader("📊 Cross-Cohort Visual Attention Drop-Off")
-df_melted = df.melt(id_vars=["Ecosystem"], value_vars=["All P13+", "13-54", "13-44", "13-34", "13-24"], var_name="Cohort", value_name="Hours")
-fig = px.bar(df_melted, x="Ecosystem", y="Hours", color="Cohort", barmode="group", color_discrete_sequence=px.colors.qualitative.Safe)
-st.plotly_chart(fig, use_container_width=True)
+with tab1:
+    df = pd.DataFrame(matrix).sort_values(by="All P13+ Baseline", ascending=False)
+    st.subheader("📋 Live Recalculated Matrix Engine")
+    st.dataframe(df, use_container_width=True, hide_index=True)
+    
+    st.subheader("📊 Cross-Cohort Visual Attention Drop-Off")
+    df_melted = df.melt(id_vars=["Ecosystem Structure"], value_vars=["All P13+ Baseline", "13-54 Workforce", "13-44 Youth", "13-34 Core", "13-24 Gen Z"], var_name="Cohort", value_name="Hours")
+    fig = px.bar(df_melted, x="Ecosystem Structure", y="Hours", color="Cohort", barmode="group", color_discrete_sequence=px.colors.qualitative.Safe)
+    st.plotly_chart(fig, use_container_width=True)
 
-st.markdown("---")
-st.markdown("### 🔍 DATA SOURCES")
-st.markdown("MÉDIAMÉTRIE MÉDIAMAT, CENTRE NATIONAL DU CINÉMA ET DE L'IMAGE ANIMÉE (CNC), SENSOR TOWER FRANCE, DATA.AI EUROPE, META INTERNAL AUDIENCE DATA, GOOGLE INVESTOR RELATIONS, VIVENDI FINANCIAL REPORTS, INSTITUT NATIONAL DE LA STATISTIQUE ET DES ÉTUDES ÉCONOMIQUES (INSEE), U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, DENTSU & LUMEN ATTENTION ECONOMY PANELS, EDISON RESEARCH CO-ACTIVE AUDIO TELEMETRY")
+with tab2:
+    if is_fr:
+        st.markdown("### **ESHAP Cross-Screen Attention Index: France Territory Blueprint**")
+        st.markdown("**Territorial Demographic Weight:** 65.1% of Population is ≤ 54 Years Old (34.9% is ≥ 55)")
+        st.markdown("---")
+        st.markdown("### 🔍 DATA SOURCES")
+        st.markdown("MÉDIAMÉTRIE MÉDIAMAT, CENTRE NATIONAL DU CINÉMA ET DE L'IMAGE ANIMÉE (CNC), SENSOR TOWER FRANCE, DATA.AI EUROPE, META INTERNAL AUDIENCE DATA, GOOGLE INVESTOR RELATIONS, VIVENDI FINANCIAL REPORTS, INSTITUT NATIONAL DE LA STATISTIQUE ET DES ÉTUDES ÉCONOMIQUES (INSEE), U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, DENTSU & LUMEN ATTENTION ECONOMY PANELS, EDISON RESEARCH CO-ACTIVE AUDIO TELEMETRY")
+        st.markdown("---")
+        st.markdown("""
+        #### **1. Corporate Ecosystem Consolidation**
+        Delivery mechanisms are stripped of their standalone vanity metrics and folded back into their parent corporate holding structures. Traditional networks are forbidden from masking linear audience attrition behind separate digital plays:
+        * **France Télévisions:** Combines all public broadcast channels (France 2, France 3, France 5) natively with the france.tv streaming player.
+        * **TF1 Group:** Consolidates flagship TF1 linear glass with TF1+ streaming consumption.
+        * **Canal+ Group:** Combines premium pay-TV channels, the MyCanal aggregator app, and Ciné+ digital footprints.
+        * **Groupe M6:** Merges M6 linear broadcast video with the M6+ platform.
+
+        #### **2. The 55+ Demographic Weighting Filter**
+        The core engine establishes its competitive moat by separating retirement-age leisure time from active workforce time. According to official **INSEE** data for the territory, **65.1% of the French population is 54 or younger**, leaving a **34.9% minority aged 55 or older**. Traditional tracking currencies rely heavily on this 34.9% minority to inflate their macro video reach. This index applies a strict zero-sum subtraction rule: *13–54 Workforce Pool = 13+ All Consumers Baseline - 55+ Heavy Linear Layer*. This filter isolates the commercially vital workforce pool, stripping away the older demographic layer that shields legacy networks from modern market realities.
+
+        #### **3. The Age Bracket Safety Guard (The Nested Funnel Rule)**
+        To keep the model realistic, the calculation script enforces a strict common-sense rule: a narrower, younger age bracket can never contain more attention hours than the larger parent group above it. A room simply cannot hold more people than the building it sits inside. The engine continuously audits the demographic columns from left to right to ensure they continuously drop in volume. To execute a 'Maximum Advantage' model for traditional media, the engine implants your established U.S. transitional curves directly onto the French workforce baseline. This conservative approach grants legacy European networks the ultimate benefit of the doubt regarding youth retention, yet still exposes their structural hollowing.
+        """)
+    else:
+        st.markdown("### **ESHAP Cross-Screen Attention Index: United States Blueprint**")
+        st.markdown("---")
+        st.markdown("### 🔍 DATA SOURCES")
+        st.markdown("U.S. CENSUS BUREAU, GWI CONSUMER DIARIES, NIELSEN MEDIA DISTRIBUTOR GAUGE, COMSCORE MOBILE METRIX, SENSOR TOWER, DATA.AI, META INTERNAL AUDIENCE METRICS, ALPHABET INVESTOR RELATIONS, WALT DISNEY COMPANY FINANCIAL REPORTS, NETFLIX QUARTERLY EARNINGS, DENTSU & LUMEN ATTENTION ECONOMY PANELS")
+        st.markdown("---")
+        st.markdown("""
+        #### **1. Corporate Ecosystem Consolidation**
+        All standalone and siloed delivery platforms are programmatically collapsed back into their master corporate parent holding entities. Linear television broadcast feeds, cable properties, standalone direct-to-consumer (DTC) streaming apps, and native social platform ecosystems are unified to stop media conglomerates from hiding underlying target audience erosion.
+        
+        #### **2. The 55+ Workforce Subtraction Rule**
+        The framework isolates the highly coveted economic engine of the active workforce by executing an unyielding zero-sum subtraction filter. Total aggregate monthly attention hours recorded within the 55+ demographic layer are stripped clean out of the total population baseline. This exposes the unvarnished realities of modern workforce attention distribution, removing the historical audience aging cushion that legacy television holding networks utilize to artificially pad macro currency totals.
+        
+        #### **3. The Age Bracket Safety Guard (The Nested Funnel Rule)**
