@@ -137,7 +137,7 @@ IT_BASE = [
 ]
 
 market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom", "Italy"])
-cols = ["Platform/Publisher", "All P13+", "55+ Layer", "13-54 Workfc", "13-44 Youth", "13-34 NextGen", "13-24 Gen Z"]
+cols = ["Platform/Publisher", "All P13+", "55+ Layer", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen Z"]
 
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
@@ -165,7 +165,7 @@ if active_shifts:
             adj_p13 = max(0.0, p13_orig + shift_val)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
             df_matrix.loc[idx, "All P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Workfc"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values)
+            df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values)
             df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values * ratio
             df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values * ratio
             df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values * ratio
@@ -183,7 +183,7 @@ if active_shifts:
             adj_p13 = max(0.0, p13_orig + absorbed_share)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
             df_matrix.loc[idx, "All P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Workfc"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values)
+            df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values)
             df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values * ratio
             df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values * ratio
             df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values * ratio
@@ -201,10 +201,14 @@ with tab1:
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
     st.write("")
     st.markdown("#### Interactive Visual Share Map")
+    
+    # Injected standard layout padding rules to stretch the radio grid horizontally
+    st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
+    
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
-    selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Show All Cohorts Overlaid"] + demo_columns, horizontal=True)
+    selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["All Cohorts Overlaid"] + demo_columns, horizontal=True)
     chart_df = df_matrix.set_index("Platform/Publisher")
-    chart_metrics = ["All P13+", "13-54 Workfc", "55+ Layer"] if selected_demo == "Show All Cohorts Overlaid" else [selected_demo]
+    chart_metrics = ["All P13+", "13-54 Workforce", "55+ Layer"] if selected_demo == "All Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 with tab2:
