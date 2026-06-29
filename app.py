@@ -189,7 +189,7 @@ BR_BASE = [
 ]
 
 st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
-st.markdown("<p style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #333333;'>The Definitive Zero-Sum Cross-Screen Attention Scale</p>", unsafe_allow_html=True)
+st.markdown("<p style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #333333;'>The Definitive Zero-Sum Cross-Screen Attention Scale (ESCAI: pronounced EE-say)</p>", unsafe_allow_html=True)
 
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"])
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
