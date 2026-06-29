@@ -130,13 +130,12 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Mid-Gray Sidebar Style Matrix & Global Typography Overrides (Restores Headroom and Main Titles)
+# Mid-Gray Sidebar Style Matrix & Global Typography Overrides
 st.html("""
     <style>
     section[data-testid="stSidebar"] {
         background-color: #4A4A4A !important;
     }
-    /* Fixed Selector Targets: Forces crisp contrast for all sidebar text structures and slider headlines */
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
     section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p {
@@ -155,10 +154,30 @@ st.html("""
     }
     </style>
     """)
+# Exact Mexico Parameters Bound Straight From Your Document Sheets
+MX_BASE = [
+    ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
+    ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
+    ["TIKTOK", 860.0, 12.0, 848.0, 695.3, 591.0, 461.0],
+    ["INSTAGRAM", 695.0, 18.0, 677.0, 602.5, 518.1, 305.7],
+    ["NETFLIX", 635.0, 54.0, 581.0, 447.4, 295.3, 156.4],
+    ["TV AZTECA", 485.0, 245.0, 240.0, 180.0, 122.4, 52.8],
+    ["AMAZON", 245.0, 32.0, 213.0, 176.8, 116.7, 52.5],
+    ["DISNEY", 220.0, 25.0, 195.0, 152.1, 100.4, 46.2],
+    ["WBD (MAX)", 195.0, 42.0, 153.0, 113.2, 72.4, 33.3],
+    ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
+]
+
+# Baseline Brazil Structured Parameters
+BR_BASE = [
+    ["YOUTUBE", 800.0, 150.0, 650.0, 500.0, 350.0, 200.0],
+    ["NETFLIX", 600.0, 110.0, 490.0, 380.0, 250.0, 120.0]
+]
+
 st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
 st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #555555;'>(ESCAI is pronounced \"EE-say\" - the C is silent)</p>", unsafe_allow_html=True)
 
-market_choice = st.sidebar.radio("Territory", ["United States", "Germany", "United Kingdom", "France", "Italy", "Spain"])
+market_choice = st.sidebar.radio("Territory", ["United States", "Germany", "United Kingdom", "France", "Italy", "Spain", "Brazil", "Mexico"])
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
@@ -166,7 +185,9 @@ elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
 elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
 elif market_choice == "Italy": df_matrix = pd.DataFrame(IT_BASE, columns=cols)
 elif market_choice == "Germany": df_matrix = pd.DataFrame(DE_BASE, columns=cols)
-else: df_matrix = pd.DataFrame(ES_BASE, columns=cols)
+elif market_choice == "Spain": df_matrix = pd.DataFrame(ES_BASE, columns=cols)
+elif market_choice == "Brazil": df_matrix = pd.DataFrame(BR_BASE, columns=cols)
+else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
 df_static_base = df_matrix.copy()
@@ -217,9 +238,15 @@ net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
 if abs(net_balance) > 0.1: st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
 else: st.sidebar.success("Zero-Sum Balance Maintained")
 
+f_map = {
+    "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧",
+    "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"
+}
+active_flag = f_map.get(market_choice, "🇺🇸")
+
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
-    st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
+    st.subheader(f"Cross-Screen Attention Allocation Ledger — {active_flag} {market_choice}")
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
     st.write("")
@@ -235,18 +262,19 @@ with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
     w_map = {
         "United States": "us", "France": "fr", "United Kingdom": "uk",
-        "Italy": "it", "Germany": "de", "Spain": "sp"
+        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
     }
     t_map = {
         "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"),
-        "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%")
+        "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"),
+        "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
     }
     f_token = w_map.get(market_choice, "us")
     w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
     with sub_method:
-        st.markdown("### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT")
+        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
         st.markdown(f"**Territorial Demographic Weight:** {w1} is ≤ 54 / {w2} is ≥ 55")
         st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
-        st.markdown("### DATA SOURCES")
+        st.markdown(f"### DATA SOURCES ({active_flag})")
         st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
