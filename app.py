@@ -77,30 +77,18 @@ logo_base64 = ""
 if os.path.exists("eshap_map.png"):
     with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
 
-# Layout script for full-width sidebar image alignment
 if logo_base64:
     st.sidebar.html("""
         <style>
-        div[data-testid="stSidebarUserContent"] {
-            padding-top: 0rem !important;
-            padding-left: 0rem !important;
-            padding-right: 0rem !important;
-        }
         div.sidebar-logo-container {
             width: 100% !important;
-            margin: 0 !important;
+            margin: 0 0 1rem 0 !important;
             padding: 0 !important;
-            line-height: 0 !important;
+            text-align: center !important;
         }
         div.sidebar-logo-container img {
-            width: 100% !important;
+            max-width: 100% !important;
             height: auto !important;
-            display: block !important;
-        }
-        /* Restore required container padding only for components below the logo slot */
-        div[data-testid="stSidebarUserContent"] > div:not(.sidebar-logo-container) {
-            padding-left: 1.15rem !important;
-            padding-right: 1.15rem !important;
         }
         </style>
         <div class="sidebar-logo-container">
@@ -108,6 +96,8 @@ if logo_base64:
         </div>
         """)
 
+# Unwrapping titles, locking text with explicit CSS rules to completely stop wrapping updates
+st.html("<style>h1[id='eshap-cross-screen-attention-index-escai'] { white-space: nowrap !important; font-size: 2.25rem !important; }</style>")
 st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
 st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #555555;'>(ESCAI is pronounced \"EE-say\" - the C is silent)</p>", unsafe_allow_html=True)
 UK_BASE = [
@@ -139,7 +129,7 @@ IT_BASE = [
     ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
 ]
 
-market_choice = st.sidebar.radio("Select Market Territory Component", ["United States", "France", "United Kingdom", "Italy"])
+market_choice = st.sidebar.radio("Territory", ["United States", "France", "United Kingdom", "Italy"])
 cols = ["Platform/Publisher", "All P13+", "55+ Layer", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen Z"]
 
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
@@ -210,7 +200,7 @@ with tab1:
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["All Cohorts Overlaid"] + demo_columns, horizontal=True)
     chart_df = df_matrix.set_index("Platform/Publisher")
-    chart_metrics = ["All P13+", "13-54 Workforce", "55+ Layer"] if selected_demo == "All Cohorts Overlaid" else [selected_demo]
+    chart_metrics = ["All P13+", "13-54 Workforce", "55+ Layer"] if selected_demo == "Show All Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 with tab2:
