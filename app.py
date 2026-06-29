@@ -76,6 +76,8 @@ if bullet_base64:
 logo_base64 = ""
 if os.path.exists("eshap_map.png"):
     with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
+
+# Layout script for full-width sidebar image alignment
 if logo_base64:
     st.sidebar.html("""
         <style>
@@ -95,9 +97,10 @@ if logo_base64:
             height: auto !important;
             display: block !important;
         }
+        /* Restore required container padding only for components below the logo slot */
         div[data-testid="stSidebarUserContent"] > div:not(.sidebar-logo-container) {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
+            padding-left: 1.15rem !important;
+            padding-right: 1.15rem !important;
         }
         </style>
         <div class="sidebar-logo-container">
@@ -202,7 +205,6 @@ with tab1:
     st.write("")
     st.markdown("#### Interactive Visual Share Map")
     
-    # Injected standard layout padding rules to stretch the radio grid horizontally
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
     
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
@@ -217,8 +219,8 @@ with tab2:
     weight_info = w_map.get(market_choice, ("64.2%", "35.8%", "us"))
     with sub_method:
         st.markdown("### METHODOLOGY")
-        st.markdown(f"**Territorial Demographic Weight:** {weight_info[0]} of Population is ≤ 54 Years Old ({weight_info[1]} is ≥ 55)")
-        st.write(load_text_asset(f"methodology_{weight_info[2]}.txt", f"{market_choice} methodology text loading..."))
+        st.markdown(f"**Territorial Demographic Weight:** {weight_info} of Population is ≤ 54 Years Old ({weight_info} is ≥ 55)")
+        st.write(load_text_asset(f"methodology_{weight_info}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
         st.markdown("### DATA SOURCES")
-        st.write(load_text_asset(f"sources_{weight_info[2]}.txt", f"{market_choice} sourcing data loading..."))
+        st.write(load_text_asset(f"sources_{weight_info}.txt", f"{market_choice} sourcing data loading..."))
