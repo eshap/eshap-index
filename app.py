@@ -168,10 +168,20 @@ MX_BASE = [
     ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
 ]
 
-# Baseline Brazil Structured Parameters
+# Exact Complete Brazil Matrix Bound Straight From Your Audited Document Panels
 BR_BASE = [
-    ["YOUTUBE", 800.0, 150.0, 650.0, 500.0, 350.0, 200.0],
-    ["NETFLIX", 600.0, 110.0, 490.0, 380.0, 250.0, 120.0]
+    ["GRUPO GLOBO", 2210.0, 1015.0, 1195.0, 920.2, 680.9, 354.1],
+    ["YOUTUBE", 1980.0, 260.0, 1720.0, 1221.2, 976.9, 625.2],
+    ["TIKTOK", 1150.0, 28.0, 1122.0, 908.8, 763.4, 587.8],
+    ["INSTAGRAM", 1040.0, 52.0, 988.0, 879.3, 747.4, 433.5],
+    ["NETFLIX", 915.0, 120.0, 795.0, 604.2, 398.7, 211.3],
+    ["RECORD GRUPO", 620.0, 365.0, 255.0, 186.1, 122.8, 54.8],
+    ["SBT (Sist. Bras.)", 515.0, 290.0, 225.0, 168.7, 115.8, 53.2],
+    ["AMAZON", 390.0, 65.0, 325.0, 266.5, 173.2, 77.9],
+    ["DISNEY", 325.0, 48.0, 277.0, 213.3, 139.3, 64.0],
+    ["WBD (MAX)", 290.0, 82.0, 208.0, 151.8, 95.6, 43.0],
+    ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
+    ["BAND (Grupo)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
 ]
 
 st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
@@ -276,5 +286,5 @@ with tab2:
         st.markdown(f"**Territorial Demographic Weight:** {w1} is ≤ 54 / {w2} is ≥ 55")
         st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
-        st.markdown(f"### DATA SOURCES ({active_flag})")
+        st.markdown("### DATA SOURCES ({active_flag})")
         st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
