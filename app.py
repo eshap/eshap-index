@@ -238,13 +238,14 @@ with tab2:
         "Italy": "it", "Germany": "de", "Spain": "sp"
     }
     t_map = {
-        "United States": "64.2% / 35.8%", "France": "65.1% / 34.9%", "United Kingdom": "63.8% / 36.2%",
-        "Italy": "59.8% / 40.2%", "Germany": "61.5% / 38.5%", "Spain": "62.0% / 38.0%"
+        "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"),
+        "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%")
     }
     f_token = w_map.get(market_choice, "us")
+    w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
     with sub_method:
         st.markdown("### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT")
-        st.markdown(f"**Territorial Demographic Weight:** {t_map.get(market_choice)} of Population is ≤ 54 Years Old / ≥ 55")
+        st.markdown(f"**Territorial Demographic Weight:** {w1} is ≤ 54 / {w2} is ≥ 55")
         st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
         st.markdown("### DATA SOURCES")
