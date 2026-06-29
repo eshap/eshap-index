@@ -130,7 +130,7 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Mid-Gray Sidebar Style Matrix & Global Typography Overrides (Resets Headroom and Main Titles)
+# Mid-Gray Sidebar Style Matrix & Global Typography Overrides (Restores Headroom and Main Titles)
 st.html("""
     <style>
     section[data-testid="stSidebar"] {
@@ -233,12 +233,19 @@ with tab1:
 
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
-    w_map = {"United States": ("64.2%", "35.8%", "us"), "France": ("65.1%", "34.9%", "fr"), "United Kingdom": ("63.8%", "36.2%", "uk"), "Italy": ("59.8%", "40.2%", "it"), "Germany": ("61.5%", "38.5%", "de"), "Spain": ("62.0%", "38.0%", "sp")}
-    weight_info = w_map.get(market_choice, ("64.2%", "35.8%", "us"))
+    w_map = {
+        "United States": "us", "France": "fr", "United Kingdom": "uk",
+        "Italy": "it", "Germany": "de", "Spain": "sp"
+    }
+    t_map = {
+        "United States": "64.2% / 35.8%", "France": "65.1% / 34.9%", "United Kingdom": "63.8% / 36.2%",
+        "Italy": "59.8% / 40.2%", "Germany": "61.5% / 38.5%", "Spain": "62.0% / 38.0%"
+    }
+    f_token = w_map.get(market_choice, "us")
     with sub_method:
         st.markdown("### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT")
-        st.markdown(f"**Territorial Demographic Weight:** {weight_info} of Population is ≤ 54 Years Old ({weight_info} is ≥ 55)")
-        st.write(load_text_asset(f"methodology_{weight_info}.txt", f"{market_choice} methodology text loading..."))
+        st.markdown(f"**Territorial Demographic Weight:** {t_map.get(market_choice)} of Population is ≤ 54 Years Old / ≥ 55")
+        st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
         st.markdown("### DATA SOURCES")
-        st.write(load_text_asset(f"sources_{weight_info}.txt", f"{market_choice} sourcing data loading..."))
+        st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
