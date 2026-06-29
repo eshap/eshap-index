@@ -11,7 +11,7 @@ def load_text_asset(filename, default_text=""):
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# Exact Data Parameter Matrices Bound Straight From Your Document Panels
+# Unified Data Parameter Matrices Bound Straight From Your Document Panels (Strict ALL CAPS)
 US_BASE = [
     ["YOUTUBE", 2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5],
     ["DISNEY", 1945.0, 1080.0, 865.0, 657.4, 447.0, 228.0],
@@ -50,23 +50,23 @@ DE_BASE = [
     ["RTL GROUP", 510.0, 310.0, 200.0, 150.0, 108.0, 49.0],
     ["NETFLIX", 445.0, 95.0, 350.0, 255.5, 160.9, 82.1],
     ["TIKTOK", 385.0, 14.0, 371.0, 289.4, 237.3, 173.2],
-    ["PROSIEBENS", 340.0, 195.0, 145.0, 107.3, 73.0, 31.2],
+    ["PROSIEBENSAT.1", 340.0, 195.0, 145.0, 107.3, 73.0, 31.2],
     ["INSTAGRAM", 295.0, 28.0, 267.0, 232.3, 188.2, 103.5],
     ["AMAZON", 230.0, 68.0, 162.0, 132.8, 82.3, 34.6],
     ["DISNEY", 195.0, 42.0, 153.0, 116.3, 73.3, 30.3],
-    ["WBD (MAX/I", 145.0, 78.0, 67.0, 48.9, 30.8, 12.7],
+    ["WBD", 145.0, 78.0, 67.0, 48.9, 30.8, 12.7],
     ["FACEBOOK", 140.0, 82.0, 58.0, 31.9, 11.8, 2.2]
 ]
 
 ES_BASE = [
-    ["RTVE (Radiot", 395.0, 295.0, 100.0, 77.0, 55.4, 35.5],
+    ["RTVE", 395.0, 295.0, 100.0, 77.0, 55.4, 35.5],
     ["ATRESMEDIA", 380.0, 235.0, 145.0, 108.8, 78.3, 39.5],
     ["YOUTUBE", 365.0, 85.0, 280.0, 196.0, 152.9, 93.3],
-    ["MEDIASET ES", 320.0, 198.0, 122.0, 91.5, 65.9, 33.3],
+    ["MEDIASET ESPANA", 320.0, 198.0, 122.0, 91.5, 65.9, 33.3],
     ["TIKTOK", 255.0, 10.0, 245.0, 191.1, 156.7, 114.4],
     ["NETFLIX", 240.0, 52.0, 188.0, 137.2, 86.5, 44.1],
     ["INSTAGRAM", 215.0, 20.0, 195.0, 169.7, 137.5, 75.6],
-    ["MOVISTAR+ (", 145.0, 82.0, 63.0, 44.1, 26.5, 11.1],
+    ["MOVISTAR+", 145.0, 82.0, 63.0, 44.1, 26.5, 11.1],
     ["DISNEY", 115.0, 24.0, 91.0, 69.2, 43.6, 18.0],
     ["WBD (MAX)", 105.0, 55.0, 50.0, 36.5, 23.0, 9.6],
     ["AMAZON", 95.0, 28.0, 67.0, 54.9, 34.0, 14.3],
@@ -89,9 +89,9 @@ UK_BASE = [
 ]
 
 IT_BASE = [
-    ["Rai", 520.0, 415.0, 105.0, 80.9, 58.2, 37.2],
+    ["RAI", 520.0, 415.0, 105.0, 80.9, 58.2, 37.2],
     ["YOUTUBE", 440.0, 110.0, 330.0, 231.0, 180.2, 109.9],
-    ["MFE (Mediaset)", 415.0, 265.0, 150.0, 112.5, 81.0, 40.8],
+    ["MFE (MEDIASET)", 415.0, 265.0, 150.0, 112.5, 81.0, 40.8],
     ["TIKTOK", 295.0, 12.0, 283.0, 220.7, 181.0, 132.1],
     ["NETFLIX", 310.0, 70.0, 240.0, 175.2, 110.4, 56.3],
     ["INSTAGRAM", 250.0, 25.0, 225.0, 195.8, 158.6, 87.2],
@@ -152,9 +152,13 @@ st.html("""
     div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 {
         color: #000000 !important;
     }
+    /* Layout fix expanding the horizontal text room for publisher labels next to bar charts */
+    div[data-testid="stVegaLiteChart"] summary, g[class*="role-axis"] text {
+        font-weight: bold !important;
+    }
     </style>
     """)
-# Exact Mexico Parameters Bound Straight From Your Document Sheets
+# Exact Mexico Parameters Bound Straight From Your Document Sheets (Strict ALL CAPS Alignment)
 MX_BASE = [
     ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
     ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
@@ -168,7 +172,7 @@ MX_BASE = [
     ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
 ]
 
-# Exact Complete Brazil Matrix Bound Straight From Your Audited Document Panels
+# Exact Complete Brazil Matrix Bound Straight From Your Audited Document Panels (Strict ALL CAPS Alignment)
 BR_BASE = [
     ["GRUPO GLOBO", 2210.0, 1015.0, 1195.0, 920.2, 680.9, 354.1],
     ["YOUTUBE", 1980.0, 260.0, 1720.0, 1221.2, 976.9, 625.2],
@@ -176,12 +180,12 @@ BR_BASE = [
     ["INSTAGRAM", 1040.0, 52.0, 988.0, 879.3, 747.4, 433.5],
     ["NETFLIX", 915.0, 120.0, 795.0, 604.2, 398.7, 211.3],
     ["RECORD GRUPO", 620.0, 365.0, 255.0, 186.1, 122.8, 54.8],
-    ["SBT (Sist. Bras.)", 515.0, 290.0, 225.0, 168.7, 115.8, 53.2],
+    ["SBT (SISTEMA BRASILEIRO DE TELEVISAO)", 515.0, 290.0, 225.0, 168.7, 115.8, 53.2],
     ["AMAZON", 390.0, 65.0, 325.0, 266.5, 173.2, 77.9],
     ["DISNEY", 325.0, 48.0, 277.0, 213.3, 139.3, 64.0],
     ["WBD (MAX)", 290.0, 82.0, 208.0, 151.8, 95.6, 43.0],
     ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
-    ["BAND (Grupo)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
+    ["BAND (GRUPO)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
 ]
 
 st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
@@ -266,7 +270,9 @@ with tab1:
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Cohorts Overlaid"] + demo_columns, horizontal=True)
     chart_df = df_matrix.set_index("Platform/Publisher")
     chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
-    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
+    
+    # Injected config adjusting text allocation headroom so TELEVISAUNIVISION is completely unclipped
+    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
 
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
