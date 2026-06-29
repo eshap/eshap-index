@@ -189,7 +189,6 @@ else: st.sidebar.success("Zero-Sum Balance Maintained")
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {market_choice}")
-    st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -0.75rem; margin-bottom: 1rem; color: #555555;'>Click Header To Reorder By Column</p>", unsafe_allow_html=True)
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
     st.write("")
@@ -200,7 +199,8 @@ with tab1:
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["All Cohorts Overlaid"] + demo_columns, horizontal=True)
     chart_df = df_matrix.set_index("Platform/Publisher")
-    chart_metrics = ["All P13+", "13-54 Workforce", "55+ Layer"] if selected_demo == "Show All Cohorts Overlaid" else [selected_demo]
+    
+    chart_metrics = ["All P13+", "13-54 Workforce", "55+ Layer"] if selected_demo == "All Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 with tab2:
@@ -209,8 +209,8 @@ with tab2:
     weight_info = w_map.get(market_choice, ("64.2%", "35.8%", "us"))
     with sub_method:
         st.markdown("### METHODOLOGY")
-        st.markdown(f"**Territorial Demographic Weight:** {weight_info} of Population is ≤ 54 Years Old ({weight_info} is ≥ 55)")
-        st.write(load_text_asset(f"methodology_{weight_info}.txt", f"{market_choice} methodology text loading..."))
+        st.markdown(f"**Territorial Demographic Weight:** {weight_info[0]} of Population is ≤ 54 Years Old ({weight_info[1]} is ≥ 55)")
+        st.write(load_text_asset(f"methodology_{weight_info[2]}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
         st.markdown("### DATA SOURCES")
-        st.write(load_text_asset(f"sources_{weight_info}.txt", f"{market_choice} sourcing data loading..."))
+        st.write(load_text_asset(f"sources_{weight_info[2]}.txt", f"{market_choice} sourcing data loading..."))
