@@ -189,11 +189,16 @@ BR_BASE = [
 ]
 
 st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
-st.markdown("<p style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #333333;'>The Definitive Zero-Sum Cross-Screen Attention Scale (ESCAI: pronounced EE-say)</p>", unsafe_allow_html=True)
+
+# Native split columns: col1 locks headline to left, col2 floats pronounciation text entirely right
+title_left, title_right = st.columns([2.5, 1])
+with title_left:
+    st.markdown("<p style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #333333;'>The Definitive Zero-Sum Cross-Screen Attention Scale</p>", unsafe_allow_html=True)
+with title_right:
+    st.markdown("<p style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #555555; text-align: right;'>(ESCAI: pronounced EE-say)</p>", unsafe_allow_html=True)
 
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"])
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
-
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
 elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
@@ -205,6 +210,7 @@ else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
 df_static_base = df_matrix.copy()
+
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
 user_shifts = {}
 for entity in df_matrix["Platform/Publisher"].unique():
