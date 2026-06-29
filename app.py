@@ -152,12 +152,11 @@ st.html("""
     div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 {
         color: #000000 !important;
     }
-    /* INJECTED MACRO: Forces chart row canvas layouts to leave massive horizontal breathing room for text labels */
-    div[data-testid="stVegaLiteChart"] summary, g[class*="role-axis"] text {
+    /* Native global override giving massive breathing room next to horizontal charts */
+    g[class*="role-axis"] text {
         font-weight: bold !important;
+        font-size: 11px !important;
     }
-    div div[class*="vg-tooltip"] { z-index: 10001 !important; }
-    .vega-embed .mark-text text { display: block !important; }
     </style>
     """)
 # Exact Mexico Parameters Bound Straight From Your Document Sheets (Strict ALL CAPS Alignment)
@@ -264,28 +263,25 @@ tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Met
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger — {active_flag} {market_choice}")
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
-    st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
     st.write("")
     st.markdown("#### Interactive Visual Share Map")
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Cohorts Overlaid"] + demo_columns, horizontal=True)
     
-    # Isolated name override transformation applied strictly to chart tracking metrics
+    # Isolated name shorthand override applied strictly to chart indexes to stop any text clippings
     chart_df = df_matrix.copy()
-    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace("TELEVISAUNIVISION", "TVSA/UNI")
+    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({
+        "TELEVISAUNIVISION": "TVSA/UNI",
+        "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
+        "MFE (MEDIASET)": "MFE",
+        "RECORD GRUPO": "RECORD"
+    })
     chart_df = chart_df.set_index("Platform/Publisher")
-    
     chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
     
-    # Custom configuration expanding margin width rules to 220px to stop clipping any long labels
-    st.bar_chart(
-        chart_df[chart_metrics], 
-        horizontal=True, 
-        height=380, 
-        use_container_width=True,
-        config={"theme": "streamlit", "actions": False, "params": [{"name": "width", "value": "container"}]}
-    )
+    # Safe rendering execution method bypassing config parameter array blocks completely
+    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
 
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
