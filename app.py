@@ -159,7 +159,7 @@ st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
 st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #555555;'>(ESCAI is pronounced \"EE-say\" - the C is silent)</p>", unsafe_allow_html=True)
 
 market_choice = st.sidebar.radio("Territory", ["United States", "Germany", "United Kingdom", "France", "Italy", "Spain"])
-cols = ["Platform/Publisher", "All P13+", "55+ GenX+", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen Z"]
+cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen Z"]
 
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
@@ -185,10 +185,10 @@ if active_shifts:
     for entity, shift_val in active_shifts.items():
         idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
         if len(idx) > 0:
-            p13_orig = df_static_base.loc[idx, "All P13+"].values
+            p13_orig = df_static_base.loc[idx, "P13+"].values
             adj_p13 = max(0.0, p13_orig + shift_val)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-            df_matrix.loc[idx, "All P13+"] = adj_p13
+            df_matrix.loc[idx, "P13+"] = adj_p13
             df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
             df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values * ratio
             df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values * ratio
@@ -196,24 +196,24 @@ if active_shifts:
 
     total_shifted_hours = sum(active_shifts.values())
     non_shifted_df = df_static_base[~df_static_base["Platform/Publisher"].isin(active_shifts.keys())]
-    total_non_shifted_pool = non_shifted_df["All P13+"].sum()
+    total_non_shifted_pool = non_shifted_df["P13+"].sum()
 
     if total_non_shifted_pool > 0 and abs(total_shifted_hours) > 0.01:
         for entity in non_shifted_df["Platform/Publisher"].unique():
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            p13_orig = df_static_base.loc[idx, "All P13+"].values
+            p13_orig = df_static_base.loc[idx, "P13+"].values
             pro_rata_weight = p13_orig / total_non_shifted_pool
             absorbed_share = -total_shifted_hours * pro_rata_weight
             adj_p13 = max(0.0, p13_orig + absorbed_share)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-            df_matrix.loc[idx, "All P13+"] = adj_p13
+            df_matrix.loc[idx, "P13+"] = adj_p13
             df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
             df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values * ratio
             df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values * ratio
             df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values * ratio
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
-net_balance = df_matrix["All P13+"].sum() - df_static_base["All P13+"].sum()
+net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
 if abs(net_balance) > 0.1: st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
 else: st.sidebar.success("Zero-Sum Balance Maintained")
 
@@ -231,7 +231,7 @@ with tab1:
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["All Cohorts Overlaid"] + demo_columns, horizontal=True)
     chart_df = df_matrix.set_index("Platform/Publisher")
     
-    chart_metrics = ["All P13+", "13-54 Workforce", "55+ GenX+"] if selected_demo == "All Cohorts Overlaid" else [selected_demo]
+    chart_metrics = ["P13+", "13-54 Workforce", "55+ GenX+"] if selected_demo == "All Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 with tab2:
@@ -240,8 +240,8 @@ with tab2:
     weight_info = w_map.get(market_choice, ("64.2%", "35.8%", "us"))
     with sub_method:
         st.markdown("### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT")
-        st.markdown(f"**Territorial Demographic Weight:** {weight_info} of Population is ≤ 54 Years Old ({weight_info} is ≥ 55)")
-        st.write(load_text_asset(f"methodology_{weight_info}.txt", f"{market_choice} methodology text loading..."))
+        st.markdown(f"**Territorial Demographic Weight:** {weight_info[0]} of Population is ≤ 54 Years Old ({weight_info[1]} is ≥ 55)")
+        st.write(load_text_asset(f"methodology_{weight_info[2]}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
         st.markdown("### DATA SOURCES")
-        st.write(load_text_asset(f"sources_{weight_info}.txt", f"{market_choice} sourcing data loading..."))
+        st.write(load_text_asset(f"sources_{weight_info[2]}.txt", f"{market_choice} sourcing data loading..."))
