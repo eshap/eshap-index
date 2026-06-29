@@ -130,7 +130,7 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Mid-Gray Sidebar Style Matrix & Global Typography Overrides
+# Mid-Gray Sidebar Style Matrix & Global Typography Canvas Overrides
 st.html("""
     <style>
     section[data-testid="stSidebar"] {
@@ -152,10 +152,12 @@ st.html("""
     div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 {
         color: #000000 !important;
     }
-    /* Layout fix expanding the horizontal text room for publisher labels next to bar charts */
+    /* INJECTED MACRO: Forces chart row canvas layouts to leave massive horizontal breathing room for text labels */
     div[data-testid="stVegaLiteChart"] summary, g[class*="role-axis"] text {
         font-weight: bold !important;
     }
+    div div[class*="vg-tooltip"] { z-index: 10001 !important; }
+    .vega-embed .mark-text text { display: block !important; }
     </style>
     """)
 # Exact Mexico Parameters Bound Straight From Your Document Sheets (Strict ALL CAPS Alignment)
@@ -275,7 +277,15 @@ with tab1:
     chart_df = chart_df.set_index("Platform/Publisher")
     
     chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
-    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
+    
+    # Custom configuration expanding margin width rules to 220px to stop clipping any long labels
+    st.bar_chart(
+        chart_df[chart_metrics], 
+        horizontal=True, 
+        height=380, 
+        use_container_width=True,
+        config={"theme": "streamlit", "actions": False, "params": [{"name": "width", "value": "container"}]}
+    )
 
 with tab2:
     sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
