@@ -159,7 +159,7 @@ st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
 st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #555555;'>(ESCAI is pronounced \"EE-say\" - the C is silent)</p>", unsafe_allow_html=True)
 
 market_choice = st.sidebar.radio("Territory", ["United States", "Germany", "United Kingdom", "France", "Italy", "Spain"])
-cols = ["Platform/Publisher", "All P13+", "55+ Layer", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen Z"]
+cols = ["Platform/Publisher", "All P13+", "55+ GenX+", "13-54 Workforce", "13-44 Youth", "13-34 NextGen", "13-24 Gen Z"]
 
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
@@ -189,7 +189,7 @@ if active_shifts:
             adj_p13 = max(0.0, p13_orig + shift_val)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
             df_matrix.loc[idx, "All P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values)
+            df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
             df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values * ratio
             df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values * ratio
             df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values * ratio
@@ -207,7 +207,7 @@ if active_shifts:
             adj_p13 = max(0.0, p13_orig + absorbed_share)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
             df_matrix.loc[idx, "All P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ Layer"].values)
+            df_matrix.loc[idx, "13-54 Workforce"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
             df_matrix.loc[idx, "13-44 Youth"] = df_static_base.loc[idx, "13-44 Youth"].values * ratio
             df_matrix.loc[idx, "13-34 NextGen"] = df_static_base.loc[idx, "13-34 NextGen"].values * ratio
             df_matrix.loc[idx, "13-24 Gen Z"] = df_static_base.loc[idx, "13-24 Gen Z"].values * ratio
@@ -231,7 +231,7 @@ with tab1:
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["All Cohorts Overlaid"] + demo_columns, horizontal=True)
     chart_df = df_matrix.set_index("Platform/Publisher")
     
-    chart_metrics = ["All P13+", "13-54 Workforce", "55+ Layer"] if selected_demo == "All Cohorts Overlaid" else [selected_demo]
+    chart_metrics = ["All P13+", "13-54 Workforce", "55+ GenX+"] if selected_demo == "All Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
 with tab2:
@@ -240,8 +240,8 @@ with tab2:
     weight_info = w_map.get(market_choice, ("64.2%", "35.8%", "us"))
     with sub_method:
         st.markdown("### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT")
-        st.markdown(f"**Territorial Demographic Weight:** {weight_info[0]} of Population is ≤ 54 Years Old ({weight_info[1]} is ≥ 55)")
-        st.write(load_text_asset(f"methodology_{weight_info[2]}.txt", f"{market_choice} methodology text loading..."))
+        st.markdown(f"**Territorial Demographic Weight:** {weight_info} of Population is ≤ 54 Years Old ({weight_info} is ≥ 55)")
+        st.write(load_text_asset(f"methodology_{weight_info}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
         st.markdown("### DATA SOURCES")
-        st.write(load_text_asset(f"sources_{weight_info[2]}.txt", f"{market_choice} sourcing data loading..."))
+        st.write(load_text_asset(f"sources_{weight_info}.txt", f"{market_choice} sourcing data loading..."))
