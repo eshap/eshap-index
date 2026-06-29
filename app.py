@@ -154,9 +154,35 @@ if logo_base64:
         </div>
         """)
 
-st.html("<style>h1[id='eshap-cross-screen-attention-index-escai'] { white-space: nowrap !important; font-size: 2.25rem !important; }</style>")
-st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
-st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #555555;'>(ESCAI is pronounced \"EE-say\" - the C is silent)</p>", unsafe_allow_html=True)
+# Custom Dark Charcoal Sidebar Theme & Solid Black Text Presentation Injection
+st.html("""
+    <style>
+    /* Dark charcoal gray sidebar treatment */
+    section[data-testid="stSidebar"] {
+        background-color: #262626 !important;
+    }
+    /* Force white text exclusively inside dark sidebar parameters */
+    section[data-testid="stSidebar"] p, 
+    section[data-testid="stSidebar"] span, 
+    section[data-testid="stSidebar"] label {
+        color: #ffffff !important;
+    }
+    /* Force absolute pure black for text surrounding charts and main workspace */
+    div[data-testid="stMain"] p, 
+    div[data-testid="stMain"] span, 
+    div[data-testid="stMain"] label, 
+    div[data-testid="stMain"] h3, 
+    div[data-testid="stMain"] h4,
+    div[data-testid="stWidgetLabel"] p {
+        color: #000000 !important;
+    }
+    h1[id='eshap-cross-screen-attention-index-escai'] {
+        white-space: nowrap !important;
+        font-size: 2.25rem !important;
+        color: #000000 !important;
+    }
+    </style>
+    """)
 
 market_choice = st.sidebar.radio("Territory", ["United States", "Germany", "United Kingdom", "France", "Italy", "Spain"])
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
