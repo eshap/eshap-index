@@ -268,10 +268,13 @@ with tab1:
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Cohorts Overlaid"] + demo_columns, horizontal=True)
-    chart_df = df_matrix.set_index("Platform/Publisher")
-    chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
     
-    # Injected config adjusting text allocation headroom so TELEVISAUNIVISION is completely unclipped
+    # Isolated name override transformation applied strictly to chart tracking metrics
+    chart_df = df_matrix.copy()
+    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace("TELEVISAUNIVISION", "TVSA/UNI")
+    chart_df = chart_df.set_index("Platform/Publisher")
+    
+    chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
 
 with tab2:
