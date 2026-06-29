@@ -43,7 +43,6 @@ FR_BASE = [
     ["FACEBOOK", 165.0, 92.0, 73.0, 40.2, 14.9, 2.8],
     ["DAZN", 20.0, 2.0, 18.0, 16.2, 12.8, 7.7]
 ]
-
 DE_BASE = [
     ["ARD", 710.0, 560.0, 150.0, 115.5, 90.1, 57.6],
     ["YOUTUBE", 625.0, 135.0, 490.0, 343.0, 267.5, 163.2],
@@ -59,34 +58,6 @@ DE_BASE = [
     ["FACEBOOK", 140.0, 82.0, 58.0, 31.9, 11.8, 2.2]
 ]
 
-bullet_base64 = ""
-if os.path.exists("planet_bullet.png"):
-    with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
-if bullet_base64:
-    st.html("""
-        <style>
-        span[data-testid='stWidgetLabel'] p, 
-        button[data-testid='stBaseButton-secondary'] p, 
-        [data-baseweb='tab'] p {
-            position: relative;
-            padding-left: 1.5rem !important;
-        }
-        span[data-testid='stWidgetLabel'] p::before, 
-        button[data-testid='stBaseButton-secondary'] p::before, 
-        [data-baseweb='tab'] p::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-image: url('data:image/png;base64,""" + bullet_base64 + """') !important;
-        }
-        </style>
-        """)
 ES_BASE = [
     ["RTVE (Radiot", 395.0, 295.0, 100.0, 77.0, 55.4, 35.5],
     ["ATRESMEDIA", 380.0, 235.0, 145.0, 108.8, 78.3, 39.5],
@@ -131,30 +102,59 @@ IT_BASE = [
     ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
 ]
 
+bullet_base64 = ""
+if os.path.exists("planet_bullet.png"):
+    with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
+if bullet_base64:
+    st.html("""
+        <style>
+        span[data-testid='stWidgetLabel'] p, button[data-testid='stBaseButton-secondary'] p, [data-baseweb='tab'] p {
+            position: relative; padding-left: 1.5rem !important;
+        }
+        span[data-testid='stWidgetLabel'] p::before, button[data-testid='stBaseButton-secondary'] p::before, [data-baseweb='tab'] p::before {
+            content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
+            background-image: url('data:image/png;base64,""" + bullet_base64 + """') !important;
+        }
+        </style>
+        """)
+
 logo_base64 = ""
 if os.path.exists("eshap_map.png"):
     with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
-
 if logo_base64:
     st.sidebar.html("""
         <style>
-        div.sidebar-logo-container {
-            width: 100% !important;
-            margin: 0 0 1rem 0 !important;
-            padding: 0 !important;
-            text-align: center !important;
-        }
-        div.sidebar-logo-container img {
-            max-width: 100% !important;
-            height: auto !important;
-        }
+        div.sidebar-logo-container { width: 100% !important; margin: 0 0 1rem 0 !important; padding: 0 !important; text-align: center !important; }
+        div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container">
-            <img src="data:image/png;base64,""" + logo_base64 + """">
-        </div>
+        <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-st.html("<style>h1[id='eshap-cross-screen-attention-index-escai'] { white-space: nowrap !important; font-size: 2.25rem !important; }</style>")
+# Mid-Gray Sidebar Style Matrix & Global Typography Overrides (Resets Headroom and Main Titles)
+st.html("""
+    <style>
+    section[data-testid="stSidebar"] {
+        background-color: #4A4A4A !important;
+    }
+    /* Fixed Selector Targets: Forces crisp contrast for all sidebar text structures and slider headlines */
+    section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
+    section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p {
+        color: #ffffff !important;
+    }
+    h1 {
+        white-space: nowrap !important;
+        font-size: 2.25rem !important;
+        color: #000000 !important;
+        display: block !important;
+        visibility: visible !important;
+    }
+    div[data-testid="stMain"] p, div[data-testid="stMain"] span, div[data-testid="stMain"] label, 
+    div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 {
+        color: #000000 !important;
+    }
+    </style>
+    """)
 st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
 st.markdown("<p style='font-size: 0.85rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #555555;'>(ESCAI is pronounced \"EE-say\" - the C is silent)</p>", unsafe_allow_html=True)
 
@@ -224,13 +224,10 @@ with tab1:
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
     st.write("")
     st.markdown("#### Interactive Visual Share Map")
-    
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
-    
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Cohorts Overlaid"] + demo_columns, horizontal=True)
     chart_df = df_matrix.set_index("Platform/Publisher")
-    
     chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380)
 
