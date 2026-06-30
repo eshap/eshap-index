@@ -150,11 +150,17 @@ if os.path.exists("eshap_map.png"):
 if logo_base64:
     st.sidebar.html("""
         <style>
-        div.sidebar-logo-container { width: 100% !important; margin: 0 0 1rem 0 !important; padding: 0 !important; text-align: center !important; }
+        div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
+
+# Position Map Shift: Injecting the toggle state strictly beneath the map graphic and above the radio category header
+merge_meta = False
+if st.session_state.get("market_choice_sync", "United States") == "United States":
+    merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
+    st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
 
 # Mid-Gray Sidebar Style Matrix & Global Typography Canvas Overrides
 st.html("""
@@ -186,14 +192,9 @@ st.caption(
 # Injected CSS reduction adjusting the line padding and gap constraints inside the territory radio list area
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 
-market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"])
+# Territory picker reading state targets natively to feed back into the top selector condition mapping layer
+market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
-
-# Side Control Trigger: Dynamic position map sliding toggle directly into the secondary row below Territory
-merge_meta = False
-if market_choice == "United States":
-    st.sidebar.write("")  # Margin separator spacing
-    merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False)
 
 if market_choice == "United States": 
     df_matrix = pd.DataFrame(US_BASE, columns=cols)
