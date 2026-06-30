@@ -193,7 +193,7 @@ st.html("""
 # System Engine Header Layout Configuration
 st.header("ESHAP Cross-Screen Attention Index (ESCAI)")
 
-# Main Scale Subhead Block: Re-styled to font-weight: normal to strip away bold properties completely
+# Main Scale Subhead Block
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale"
@@ -201,10 +201,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link: Matches non-bold presentation properties with exact vertical layout rows
+# Persistent Substack Newsletter Link: Hardcoded cleanly to your exact node address
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "For full analysis: <a href='https://eshap.substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
 )
