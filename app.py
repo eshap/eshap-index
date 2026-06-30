@@ -130,7 +130,7 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Mid-Gray Sidebar Style Matrix & Global Typography Canvas Overrides
+# Mid-Gray Sidebar Style Matrix & Global Dynamic Dark Mode Theme Canvas Overrides
 st.html("""
     <style>
     section[data-testid="stSidebar"] {
@@ -141,6 +141,7 @@ st.html("""
     section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p {
         color: #ffffff !important;
     }
+    /* Fixed Default Main Canvas Typography Rules (Light Mode Defaults) */
     h1 {
         white-space: nowrap !important;
         font-size: 2.25rem !important;
@@ -155,6 +156,22 @@ st.html("""
     g[class*="role-axis"] text {
         font-weight: bold !important;
         font-size: 11px !important;
+    }
+    
+    /* DYNAMIC RESPONSIVE MEDIA ENGINES: Evaluates system theme color layers and flips typography to pure white */
+    @media (prefers-color-scheme: dark) {
+        h1, .eshap-title {
+            color: #ffffff !important;
+        }
+        div[data-testid="stMain"] p, 
+        div[data-testid="stMain"] span, 
+        div[data-testid="stMain"] label, 
+        div[data-testid="stMain"] h3, 
+        div[data-testid="stMain"] h4,
+        .eshap-subhead-text,
+        .eshap-subhead-text span {
+            color: #ffffff !important;
+        }
     }
     </style>
     """)
@@ -192,7 +209,7 @@ st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
 
 # Unified layout subheader forcing the pronunciation string to align natively directly behind the title
 st.markdown(
-    "<p style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #333333;'>"
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #333333;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale <span style='color: #555555; font-weight: normal; margin-left: 0.5rem;'>(ESCAI: pronounced EE-say)</span>"
     "</p>", 
     unsafe_allow_html=True
@@ -288,29 +305,4 @@ with tab1:
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
     
     if market_choice == "Brazil":
-        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
-    elif market_choice == "Mexico":
-        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons, including consolidated cross-screen volumes for Claro Sports and Uno TV. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
-        
-    st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
-
-with tab2:
-    sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
-    w_map = {
-        "United States": "us", "France": "fr", "United Kingdom": "uk",
-        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
-    }
-    t_map = {
-        "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"),
-        "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"),
-        "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
-    }
-    f_token = w_map.get(market_choice, "us")
-    w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
-    with sub_method:
-        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
-        st.markdown(f"**Territorial Demographic Weight:** {w1} is ≤ 54 / {w2} is ≥ 55")
-        st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
-    with sub_source:
-        st.markdown("### DATA SOURCES ({active_flag})")
-        st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
+        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html
