@@ -156,7 +156,7 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Mid-Gray Sidebar Style Matrix & Bulletproof Absolute Dark Mode Inversion Pipeline
+# Mid-Gray Sidebar Style Matrix & Global Typography Canvas Overrides
 st.html("""
     <style>
     section[data-testid="stSidebar"] {
@@ -167,80 +167,22 @@ st.html("""
     section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p {
         color: #ffffff !important;
     }
-    h1 {
-        white-space: nowrap !important;
-        font-size: 2.25rem !important;
-        color: #000000 !important;
-        display: block !important;
-        visibility: visible !important;
-    }
-    div[data-testid="stMain"] p, div[data-testid="stMain"] span, div[data-testid="stMain"] label, 
-    div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 {
-        color: #000000 !important;
-    }
     g[class*="role-axis"] text {
         font-weight: bold !important;
         font-size: 11px !important;
     }
-    
-    /* COMPLETE CUSTOM HTML CSS INJECTION FOR ENFORCED TITLE/SUBHEAD THEME SENSITIVITY */
-    .darkmode-title {
-        color: #000000 !important;
-        font-size: 2.25rem !important;
-        font-weight: bold !important;
-        margin-bottom: 0.5rem !important;
-    }
-    .darkmode-subhead {
-        color: #333333 !important;
-        font-size: 0.9rem !important;
-        font-weight: bold !important;
-        margin-top: -0.5rem !important;
-        margin-bottom: 1.5rem !important;
-    }
-    .darkmode-subhead span {
-        color: #555555 !important;
-        font-weight: normal !important;
-    }
-    
-    /* RADICAL INVERSION MATRIX: Forces theme containers to pure crisp white during active Dark States */
-    @media (prefers-color-scheme: dark) {
-        h1, [data-testid="stHeaderBlock"] h1, .stHeading, h1 div, h1 span, .eshap-title, .darkmode-title {
-            color: #ffffff !important;
-            -webkit-text-fill-color: #ffffff !important;
-        }
-        div[data-testid="stMain"] p, 
-        div[data-testid="stMain"] span, 
-        div[data-testid="stMain"] label, 
-        div[data-testid="stMain"] h3, 
-        div[data-testid="stMain"] h4,
-        .stMarkdown p,
-        .stMarkdown span,
-        .eshap-subhead-text,
-        .eshap-subhead-text span,
-        .darkmode-subhead,
-        .darkmode-subhead span {
-            color: #ffffff !important;
-            -webkit-text-fill-color: #ffffff !important;
-        }
-    }
-    
-    /* Streamlit Cloud System Theme Container Inversion Catchers */
-    html[data-theme="dark"] h1, html[data-theme="dark"] .stHeading, html[data-theme="dark"] h1 div, html[data-theme="dark"] h1 span, html[data-theme="dark"] .darkmode-title {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
-    }
-    html[data-theme="dark"] .eshap-subhead-text, html[data-theme="dark"] .eshap-subhead-text span, html[data-theme="dark"] .stMarkdown p, html[data-theme="dark"] .darkmode-subhead, html[data-theme="dark"] .darkmode-subhead span {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
-    }
     </style>
     """)
-# Custom clean HTML block bypassing standard native layout constraints to anchor theme queries
-st.html("<div class='darkmode-title'>ESHAP Cross-Screen Attention Index (ESCAI)</div>")
+# System Color Extraction: Inherits the machine's true foreground text color dynamically on layout load
+st.html(
+    "<h1 style='color: currentColor !important; font-size: 2.25rem; font-weight: bold; margin-bottom: 0.5rem;'>"
+    "ESHAP Cross-Screen Attention Index (ESCAI)"
+    "</h1>"
+)
 
 st.html(
-    "<div class='darkmode-subhead'>"
-    "The Definitive Zero-Sum Cross-Screen Attention Scale <span style='margin-left: 0.5rem;'>(ESCAI: pronounced EE-say)</span>"
+    "<div style='color: currentColor !important; font-size: 0.9rem; font-weight: bold; margin-top: -0.5rem; margin-bottom: 1.5rem;'>"
+    "The Definitive Zero-Sum Cross-Screen Attention Scale <span style='opacity: 0.8; font-weight: normal; margin-left: 0.5rem;'>(ESCAI: pronounced EE-say)</span>"
     "</div>"
 )
 
@@ -268,7 +210,7 @@ if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
     st.rerun()
 
-active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
+active_shifts = {k: float(v) for k, v in user_shifts.items() as float if v != 0.0}
 if active_shifts:
     for entity, shift_val in active_shifts.items():
         idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
