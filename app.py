@@ -180,22 +180,15 @@ st.html("""
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
-# Main Scale Subhead Block: Stripped completely of bold
+# Main Scale Subhead Block
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale"
     "</p>", 
     unsafe_allow_html=True
 )
-# Persistent Substack Newsletter Link: Hardcoded cleanly to point straight to ://substack.com
-st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>For full analysis: <a href='https://://substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a></p>", 
-    unsafe_allow_html=True
-)
 
-st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-
-Hardcoded to exact node path in non-bold gray type
+# Persistent Substack Newsletter Link
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
     "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
@@ -207,6 +200,7 @@ st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
+# Interactive layout parsing supporting cross-border Meta matrix conversion
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
 elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
@@ -216,12 +210,11 @@ elif market_choice == "Spain": df_matrix = pd.DataFrame(ES_BASE, columns=cols)
 elif market_choice == "Brazil": df_matrix = pd.DataFrame(BR_BASE, columns=cols)
 else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
 
-# Universal Meta Aggregation Loop: Automatically catches and consolidates Instagram/Facebook inside ANY selected country matrix
 if merge_meta:
     meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+    non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
     if not meta_rows.empty:
-        non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
-        summed_vals = meta_rows[cols[1:]].astype(float).sum().tolist()
+        summed_vals = meta_rows[cols[1:]].sum().tolist()
         combined_row = [["META"] + summed_vals]
         df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
         df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
@@ -279,7 +272,6 @@ else: st.sidebar.success("Zero-Sum Balance Maintained")
 f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
-# Split cleanly into a 4-tab interface architecture to isolate FAQs on their own dedicated view
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
@@ -336,8 +328,6 @@ with tab2:
     st.markdown("The numbers in this index are from companies we all know. So is the point of view. We ask the right questions - in this case, where is the attention of the whole consumer actually going — because everyone asked us.")
     st.markdown("That fear of finding out is the systemic blindness now pushing our industry off a cliff. Thus, the ECSAI - the ESHAP Cross-Screen Attention Index. It's our new compass toward today's audience: The Whole Consumer.")
     st.write("---")
-    
-    # Fully bolded, style-responsive outro block configured for auto white-balancing in dark mode themes
     st.markdown(
         "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
@@ -357,7 +347,7 @@ with tab3:
     st.markdown("#### HOW DO YOU BLEND THE VARIOUS INPUTS - GLASS DATA, CENSUS, DIARIES - INTO ONE SMOOTH INDEX FOR EACH COUNTRY, CUTTING ACROSS DEMOS BASED ONLY ON PUBLICLY AVAILABLE DATA?")
     st.markdown("To blend these completely disparate public inputs into a single, seamless cross-screen index for each territory, our model runs a three-step mathematical normalization loop that forces apples-and-oranges data into a strict, logic-enforced daily time budget. Because we use free, un-siloed data scattered across corporate and government reports, our system treats each country as a closed market sponge where total population and total available hours are hard constants.")
     st.markdown("Here is the exact step-by-step math mechanics of how the index blends glass data, census records, and consumer diaries into a single smooth number for each demographic cohort:")
-    st.markdown("**Census Denominator Lock (The Total Volume Ceiling)**<br>The entire model is anchored on the local state census registry (such as INSEE, Destatis, ISTAT, or the U.S. Census Bureau). The index takes the total population headcount for the territory, filters for the P13+ universe. It then establishes a Total Available Awake Hours Budget per month (assuming a standardized 16-hour active day). This number is our absolute ceiling. It represents the total size of the market sponge. No matter how many apps or TV channels claim massive usage, the combined monthly hours in our index can never exceed this hard, census-backed population budget digital hours.", unsafe_allow_html=True)
+    st.markdown("**Census Denominator Lock (The Total Volume Ceiling)**<br>The entire model is anchored on the local state census registry (such as INSEE, Destatis, ISTAT, or the U.S. Census Bureau). The index takes the total population headcount for the territory, filters for the P13+ universe. It then establishes a Total Available Awake Hours Budget per month (assuming a standardized 16-hour active day). This number is our absolute ceiling. It represents the total size of the market sponge. No matter how many apps or TV channels claim massive usage, the combined monthly hours in our index can never exceed this hard, census-backed population budget.", unsafe_allow_html=True)
     st.markdown("**Normalizing Metrics into 'Absolute Attention Hours'**<br>Next, our model takes the fragmented public data points and converts them into a singular currency: Millions of Attention Hours per Month. *Blending the Glass and Feed Data:* Traditional linear TV currencies (like Médiamétrie or BARB) publish reach and 'Time Spent Viewing' (TSV) per day. The model takes the average daily TSV for a specific cohort, multiplies it by the demographic population weight from the census, and scales it to 30 days to find total linear hours. Big Tech investor filings and regulatory white papers present usage in 'Daily Active Users' (DAUs) or 'Monthly Active Users' (MAUs) paired with global or regional average session lengths. The model intercepts these ratios, applies the local territory footprint weight, and multiplies active users by daily active minutes to extract total digital hours. We take the stated number of users per digital platforms, apportion them by region/populations, then using diaries, surveys, public reports, and other regional research data, the model assigns pro rata usage hours per day in those regions.", unsafe_allow_html=True)
     st.markdown("**The Zero-Sum Squeeze and Diary De-Duplication**<br>This is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling. This over-allocation happens because of concurrent multi-screening -- a consumer scrolling on TikTok while the television plays a telenovela or news broadcast in the background. *The Diary Filter:* Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and Dentsu/Lumen attention panels. These diaries track the percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). *The Squeeze:* The model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. Digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. Glass hours are programmatically squeezed until the multi-screen overlap is flattened and duplication is erased.", unsafe_allow_html=True)
     st.markdown("**The Generational Decay Calibration**<br>This is a crucial step to understanding how populations in different regions adapt to different media differently. To cut smoothly across the narrower demographic tiers (13-44, 13-34, 13-24) based only on public data, the model processes the numbers through localized fractional decay curves. Instead of assuming identical generational behavioral migration everywhere, the curves are adjusted using the baseline ratios found in the regulatory white papers (like Ofcom's Media Nations or Arcom's reports). The system applies a *Nested Funnel Safety Guard:* A strict structural logic barrier hardcoded into the model to ensure horizontal and vertical cohort integrity; this mathematically prevents narrower, younger generational slices of the population from ever showing a higher attention volume than the broader demographics that encapsulate them. This forces a mathematical step-down multiplier from left to right. This ensures that as the age bracket narrows, the legacy broadcaster values decay smoothly according to local policy protections, while the digital platform volumes scale up without causing a data inflation spill -- more attention data than the population of any region could fill in any one day.", unsafe_allow_html=True)
@@ -370,10 +360,8 @@ with tab3:
     st.markdown("The index must be stress-tested against markets that actively resist international digital migration through aggressive state intervention and distinct cultural infrastructure, such as Italy, France, and Spain. By forcing the zero-sum model to process these three protectionist territories, by engineering specialized local policy friction curves to honor their defensive cushions, the index can be a flexible global tool, not just a cookie-cutter American proxy. To balance the inverted, aging demographic pyramids of Europe, the index integrates the two heavyweights of Latin America. Brazil and Mexico represent massive, youth-heavy populations that boast some of the highest daily smartphone video consumption lengths on earth. Including these territories allows us to visualize the absolute opposite end of the media lifecycle: markets where traditional pay-TV infrastructures are entirely bypassable, mobile-velocity acceleration is absolute, and tech utilities operate at an unprecedented 97% to 98% workforce density.")
     st.markdown("We did not include Asia or a wider Latin American footprint in this initial launch for one reason: data maturity and local currency standardization. To deliver a logic-enforced zero-sum matrix, the index requires every country baseline to sit completely transparently in the public domain. The foundational data layers - specifically, open regulatory white papers, audited public broadcaster disclosures, and standardized local device telemetry panels - must possess structural transparency. Markets like Japan, South Korea, India, and smaller Latin American territories currently operate on highly fragmented, proprietary, or state-cloaked measurement silos. Trying to force those opaque systems into a strict human daily clock, right now, requires speculative modeling that compromises the index's standard of data integrity.")
     st.write("---")
-    
-    # Fully bolded, style-responsive outro block configured for auto white-balancing in dark mode themes
     st.markdown(
-        "<p style='font-size: 0.92rem; font-weight: bold; line-weight: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
+        "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
         "We would love to know what you think. Please send your feedback and questions to "
         "<a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
