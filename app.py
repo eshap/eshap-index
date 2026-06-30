@@ -143,9 +143,9 @@ if bullet_base64:
         </style>
         """)
 
-# Clean Sidebar Pronunciation Line: Stripped cleanly of bold/italic properties to sit subtly at sidebar apex
+# Clean Sidebar Pronunciation Line
 st.sidebar.markdown(
-    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
+    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'>"
     "ECSAI: pronounced EE-say"
     "</p>", 
     unsafe_allow_html=True
@@ -156,25 +156,18 @@ if os.path.exists("eshap_map.png"):
     with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
 if logo_base64:
     st.sidebar.html("""
-    <style>
-    div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
-    div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
-    </style>
-    <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
-    """)
+        <style>
+        div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
+        div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
+        </style>
+        <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
+        """)
 
-# Intercepted Meta Sidebar Toggle: Nested right beneath logo framework and globally available across all territories
-merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
+# Universal Global Meta Toggle: Hardcoded to render globally above Territory regardless of selected market path
+merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_universal")
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
 st.html("""
-<style>
-g[class*="role-axis"] text { 
-    font-weight: bold !important; 
-    font-size: 11px !important; 
-}
-</style>
-""")
-
+    <style>
     section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
@@ -186,7 +179,7 @@ g[class*="role-axis"] text {
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
-# Main Scale Subhead Block: Stripped completely of bold properties
+# Main Scale Subhead Block: Stripped completely of bold
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale"
@@ -206,15 +199,7 @@ st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
-if market_choice == "United States": 
-    df_matrix = pd.DataFrame(US_BASE, columns=cols)
-    if merge_meta:
-        meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
-        non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
-        summed_vals = meta_rows[cols[1:]].sum().tolist()
-        combined_row = [["META"] + summed_vals]
-        df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
-        df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
+if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
 elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
 elif market_choice == "Italy": df_matrix = pd.DataFrame(IT_BASE, columns=cols)
@@ -222,6 +207,16 @@ elif market_choice == "Germany": df_matrix = pd.DataFrame(DE_BASE, columns=cols)
 elif market_choice == "Spain": df_matrix = pd.DataFrame(ES_BASE, columns=cols)
 elif market_choice == "Brazil": df_matrix = pd.DataFrame(BR_BASE, columns=cols)
 else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
+
+# Universal Meta Aggregation Loop: Automatically catches and consolidates Instagram/Facebook inside ANY selected country matrix
+if merge_meta:
+    meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+    if not meta_rows.empty:
+        non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+        summed_vals = meta_rows[cols[1:]].astype(float).sum().tolist()
+        combined_row = [["META"] + summed_vals]
+        df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
+        df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
 df_static_base = df_matrix.copy()
