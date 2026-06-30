@@ -295,20 +295,23 @@ with tab1:
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 with tab2:
-with tab2:
     st.subheader("Why ECSAI? Understanding the Cross-Screen Attention Index")
     st.markdown("In the commercial Media industry, measurement has always been divided by screens. No major auditing bureau or currency panel has ever forced television meters, handset timestamps, and browser logs into a singular, logic-enforced, zero-sum attention budget. **This is collective malpractice.** If you still treat social video and television as separate silos, to twist the age-old Wanamaker adage: *You are wasting half your money.*")
     st.markdown("In the next three years, one trillion dollars will be spent on advertising in the US alone. More than three quarters of that will be spent on digital platforms. Another \$180 billion will be spent on television advertising. No one is measuring the reach, frequency, or effectiveness of this massive cashflow across these platforms.")
     
-    if os.path.exists("eshap_us_devices.png"): st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem (US Baseline)", use_container_width=True)
-    else: st.info("💡 *[Placeholder for eshap_us_devices.png: In a recent survey of 3,000 US consumers, 59% watch video primarily on phones vs 28% on traditional TV glass]*")
+    if os.path.exists("eshap_us_devices.png"): 
+        st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem (US Baseline)", use_container_width=True)
+    else: 
+        st.info("💡 *[Placeholder for eshap_us_devices.png: In a recent survey of 3,000 US consumers, 59% watch video primarily on phones vs 28% on traditional TV glass]*")
     
     st.markdown("Publishers and advertisers look at their TV ratings, digital buyers and social media experts look at mobile handset logs, and everybody claims they are winning the war for reach. Meanwhile the measurement industry locks agencies into long-term contracts, then charges sellers through the nose to use their 'currency.' Or, they will track attention across all the platforms, but only by campaign - not as a map nor trajectory of total cross-screen attention. This leaves our collective data on real attention siloed to the point of pointlessness.")
     st.markdown("The industry is totally blind to how real people actually behave. Today's consumer is a singular, fluid entity moving seamlessly across a multi-screen day, allocating a single, finite commodity: attention.")
     st.markdown("The Media industry is lost specifically because they are charting their course based on the failed logic of vanity metrics, rather than following the actual data; the voice of the audience.")
     
-    if os.path.exists("eshap_devicesgen.png"): st.image("eshap_devicesgen.png", caption="Video Device Preference Layout Broken Down Across Generational Cohorts", use_container_width=True)
-    else: st.info("💡 *[Placeholder for eshap_devicesgen.png: Media Generation Gap breakdown charting step-down linear curves from 18-24 up to Boomer demographics]*")
+    if os.path.exists("eshap_devicesgen.png"): 
+        st.image("eshap_devicesgen.png", caption="Video Device Preference Layout Broken Down Across Generational Cohorts", use_container_width=True)
+    else: 
+        st.info("💡 *[Placeholder for eshap_devicesgen.png: Media Generation Gap breakdown charting step-down linear curves from 18-24 up to Boomer demographics]*")
     
     st.markdown("Only Baby Boomers watch more video on televisions than on phones. Every other generation of Americans watches video on their phones two to three times more than their TVs.")
     st.markdown("We have conducted the same study across the Big 5 in Europe. The results are not identical - but they are quite similar. You can see all this survey data on Media War & Peace.")
