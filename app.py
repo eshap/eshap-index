@@ -163,9 +163,13 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Intercepted Meta Sidebar Toggle: Nested right beneath logo framework and above the Territory picker
-merge_meta = False
-if st.session_state.get("market_choice_sync", "United States") == "United States":
+# Intercepted Meta Sidebar Toggle: Nested right beneath logo framework and globally available across all territories
+merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
+st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
+st.html("""
+<style>
+
+
     merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
     st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
 st.html("""
