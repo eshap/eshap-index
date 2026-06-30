@@ -144,9 +144,9 @@ if bullet_base64:
         </style>
         """)
 
-# Subtle Pronunciation Line: Anchored directly at the absolute apex of the sidebar panel
+# Clean Sidebar Pronunciation Line: Stripped of all bold and italic decoration properties
 st.sidebar.markdown(
-    "<p style='font-size: 0.82rem; font-weight: bold; font-style: italic; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'>"
+    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
     "ESCAI: pronounced EE-say"
     "</p>", 
     unsafe_allow_html=True
@@ -193,18 +193,18 @@ st.html("""
 # System Engine Header Layout Configuration
 st.header("ESHAP Cross-Screen Attention Index (ESCAI)")
 
-# Equally Spaced Main Subhead Block
+# Main Scale Subhead Block: Re-styled to font-weight: normal to strip away bold properties completely
 st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale"
     "</p>", 
     unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link: Formatted in non-bold gray typeface with matching spacing
+# Persistent Substack Newsletter Link: Matches non-bold presentation properties with exact vertical layout rows
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://eshap.substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
 )
