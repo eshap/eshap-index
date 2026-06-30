@@ -195,16 +195,16 @@ st.header("ESHAP Cross-Screen Attention Index (ESCAI)")
 
 # Equally Spaced Main Subhead Block
 st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333;'>"
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale"
     "</p>", 
     unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link: Rebuilt in the identical typeface and font sizes with strict row margins
+# Persistent Substack Newsletter Link: Formatted in non-bold gray typeface with matching spacing
 st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: 0rem; margin-bottom: 1.5rem; color: #333333;'>"
-    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
+    "For full analysis: <a href='https://eshap.substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
 )
@@ -303,7 +303,7 @@ with tab1:
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({
         "TELEVISAUNIVISION": "TVSA/UNI",
-        "SBT (SISTEMA BRASIRO DE TELEVISAO)": "SBT (BRAZIL)",
+        "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
         "MEDIASET ESPANA": "MEDIASET ES",
         "MFE (MEDIASET)": "MFE",
         "RECORD GRUPO": "RECORD"
