@@ -101,7 +101,33 @@ IT_BASE = [
     ["FACEBOOK", 160.0, 101.0, 59.0, 32.5, 12.0, 2.3],
     ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
 ]
+MX_BASE = [
+    ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
+    ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
+    ["TIKTOK", 860.0, 12.0, 848.0, 695.3, 591.0, 461.0],
+    ["INSTAGRAM", 695.0, 18.0, 677.0, 602.5, 518.1, 305.7],
+    ["NETFLIX", 635.0, 54.0, 581.0, 447.4, 295.3, 156.4],
+    ["TV AZTECA", 485.0, 245.0, 240.0, 180.0, 122.4, 52.8],
+    ["AMAZON", 245.0, 32.0, 213.0, 176.8, 116.7, 52.5],
+    ["DISNEY", 220.0, 25.0, 195.0, 152.1, 100.4, 46.2],
+    ["WBD (MAX)", 195.0, 42.0, 153.0, 113.2, 72.4, 33.3],
+    ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
+]
 
+BR_BASE = [
+    ["GRUPO GLOBO", 2210.0, 1015.0, 1195.0, 920.2, 680.9, 354.1],
+    ["YOUTUBE", 1980.0, 260.0, 1720.0, 1221.2, 976.9, 625.2],
+    ["TIKTOK", 1150.0, 28.0, 1122.0, 908.8, 763.4, 587.8],
+    ["INSTAGRAM", 1040.0, 52.0, 988.0, 879.3, 747.4, 433.5],
+    ["NETFLIX", 915.0, 120.0, 795.0, 604.2, 398.7, 211.3],
+    ["RECORD GRUPO", 620.0, 365.0, 255.0, 186.1, 122.8, 54.8],
+    ["SBT (SISTEMA BRASILEIRO DE TELEVISAO)", 515.0, 290.0, 225.0, 168.7, 115.8, 53.2],
+    ["AMAZON", 390.0, 65.0, 325.0, 266.5, 173.2, 77.9],
+    ["DISNEY", 325.0, 48.0, 277.0, 213.3, 139.3, 64.0],
+    ["WBD (MAX)", 290.0, 82.0, 208.0, 151.8, 95.6, 43.0],
+    ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
+    ["BAND (GRUPO)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
+]
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
     with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
@@ -133,18 +159,29 @@ if logo_base64:
 # Mid-Gray Sidebar Style Matrix & Global Dynamic Dark Mode Theme Canvas Overrides
 st.html("""
     <style>
-    section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
+    section[data-testid="stSidebar"] {
+        background-color: #4A4A4A !important;
+    }
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p { color: #ffffff !important; }
+    section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p {
+        color: #ffffff !important;
+    }
     h1 {
-        white-space: nowrap !important; font-size: 2.25rem !important; color: #000000 !important;
-        display: block !important; visibility: visible !important;
+        white-space: nowrap !important;
+        font-size: 2.25rem !important;
+        color: #000000 !important;
+        display: block !important;
+        visibility: visible !important;
     }
     div[data-testid="stMain"] p, div[data-testid="stMain"] span, div[data-testid="stMain"] label, 
-    div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 { color: #000000 !important; }
-    g[class*="role-axis"] text { font-weight: bold !important; font-size: 11px !important; }
-    
+    div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 {
+        color: #000000 !important;
+    }
+    g[class*="role-axis"] text {
+        font-weight: bold !important;
+        font-size: 11px !important;
+    }
     @media (prefers-color-scheme: dark) {
         h1, .eshap-title { color: #ffffff !important; }
         div[data-testid="stMain"] p, div[data-testid="stMain"] span, div[data-testid="stMain"] label, 
@@ -154,39 +191,8 @@ st.html("""
     }
     </style>
     """)
-# Exact Mexico Parameters Bound Straight From Your Document Sheets (Strict ALL CAPS Alignment)
-MX_BASE = [
-    ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
-    ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
-    ["TIKTOK", 860.0, 12.0, 848.0, 695.3, 591.0, 461.0],
-    ["INSTAGRAM", 695.0, 18.0, 677.0, 602.5, 518.1, 305.7],
-    ["NETFLIX", 635.0, 54.0, 581.0, 447.4, 295.3, 156.4],
-    ["TV AZTECA", 485.0, 245.0, 240.0, 180.0, 122.4, 52.8],
-    ["AMAZON", 245.0, 32.0, 213.0, 176.8, 116.7, 52.5],
-    ["DISNEY", 220.0, 25.0, 195.0, 152.1, 100.4, 46.2],
-    ["WBD (MAX)", 195.0, 42.0, 153.0, 113.2, 72.4, 33.3],
-    ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
-]
-
-# Exact Complete Brazil Matrix Bound Straight From Your Audited Document Panels (Strict ALL CAPS Alignment)
-BR_BASE = [
-    ["GRUPO GLOBO", 2210.0, 1015.0, 1195.0, 920.2, 680.9, 354.1],
-    ["YOUTUBE", 1980.0, 260.0, 1720.0, 1221.2, 976.9, 625.2],
-    ["TIKTOK", 1150.0, 28.0, 1122.0, 908.8, 763.4, 587.8],
-    ["INSTAGRAM", 1040.0, 52.0, 988.0, 879.3, 747.4, 433.5],
-    ["NETFLIX", 915.0, 120.0, 795.0, 604.2, 398.7, 211.3],
-    ["RECORD GRUPO", 620.0, 365.0, 255.0, 186.1, 122.8, 54.8],
-    ["SBT (SISTEMA BRASILEIRO DE TELEVISAO)", 515.0, 290.0, 225.0, 168.7, 115.8, 53.2],
-    ["AMAZON", 390.0, 65.0, 325.0, 266.5, 173.2, 77.9],
-    ["DISNEY", 325.0, 48.0, 277.0, 213.3, 139.3, 64.0],
-    ["WBD (MAX)", 290.0, 82.0, 208.0, 151.8, 95.6, 43.0],
-    ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
-    ["BAND (GRUPO)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
-]
-
 st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
 
-# Unified layout subheader forcing the pronunciation string to align natively directly behind the title
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #333333;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale <span style='color: #555555; font-weight: normal; margin-left: 0.5rem;'>(ESCAI: pronounced EE-say)</span>"
@@ -196,6 +202,7 @@ st.markdown(
 
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"])
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
+
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
 elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
@@ -283,5 +290,46 @@ with tab1:
     
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
     
+    # Text-wrapper syntax enforcement applied directly to stop background multi-line literal truncation breaks
     if market_choice == "Brazil":
-        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>Platform
+        st.markdown(
+            "<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'>"
+            "<strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>"
+            "Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. "
+            "WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted."
+            "</p>",
+            unsafe_allow_html=True
+        )
+    elif market_choice == "Mexico":
+        st.markdown(
+            "<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'>"
+            "<strong>Cross-Screen Attention Allocation Ledger: MEXICO</strong><br>"
+            "Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. "
+            "YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons, "
+            "including consolidated cross-screen volumes for Claro Sports and Uno TV. Concurrent multi-screening duplication and passive device use discounted."
+            "</p>",
+            unsafe_allow_html=True
+        )
+        
+    st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
+
+with tab2:
+    sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
+    w_map = {
+        "United States": "us", "France": "fr", "United Kingdom": "uk",
+        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
+    }
+    t_map = {
+        "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"),
+        "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"),
+        "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
+    }
+    f_token = w_map.get(market_choice, "us")
+    w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
+    with sub_method:
+        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
+        st.markdown(f"**Territorial Demographic Weight:** {w1} is ≤ 54 / {w2} is ≥ 55")
+        st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
+    with sub_source:
+        st.markdown("### DATA SOURCES ({active_flag})")
+        st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
