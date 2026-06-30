@@ -47,7 +47,7 @@ DE_BASE = [
     ["ARD", 710.0, 560.0, 150.0, 115.5, 90.1, 57.6],
     ["YOUTUBE", 625.0, 135.0, 490.0, 343.0, 267.5, 163.2],
     ["ZDF", 615.0, 505.0, 110.0, 84.7, 66.1, 42.2],
-    ["RTL GROUP", 510.0, 310.0, 200.0, 150.0, 108.0, 49.0],
+    ["RTL GROUP", 510.0, 310.0, 200.0, 150.0, 100.0, 49.0],
     ["NETFLIX", 445.0, 95.0, 350.0, 255.5, 160.9, 82.1],
     ["TIKTOK", 385.0, 14.0, 371.0, 289.4, 237.3, 173.2],
     ["PROSIEBENSAT.1", 340.0, 195.0, 145.0, 107.3, 73.0, 31.2],
@@ -156,7 +156,7 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Mid-Gray Sidebar Style Matrix & Global Dynamic Dark Mode Theme Canvas Overrides
+# Mid-Gray Sidebar Style Matrix & Robust Cross-Browser Dark Mode Typos Overrides
 st.html("""
     <style>
     section[data-testid="stSidebar"] {
@@ -182,10 +182,20 @@ st.html("""
         font-weight: bold !important;
         font-size: 11px !important;
     }
+    /* DEEP CORE TARGET OVERRIDES: Detects system color dark-mode status and forces visibility across all text structures */
     @media (prefers-color-scheme: dark) {
-        h1, .eshap-title { color: #ffffff !important; }
-        div[data-testid="stMain"] p, div[data-testid="stMain"] span, div[data-testid="stMain"] label, 
-        div[data-testid="stMain"] h3, div[data-testid="stMain"] h4, .eshap-subhead-text, .eshap-subhead-text span {
+        h1, [data-testid="stHeader"] h1, .stMarkdown h1, .eshap-title {
+            color: #ffffff !important;
+        }
+        div[data-testid="stMain"] p, 
+        div[data-testid="stMain"] span, 
+        div[data-testid="stMain"] label, 
+        div[data-testid="stMain"] h3, 
+        div[data-testid="stMain"] h4,
+        .stMarkdown p,
+        .stMarkdown span,
+        .eshap-subhead-text,
+        .eshap-subhead-text span {
             color: #ffffff !important;
         }
     }
@@ -269,6 +279,7 @@ active_flag = f_map.get(market_choice, "🇺🇸")
 
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
+    # REVERTED LAYOUT: Re-enforces standard layout ordering rules (Colon followed immediately by Flag and Territory Name)
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.write("")
@@ -290,7 +301,7 @@ with tab1:
     
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
     
-    # Text-wrapper syntax enforcement applied directly to stop background multi-line literal truncation breaks
+    # Bound explicitly in strict single-line continuous parsing arrays to bypass all syntax string breaks
     if market_choice == "Brazil":
         st.markdown(
             "<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'>"
