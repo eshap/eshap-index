@@ -47,7 +47,7 @@ DE_BASE = [
     ["ARD", 710.0, 560.0, 150.0, 115.5, 90.1, 57.6],
     ["YOUTUBE", 625.0, 135.0, 490.0, 343.0, 267.5, 163.2],
     ["ZDF", 615.0, 505.0, 110.0, 84.7, 66.1, 42.2],
-    ["RTL GROUP", 510.0, 310.0, 200.0, 150.0, 100.0, 49.0],
+    ["RTL GROUP", 510.0, 310.0, 200.0, 150.0, 108.0, 49.0],
     ["NETFLIX", 445.0, 95.0, 350.0, 255.5, 160.9, 82.1],
     ["TIKTOK", 385.0, 14.0, 371.0, 289.4, 237.3, 173.2],
     ["PROSIEBENSAT.1", 340.0, 195.0, 145.0, 107.3, 73.0, 31.2],
@@ -156,7 +156,7 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Mid-Gray Sidebar Style Matrix & Robust Cross-Browser Dark Mode Typos Overrides
+# Mid-Gray Sidebar Style Matrix & Bulletproof Absolute Dark Mode Inversion Pipeline
 st.html("""
     <style>
     section[data-testid="stSidebar"] {
@@ -182,10 +182,31 @@ st.html("""
         font-weight: bold !important;
         font-size: 11px !important;
     }
-    /* DEEP CORE TARGET OVERRIDES: Detects system color dark-mode status and forces visibility across all text structures */
+    
+    /* COMPLETE CUSTOM HTML CSS INJECTION FOR ENFORCED TITLE/SUBHEAD THEME SENSITIVITY */
+    .darkmode-title {
+        color: #000000 !important;
+        font-size: 2.25rem !important;
+        font-weight: bold !important;
+        margin-bottom: 0.5rem !important;
+    }
+    .darkmode-subhead {
+        color: #333333 !important;
+        font-size: 0.9rem !important;
+        font-weight: bold !important;
+        margin-top: -0.5rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+    .darkmode-subhead span {
+        color: #555555 !important;
+        font-weight: normal !important;
+    }
+    
+    /* RADICAL INVERSION MATRIX: Forces theme containers to pure crisp white during active Dark States */
     @media (prefers-color-scheme: dark) {
-        h1, [data-testid="stHeader"] h1, .stMarkdown h1, .eshap-title {
+        h1, [data-testid="stHeaderBlock"] h1, .stHeading, h1 div, h1 span, .eshap-title, .darkmode-title {
             color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
         }
         div[data-testid="stMain"] p, 
         div[data-testid="stMain"] span, 
@@ -195,19 +216,32 @@ st.html("""
         .stMarkdown p,
         .stMarkdown span,
         .eshap-subhead-text,
-        .eshap-subhead-text span {
+        .eshap-subhead-text span,
+        .darkmode-subhead,
+        .darkmode-subhead span {
             color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
         }
+    }
+    
+    /* Streamlit Cloud System Theme Container Inversion Catchers */
+    html[data-theme="dark"] h1, html[data-theme="dark"] .stHeading, html[data-theme="dark"] h1 div, html[data-theme="dark"] h1 span, html[data-theme="dark"] .darkmode-title {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    html[data-theme="dark"] .eshap-subhead-text, html[data-theme="dark"] .eshap-subhead-text span, html[data-theme="dark"] .stMarkdown p, html[data-theme="dark"] .darkmode-subhead, html[data-theme="dark"] .darkmode-subhead span {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     </style>
     """)
-st.title("ESHAP Cross-Screen Attention Index (ESCAI)")
+# Custom clean HTML block bypassing standard native layout constraints to anchor theme queries
+st.html("<div class='darkmode-title'>ESHAP Cross-Screen Attention Index (ESCAI)</div>")
 
-st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 1.5rem; color: #333333;'>"
-    "The Definitive Zero-Sum Cross-Screen Attention Scale <span style='color: #555555; font-weight: normal; margin-left: 0.5rem;'>(ESCAI: pronounced EE-say)</span>"
-    "</p>", 
-    unsafe_allow_html=True
+st.html(
+    "<div class='darkmode-subhead'>"
+    "The Definitive Zero-Sum Cross-Screen Attention Scale <span style='margin-left: 0.5rem;'>(ESCAI: pronounced EE-say)</span>"
+    "</div>"
 )
 
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"])
@@ -279,7 +313,6 @@ active_flag = f_map.get(market_choice, "🇺🇸")
 
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
-    # REVERTED LAYOUT: Re-enforces standard layout ordering rules (Colon followed immediately by Flag and Territory Name)
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.write("")
@@ -301,7 +334,6 @@ with tab1:
     
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
     
-    # Bound explicitly in strict single-line continuous parsing arrays to bypass all syntax string breaks
     if market_choice == "Brazil":
         st.markdown(
             "<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'>"
