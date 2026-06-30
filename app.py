@@ -189,6 +189,14 @@ st.caption(
     "The Definitive Zero-Sum Cross-Screen Attention Scale (ESCAI: pronounced EE-say)"
 )
 
+# Persistent Substack Newsletter Link: Injects clean, responsive target anchor tags across every page
+st.markdown(
+    "<p class='eshap-subhead-text' style='font-size: 0.88rem; font-weight: bold; margin-top: -0.75rem; margin-bottom: 1.5rem;'> "
+    "👉 Read the full analysis on Substack: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "</p>", 
+    unsafe_allow_html=True
+)
+
 # Injected CSS reduction adjusting the line padding and gap constraints inside the territory radio list area
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 
@@ -270,6 +278,7 @@ f_map = {
 }
 active_flag = f_map.get(market_choice, "🇺🇸")
 
+# Sub-tab element layout definitions modified to Methodology Blueprint
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
@@ -316,7 +325,7 @@ with tab1:
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 
 with tab2:
-    sub_method, sub_source = st.tabs(["Methodology Framework", "Sourcing Matrix"])
+    sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     w_map = {
         "United States": "us", "France": "fr", "United Kingdom": "uk",
         "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
