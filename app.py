@@ -133,43 +133,22 @@ if logo_base64:
 # Mid-Gray Sidebar Style Matrix & Global Dynamic Dark Mode Theme Canvas Overrides
 st.html("""
     <style>
-    section[data-testid="stSidebar"] {
-        background-color: #4A4A4A !important;
-    }
+    section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p {
-        color: #ffffff !important;
-    }
-    /* Fixed Default Main Canvas Typography Rules (Light Mode Defaults) */
+    section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p { color: #ffffff !important; }
     h1 {
-        white-space: nowrap !important;
-        font-size: 2.25rem !important;
-        color: #000000 !important;
-        display: block !important;
-        visibility: visible !important;
+        white-space: nowrap !important; font-size: 2.25rem !important; color: #000000 !important;
+        display: block !important; visibility: visible !important;
     }
     div[data-testid="stMain"] p, div[data-testid="stMain"] span, div[data-testid="stMain"] label, 
-    div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 {
-        color: #000000 !important;
-    }
-    g[class*="role-axis"] text {
-        font-weight: bold !important;
-        font-size: 11px !important;
-    }
+    div[data-testid="stMain"] h3, div[data-testid="stMain"] h4 { color: #000000 !important; }
+    g[class*="role-axis"] text { font-weight: bold !important; font-size: 11px !important; }
     
-    /* DYNAMIC RESPONSIVE MEDIA ENGINES: Evaluates system theme color layers and flips typography to pure white */
     @media (prefers-color-scheme: dark) {
-        h1, .eshap-title {
-            color: #ffffff !important;
-        }
-        div[data-testid="stMain"] p, 
-        div[data-testid="stMain"] span, 
-        div[data-testid="stMain"] label, 
-        div[data-testid="stMain"] h3, 
-        div[data-testid="stMain"] h4,
-        .eshap-subhead-text,
-        .eshap-subhead-text span {
+        h1, .eshap-title { color: #ffffff !important; }
+        div[data-testid="stMain"] p, div[data-testid="stMain"] span, div[data-testid="stMain"] label, 
+        div[data-testid="stMain"] h3, div[data-testid="stMain"] h4, .eshap-subhead-text, .eshap-subhead-text span {
             color: #ffffff !important;
         }
     }
@@ -305,4 +284,4 @@ with tab1:
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
     
     if market_choice == "Brazil":
-        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html
+        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>Platform
