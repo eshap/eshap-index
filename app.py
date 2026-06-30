@@ -144,6 +144,14 @@ if bullet_base64:
         </style>
         """)
 
+# Subtle Pronunciation Line: Anchored directly at the absolute apex of the sidebar panel
+st.sidebar.markdown(
+    "<p style='font-size: 0.82rem; font-weight: bold; font-style: italic; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'>"
+    "ESCAI: pronounced EE-say"
+    "</p>", 
+    unsafe_allow_html=True
+)
+
 logo_base64 = ""
 if os.path.exists("eshap_map.png"):
     with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
@@ -185,13 +193,17 @@ st.html("""
 # System Engine Header Layout Configuration
 st.header("ESHAP Cross-Screen Attention Index (ESCAI)")
 
-st.caption(
-    "The Definitive Zero-Sum Cross-Screen Attention Scale (ESCAI: pronounced EE-say)"
+# Equally Spaced Main Subhead Block
+st.markdown(
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333;'>"
+    "The Definitive Zero-Sum Cross-Screen Attention Scale"
+    "</p>", 
+    unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link: Displays the clean text string with zero added layout prefix characters
+# Persistent Substack Newsletter Link: Rebuilt in the identical typeface and font sizes with strict row margins
 st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.88rem; font-weight: bold; margin-top: -0.75rem; margin-bottom: 1.5rem;'>"
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: 0rem; margin-bottom: 1.5rem; color: #333333;'>"
     "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
@@ -278,7 +290,6 @@ f_map = {
 }
 active_flag = f_map.get(market_choice, "🇺🇸")
 
-# Sub-tab element layout definitions modified to Methodology Blueprint
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
@@ -292,7 +303,7 @@ with tab1:
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({
         "TELEVISAUNIVISION": "TVSA/UNI",
-        "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
+        "SBT (SISTEMA BRASIRO DE TELEVISAO)": "SBT (BRAZIL)",
         "MEDIASET ESPANA": "MEDIASET ES",
         "MFE (MEDIASET)": "MFE",
         "RECORD GRUPO": "RECORD"
