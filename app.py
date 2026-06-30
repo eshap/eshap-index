@@ -119,7 +119,7 @@ BR_BASE = [
     ["TIKTOK", 1150.0, 28.0, 1122.0, 908.8, 763.4, 587.8],
     ["INSTAGRAM", 1040.0, 52.0, 988.0, 879.3, 747.4, 433.5],
     ["NETFLIX", 915.0, 120.0, 795.0, 604.2, 398.7, 211.3],
-    ["RECORD GRUPO", 620.0, 365.0, 255.0, 186.1, 122.8, 54.8],
+    ["GROUPO RECORD", 620.0, 365.0, 255.0, 186.1, 122.8, 54.8],
     ["SBT (SISTEMA BRASILEIRO DE TELEVISAO)", 515.0, 290.0, 225.0, 168.7, 115.8, 53.2],
     ["AMAZON", 390.0, 65.0, 325.0, 266.5, 173.2, 77.9],
     ["DISNEY", 325.0, 48.0, 277.0, 213.3, 139.3, 64.0],
@@ -127,6 +127,7 @@ BR_BASE = [
     ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
     ["BAND (GRUPO)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
 ]
+
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
     with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
@@ -283,7 +284,13 @@ with tab1:
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Cohorts Overlaid"] + demo_columns, horizontal=True)
     
     chart_df = df_matrix.copy()
-    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"TELEVISAUNIVISION": "TVSA/UNI", "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)", "MEDIASET ESPANA": "MEDIASET ES", "MFE (MEDIASET)": "MFE", "RECORD GRUPO": "RECORD"})
+    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({
+        "TELEVISAUNIVISION": "TVSA/UNI",
+        "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
+        "MEDIASET ESPANA": "MEDIASET ES",
+        "MFE (MEDIASET)": "MFE",
+        "GROUPO RECORD": "RECORD"
+    })
     chart_df = chart_df.set_index("Platform/Publisher")
     chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
@@ -294,6 +301,7 @@ with tab1:
         st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons, including consolidated cross-screen volumes for Claro Sports and Uno TV. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
+
 with tab2:
     st.subheader("Why ECSAI? Understanding the Cross-Screen Attention Index")
     st.markdown("In the commercial Media industry, measurement has always been divided by screens. No major auditing bureau or currency panel has ever forced television meters, handset timestamps, and browser logs into a singular, logic-enforced, zero-sum attention budget. **This is collective malpractice.** If you still treat social video and television as separate silos, to twist the age-old Wanamaker adage: *You are wasting half your money.*")
