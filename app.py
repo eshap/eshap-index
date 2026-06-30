@@ -144,10 +144,10 @@ if bullet_base64:
         </style>
         """)
 
-# Clean Sidebar Pronunciation Line: Stripped of all bold and italic decoration properties
+# Clean Sidebar Pronunciation Line: Updated cleanly to show ECSAI nomenclature
 st.sidebar.markdown(
     "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
-    "ESCAI: pronounced EE-say"
+    "ECSAI: pronounced EE-say"
     "</p>", 
     unsafe_allow_html=True
 )
@@ -190,8 +190,8 @@ st.html("""
     }
     </style>
     """)
-# System Engine Header Layout Configuration
-st.header("ESHAP Cross-Screen Attention Index (ESCAI)")
+# System Engine Header Layout Configuration: Updated to show ESHAP Cross Screen Attention Index (ECSAI)
+st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
 # Main Scale Subhead Block
 st.markdown(
@@ -201,10 +201,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link: Hardcoded cleanly to your exact node address
+# Persistent Substack Newsletter Link
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://eshap.substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
 )
@@ -290,6 +290,7 @@ f_map = {
 }
 active_flag = f_map.get(market_choice, "🇺🇸")
 
+# Tab 2 subtitle updated to show (ECSAI: pronounced EE-say) cleanly
 tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
@@ -349,7 +350,7 @@ with tab2:
     f_token = w_map.get(market_choice, "us")
     w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
     with sub_method:
-        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
+        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()}) (ECSAI: pronounced EE-say)")
         st.markdown(f"**Territorial Demographic Weight:** {w1} is ≤ 54 / {w2} is ≥ 55")
         st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
     with sub_source:
