@@ -176,32 +176,32 @@ st.html("""
     }
     </style>
     """)
+# System Engine Header Layout Configuration
 st.header("ESHAP Cross-Screen Attention Index (ESCAI)")
 
 st.caption(
     "The Definitive Zero-Sum Cross-Screen Attention Scale (ESCAI: pronounced EE-say)"
 )
 
+# Injected CSS reduction adjusting the line padding and gap constraints inside the territory radio list area
+st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
+
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"])
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
-# Side Control Trigger: Injecting the on-the-fly consolidation toggle rule
+# Side Control Trigger: Dynamic position map sliding toggle directly into the secondary row below Territory
 merge_meta = False
 if market_choice == "United States":
+    st.sidebar.write("")  # Margin separator spacing
     merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False)
 
 if market_choice == "United States": 
     df_matrix = pd.DataFrame(US_BASE, columns=cols)
     if merge_meta:
-        # Programmatically separate out the target components
         meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
         non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
-        
-        # Aggregate the numeric values cleanly
         summed_vals = meta_rows[cols[1:]].sum().tolist()
         combined_row = [["META"] + summed_vals]
-        
-        # Merge back and force a clean matrix rebuild sorted by P13+ volume
         df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
         df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
@@ -214,7 +214,6 @@ else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
 df_static_base = df_matrix.copy()
-
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
 user_shifts = {}
 for entity in df_matrix["Platform/Publisher"].unique():
@@ -223,6 +222,9 @@ for entity in df_matrix["Platform/Publisher"].unique():
 if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
     st.rerun()
+
+# Explainer block injected at the baseline of the slider matrix block inside the sidebar container panel
+st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
 
 active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
 if active_shifts:
