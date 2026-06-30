@@ -171,19 +171,17 @@ st.html("""
         font-weight: bold !important;
         font-size: 11px !important;
     }
+    /* Fixed selectors ensuring proper typography color inheritance under both themes natively */
+    .eshap-subhead-text, .eshap-subhead-text span {
+        color: inherit !important;
+    }
     </style>
     """)
-# System Color Extraction: Inherits the machine's true foreground text color dynamically on layout load
-st.html(
-    "<h1 style='color: currentColor !important; font-size: 2.25rem; font-weight: bold; margin-bottom: 0.5rem;'>"
-    "ESHAP Cross-Screen Attention Index (ESCAI)"
-    "</h1>"
-)
+# Fixed System Engine Header: Bypasses raw HTML color injection to let Streamlit engine track Dark Mode white type natively
+st.header("ESHAP Cross-Screen Attention Index (ESCAI)")
 
-st.html(
-    "<div style='color: currentColor !important; font-size: 0.9rem; font-weight: bold; margin-top: -0.5rem; margin-bottom: 1.5rem;'>"
-    "The Definitive Zero-Sum Cross-Screen Attention Scale <span style='opacity: 0.8; font-weight: normal; margin-left: 0.5rem;'>(ESCAI: pronounced EE-say)</span>"
-    "</div>"
+st.caption(
+    "The Definitive Zero-Sum Cross-Screen Attention Scale (ESCAI: pronounced EE-say)"
 )
 
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"])
@@ -210,7 +208,7 @@ if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
     st.rerun()
 
-active_shifts = {k: float(v) for k, v in user_shifts.items() as float if v != 0.0}
+active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
 if active_shifts:
     for entity, shift_val in active_shifts.items():
         idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
