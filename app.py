@@ -25,7 +25,6 @@ US_BASE = [
     ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
     ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
 ]
-
 FR_BASE = [
     ["YOUTUBE", 485.0, 95.0, 390.0, 273.0, 212.9, 129.9],
     ["TIKTOK", 335.0, 12.0, 323.0, 251.9, 206.6, 150.8],
@@ -43,6 +42,7 @@ FR_BASE = [
     ["FACEBOOK", 165.0, 92.0, 73.0, 40.2, 14.9, 2.8],
     ["DAZN", 20.0, 2.0, 18.0, 16.2, 12.8, 7.7]
 ]
+
 DE_BASE = [
     ["ARD", 710.0, 560.0, 150.0, 115.5, 90.1, 57.6],
     ["YOUTUBE", 625.0, 135.0, 490.0, 343.0, 267.5, 163.2],
@@ -57,7 +57,6 @@ DE_BASE = [
     ["WBD", 145.0, 78.0, 67.0, 48.9, 30.8, 12.7],
     ["FACEBOOK", 140.0, 82.0, 58.0, 31.9, 11.8, 2.2]
 ]
-
 ES_BASE = [
     ["RTVE", 395.0, 295.0, 100.0, 77.0, 55.4, 35.5],
     ["ATRESMEDIA", 380.0, 235.0, 145.0, 108.8, 78.3, 39.5],
@@ -87,7 +86,6 @@ UK_BASE = [
     ["FACEBOOK", 210.0, 115.0, 95.0, 52.3, 19.3, 3.7],
     ["AMAZON", 195.0, 62.0, 133.0, 109.1, 67.6, 28.4]
 ]
-
 IT_BASE = [
     ["RAI", 520.0, 415.0, 105.0, 80.9, 58.2, 37.2],
     ["YOUTUBE", 440.0, 110.0, 330.0, 231.0, 180.2, 109.9],
@@ -101,6 +99,7 @@ IT_BASE = [
     ["FACEBOOK", 160.0, 101.0, 59.0, 32.5, 12.0, 2.3],
     ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
 ]
+
 MX_BASE = [
     ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
     ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
@@ -144,9 +143,9 @@ if bullet_base64:
         </style>
         """)
 
-# Clean Sidebar Pronunciation Line: Updated cleanly to show ECSAI nomenclature
+# Clean Sidebar Pronunciation Line: Stripped cleanly of bold/italic properties to sit subtly at sidebar apex
 st.sidebar.markdown(
-    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
+    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'>"
     "ECSAI: pronounced EE-say"
     "</p>", 
     unsafe_allow_html=True
@@ -164,36 +163,25 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Position Map Shift: Injecting the toggle state strictly beneath the map graphic and above the radio category header
+# Intercepted Meta Sidebar Toggle: Nested right beneath logo framework
 merge_meta = False
 if st.session_state.get("market_choice_sync", "United States") == "United States":
     merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
     st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
-
-# Mid-Gray Sidebar Style Matrix & Global Typography Canvas Overrides
 st.html("""
     <style>
-    section[data-testid="stSidebar"] {
-        background-color: #4A4A4A !important;
-    }
+    section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p {
-        color: #ffffff !important;
-    }
-    g[class*="role-axis"] text {
-        font-weight: bold !important;
-        font-size: 11px !important;
-    }
-    .eshap-subhead-text, .eshap-subhead-text span {
-        color: inherit !important;
-    }
+    section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p { color: #ffffff !important; }
+    g[class*="role-axis"] text { font-weight: bold !important; font-size: 11px !important; }
+    .eshap-subhead-text, .eshap-subhead-text span { color: inherit !important; }
     </style>
     """)
-# System Engine Header Layout Configuration: Updated to show ESHAP Cross Screen Attention Index (ECSAI)
+
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
-# Main Scale Subhead Block
+# Main Scale Subhead Block: Stripped completely of bold
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale"
@@ -201,7 +189,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link
+# Persistent Substack Newsletter Link: Hardcoded to exact node path in non-bold gray type
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
     "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
@@ -209,10 +197,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Injected CSS reduction adjusting the line padding and gap constraints inside the territory radio list area
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-
-# Territory picker reading state targets natively to feed back into the top selector condition mapping layer
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
@@ -235,6 +220,7 @@ else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
 df_static_base = df_matrix.copy()
+
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
 user_shifts = {}
 for entity in df_matrix["Platform/Publisher"].unique():
@@ -244,7 +230,6 @@ if st.sidebar.button("Reset Defaults"):
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
     st.rerun()
 
-# Explainer block injected at the baseline of the slider matrix block inside the sidebar container panel
 st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
 
 active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
@@ -260,7 +245,6 @@ if active_shifts:
             df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
             df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
             df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
-
     total_shifted_hours = sum(active_shifts.values())
     non_shifted_df = df_static_base[~df_static_base["Platform/Publisher"].isin(active_shifts.keys())]
     total_non_shifted_pool = non_shifted_df["P13+"].sum()
@@ -284,14 +268,10 @@ net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
 if abs(net_balance) > 0.1: st.sidebar.warning(f"Simulated Shift Imbalance: {net_balance:+.1f}M Hours")
 else: st.sidebar.success("Zero-Sum Balance Maintained")
 
-f_map = {
-    "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧",
-    "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"
-}
+f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
-# Tab 2 subtitle updated to show (ECSAI: pronounced EE-say) cleanly
-tab1, tab2 = st.tabs(["CSAI Interactive Index Matrix", "Index Architecture & Methodology"])
+tab1, tab2, tab3 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
@@ -302,51 +282,34 @@ with tab1:
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Cohorts Overlaid"] + demo_columns, horizontal=True)
     
     chart_df = df_matrix.copy()
-    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({
-        "TELEVISAUNIVISION": "TVSA/UNI",
-        "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
-        "MEDIASET ESPANA": "MEDIASET ES",
-        "MFE (MEDIASET)": "MFE",
-        "RECORD GRUPO": "RECORD"
-    })
+    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"TELEVISAUNIVISION": "TVSA/UNI", "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)", "MEDIASET ESPANA": "MEDIASET ES", "MFE (MEDIASET)": "MFE", "RECORD GRUPO": "RECORD"})
     chart_df = chart_df.set_index("Platform/Publisher")
     chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
-    
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
     
     if market_choice == "Brazil":
-        st.markdown(
-            "<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'>"
-            "<strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>"
-            "Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. "
-            "WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted."
-            "</p>",
-            unsafe_allow_html=True
-        )
+        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
     elif market_choice == "Mexico":
-        st.markdown(
-            "<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'>"
-            "<strong>Cross-Screen Attention Allocation Ledger: MEXICO</strong><br>"
-            "Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. "
-            "YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons, "
-            "including consolidated cross-screen volumes for Claro Sports and Uno TV. Concurrent multi-screening duplication and passive device use discounted."
-            "</p>",
-            unsafe_allow_html=True
-        )
+        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons, including consolidated cross-screen volumes for Claro Sports and Uno TV. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 
 with tab2:
+    st.subheader("Why ECSAI? Understanding the Cross-Screen Attention Index")
+    st.markdown("In the commercial Media industry, measurement has always been divided by screens. No major auditing bureau or currency panel has ever forced television meters, handset timestamps, and browser logs into a singular, logic-enforced, zero-sum attention budget. **This is collective malpractice.** If you still treat social video and television as separate silos, to twist the age-old Wanamaker adage: *You are wasting half your money.*")
+    st.markdown("In the next three years, one trillion dollars will be spent on advertising in the US alone. More than three quarters of that will be spent on digital platforms. Another \$180 billion will be spent on television advertising. No one is measuring the reach, frequency, or effectiveness of this massive cashflow across these platforms.")
+    if os.path.exists("share_by_device.png"): st.image("share_by_device.png", caption="Video Consumption Share By Device Ecosystem (US Baseline)", use_container_width=True)
+    else: st.info("💡 *[Placeholder for share_by_device.png: In a recent survey of 3,000 US consumers, 59% watch video primarily on phones vs 28% on traditional TV glass]*")
+    st.markdown("Publishers and advertisers look at their TV ratings, digital buyers and social media experts look at mobile handset logs, and everybody claims they are winning the war for reach. Meanwhile the measurement industry locks agencies into long-term contracts, then charges sellers through the nose to use their 'currency.' Or, they will track attention across all the platforms, but only by campaign - not as a map nor trajectory of total cross-screen attention. This leaves our data on *real attention* siloed to the point of pointlessness.")
+    st.markdown("The industry is totally blind to how real people actually behave. Today's consumer is a singular, fluid entity moving seamlessly across a multi-screen day, allocating a single, finite commodity: **attention**. The Media industry is lost specifically because they are charting their course based on the failed logic of vanity metrics, rather than following the actual data; the voice of the audience.")
+    if os.path.exists("devices_by_generation.png"): st.image("devices_by_generation.png", caption="Video Device Preference Layout Broken Down Across Generational Cohorts", use_container_width=True)
+    else: st.info("💡 *[Placeholder for devices_by_generation.png: Media Generation Gap breakdown charting step-down linear curves from 18-24 up to Boomer demographics]*")
+    st.markdown("Only Baby Boomers watch more video on televisions than on phones. Every other generation of Americans watches video on their phones two to three times more than their TVs. By treating human focus as a tangible physical property constrained by a fixed 24-hour clock, we built a model that removes corporate bias, complacency, and corruption from measurement. It exposes the actual depth of consumer focus, proving that while a traditional network may still technically 'reach' a young consumer, that consumer's finite daily time budget has completely migrated to a personal screen.")
+
+with tab3:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
-    w_map = {
-        "United States": "us", "France": "fr", "United Kingdom": "uk",
-        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
-    }
-    t_map = {
-        "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"),
-        "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"),
-        "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
-    }
+    w_map = {"United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"}
+    t_map = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}
     f_token = w_map.get(market_choice, "us")
     w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
     with sub_method:
