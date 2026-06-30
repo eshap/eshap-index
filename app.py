@@ -189,10 +189,10 @@ st.caption(
     "The Definitive Zero-Sum Cross-Screen Attention Scale (ESCAI: pronounced EE-say)"
 )
 
-# Persistent Substack Newsletter Link: Injects clean, responsive target anchor tags across every page
+# Persistent Substack Newsletter Link: Injects your exact updated text block and hyperlink anchor
 st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.88rem; font-weight: bold; margin-top: -0.75rem; margin-bottom: 1.5rem;'> "
-    "👉 Read the full analysis on Substack: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "<p class='eshap-subhead-text' style='font-size: 0.88rem; font-weight: bold; margin-top: -0.75rem; margin-bottom: 1.5rem;'>> "
+    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
 )
