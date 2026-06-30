@@ -171,13 +171,11 @@ st.html("""
         font-weight: bold !important;
         font-size: 11px !important;
     }
-    /* Fixed selectors ensuring proper typography color inheritance under both themes natively */
     .eshap-subhead-text, .eshap-subhead-text span {
         color: inherit !important;
     }
     </style>
     """)
-# Fixed System Engine Header: Bypasses raw HTML color injection to let Streamlit engine track Dark Mode white type natively
 st.header("ESHAP Cross-Screen Attention Index (ESCAI)")
 
 st.caption(
@@ -187,7 +185,25 @@ st.caption(
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"])
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
-if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
+# Side Control Trigger: Injecting the on-the-fly consolidation toggle rule
+merge_meta = False
+if market_choice == "United States":
+    merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False)
+
+if market_choice == "United States": 
+    df_matrix = pd.DataFrame(US_BASE, columns=cols)
+    if merge_meta:
+        # Programmatically separate out the target components
+        meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+        non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+        
+        # Aggregate the numeric values cleanly
+        summed_vals = meta_rows[cols[1:]].sum().tolist()
+        combined_row = [["META"] + summed_vals]
+        
+        # Merge back and force a clean matrix rebuild sorted by P13+ volume
+        df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
+        df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
 elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
 elif market_choice == "Italy": df_matrix = pd.DataFrame(IT_BASE, columns=cols)
