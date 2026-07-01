@@ -198,82 +198,26 @@ st.markdown(
 )
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
-cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
-
-if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
-elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
-elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
-elif market_choice == "Italy": df_matrix = pd.DataFrame(IT_BASE, columns=cols)
-elif market_choice == "Germany": df_matrix = pd.DataFrame(DE_BASE, columns=cols)
-elif market_choice == "Spain": df_matrix = pd.DataFrame(ES_BASE, columns=cols)
-elif market_choice == "Brazil": df_matrix = pd.DataFrame(BR_BASE, columns=cols)
-else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
-
-if merge_meta:
-    meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
-    non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
-    if not meta_rows.empty:
-        summed_vals = meta_rows[cols[1:]].sum().tolist()
-        combined_row = [["META"] + summed_vals]
-        df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
-        df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
-
-# Enforce float casting immediately at start to prevent calculation mismatch value errors
-df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
-
-# Uniformize data presentation layer text across ledger, CSV export, and charting arrays
-df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
-    "TELEVISAUNIVISION": "TVSA/UNI",
-    "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
-    "MEDIASET ESPANA": "MEDIASET ES",
-    "MFE (MEDIASET)": "MFE",
-    "GROUPO RECORD": "GROUPO RECORD"
-})
-
-df_static_base = df_matrix.copy()
-
-st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
-user_shifts = {}
-for entity in df_matrix["Platform/Publisher"].unique():
-    user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
-
-if st.sidebar.button("Reset Defaults"):
-    st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
-    st.rerun()
-
-st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
-
-active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
-if active_shifts:
-    for entity, shift_val in active_shifts.items():
-        idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-        if len(idx) > 0:
-            p13_orig = df_static_base.loc[idx, "P13+"].values
-            adj_p13 = max(0.0, p13_orig + shift_val)
-            ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-            df_matrix.loc[idx, "P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
-            df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
-            df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
-            df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
 total_shifted_hours = sum(active_shifts.values())
-non_shifted_df = df_static_base[~df_static_base["Platform/Publisher"].isin(active_shifts.keys())]
-total_non_shifted_pool = non_shifted_df["P13+"].sum()
 
-if total_non_shifted_pool > 0 and abs(total_shifted_hours) > 0.01:
-    for entity in non_shifted_df["Platform/Publisher"].unique():
-        idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-        p13_orig = df_static_base.loc[idx, "P13+"].values
-        pro_rata_weight = p13_orig / total_non_shifted_pool
-        absorbed_share = -total_shifted_hours * pro_rata_weight
-        adj_p13 = max(0.0, p13_orig + absorbed_share)
-        ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-        df_matrix.loc[idx, "P13+"] = adj_p13
-        df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
-        df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
-        df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
-        df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
+# Deployment of the recursive loop protecting siphons from crashing through the 0.0 floor
+if abs(total_shifted_hours) > 0.01:
+    surviving_entities = [e for e in df_static_base["Platform/Publisher"].unique() if e not in active_shifts.keys()]
+    remaining_deficit = total_shifted_hours
+    
+    # Run the compression logic loop until the entire attention deficit parameter is completely absorbed
+    while abs(remaining_deficit) > 0.01 and len(surviving_entities) > 0:
+        current_pool_total = df_matrix[df_matrix["Platform/Publisher"].isin(surviving_entities)]["P13+"].sum()
+        
+        if current_pool_total  0 else 1.0
+                df_matrix.loc[idx, "P13+"] = proposed_p13
+                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, proposed_p13 - df_static_base.loc[idx, "55+ GenX+"].values[0])
+                df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values[0] * ratio
+                df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values[0] * ratio
+                df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values[0] * ratio
+                
+        remaining_deficit += allocated_this_step
+        surviving_entities = [e for e in surviving_entities if e not in next_cycle_dropouts]
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
@@ -283,8 +227,8 @@ else: st.sidebar.success("Zero-Sum Balance Maintained")
 f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
-# Split cleanly into a 4-tab interface architecture to isolate FAQs on their own dedicated view
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
+
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.75rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
