@@ -2,14 +2,20 @@ import streamlit as st
 import pandas as pd
 import base64, os, io
 
-# Performance Cache Shield: Forces instantaneous local file updates with zero tab latency
-@st.cache_data(show_spinner=False)
-def load_text_asset(filename, default_text=""):
+# Performance Cache Shield: Completely isolates the IO filesystem overhead from the application thread
+@st.cache_data(ttl=3600, max_entries=32, show_spinner=False)
+def load_text_asset_cached(filename):
     if os.path.exists(filename):
-        with open(filename, "r", encoding="utf-8") as f:
-            content = f.read().strip()
-            if content: return content
-    return default_text
+        try:
+            with open(filename, "r", encoding="utf-8") as f:
+                return str(f.read().strip())
+        except Exception:
+            return ""
+    return ""
+
+def load_text_asset(filename, default_text=""):
+    content = load_text_asset_cached(filename)
+    return content if content else default_text
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
@@ -27,6 +33,7 @@ US_BASE = [
     ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
     ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
 ]
+
 FR_BASE = [
     ["YOUTUBE", 485.0, 95.0, 390.0, 273.0, 212.9, 129.9],
     ["TIKTOK", 335.0, 12.0, 323.0, 251.9, 206.6, 150.8],
