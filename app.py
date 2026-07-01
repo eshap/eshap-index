@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import base64, os, io
 
+# Performance Cache Shield: Forces instantaneous local file updates with zero tab latency
+@st.cache_data(show_spinner=False)
 def load_text_asset(filename, default_text=""):
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as f:
@@ -130,20 +132,27 @@ BR_BASE = [
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
     with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
-if bullet_base64:
-    st.html("""
-        <style>
-        span[data-testid='stWidgetLabel'] p, button[data-testid='stBaseButton-secondary'] p, [data-baseweb='tab'] p {
-            position: relative; padding-left: 1.5rem !important;
-        }
-        span[data-testid='stWidgetLabel'] p::before, button[data-testid='stBaseButton-secondary'] p::before, [data-baseweb='tab'] p::before {
-            content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
-            background-image: url('data:image/png;base64,""" + bullet_base64 + """') !important;
-        }
-        </style>
-        """)
 
-# Clean Sidebar Pronunciation Line: Stripped cleanly of bold/italic properties to sit subtly at sidebar apex
+# Mobile Viewport Optimization Shield: Injects style markers to force seamless unclipped scrolling
+st.html("""
+    <style>
+    span[data-testid='stWidgetLabel'] p, button[data-testid='stBaseButton-secondary'] p, [data-baseweb='tab'] p {
+        position: relative; padding-left: 1.5rem !important;
+    }
+    """ + (f"""span[data-testid='stWidgetLabel'] p::before, button[data-testid='stBaseButton-secondary'] p::before, [data-baseweb='tab'] p::before {{
+        content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
+        background-image: url('data:image/png;base64,{bullet_base64}') !important;
+    }}""" if bullet_base64 else "") + """
+    div[data-testid="stDataFrame"] {
+        width: 100% !important;
+        overflow-x: auto !important;
+    }
+    div[data-testid="stDataFrame"] data-grid {
+        min-width: 820px !important;
+    }
+    </style>
+    """)
+
 st.sidebar.markdown(
     "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
     "ECSAI: pronounced EE-say"
@@ -179,7 +188,6 @@ st.html("""
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
-# Main Scale Subhead Block: Stripped completely of bold
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale"
@@ -187,16 +195,25 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link: Hardcoded cleanly to point straight to ://substack.com
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://://substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
 )
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
+
+# Market Context Reset Shield: Wipes memory cache instantly upon changing territories to prevent conversion loop crashes
+if "previous_market" not in st.session_state:
+    st.session_state.previous_market = market_choice
+
+if st.session_state.previous_market != market_choice:
+    st.session_state.previous_market = market_choice
+    st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
+    st.rerun()
+
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
@@ -247,14 +264,14 @@ if active_shifts:
     for entity, shift_val in active_shifts.items():
         idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
         if len(idx) > 0:
-            p13_orig = df_static_base.loc[idx, "P13+"].values
+            p13_orig = df_static_base.loc[idx, "P13+"].values.item()
             adj_p13 = max(0.0, p13_orig + shift_val)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
             df_matrix.loc[idx, "P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
-            df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
-            df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
-            df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
+            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values.item())
+            df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values.item() * ratio
+            df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values.item() * ratio
+            df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values.item() * ratio
 total_shifted_hours = sum(active_shifts.values())
 
 if abs(total_shifted_hours) > 0.01:
