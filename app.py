@@ -201,7 +201,6 @@ st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'
 market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
-# Interactive layout parsing supporting cross-border Meta matrix conversion
 if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
 elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
@@ -220,7 +219,18 @@ if merge_meta:
         df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
         df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
 
+# Enforce float casting immediately at start to prevent calculation mismatch value errors
 df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
+
+# Uniformize data presentation layer text across ledger, CSV export, and charting arrays
+df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
+    "TELEVISAUNIVISION": "TVSA/UNI",
+    "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
+    "MEDIASET ESPANA": "MEDIASET ES",
+    "MFE (MEDIASET)": "MFE",
+    "GROUPO RECORD": "GROUPO RECORD"
+})
+
 df_static_base = df_matrix.copy()
 
 st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
@@ -273,38 +283,24 @@ else: st.sidebar.success("Zero-Sum Balance Maintained")
 f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
+# Split cleanly into a 4-tab interface architecture to isolate FAQs on their own dedicated view
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
-    
-    # Subhead Unit Label: Rendered in bold italic responsive font canvas mapping style
-    st.markdown(
-        "<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.75rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", 
-        unsafe_allow_html=True
-    )
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.75rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.write("")
-    st.markdown("#### Interactive Visual Share Map")
     
-    # Subhead Unit Label: Rendered in bold italic responsive font canvas mapping style
-    st.markdown(
-        "<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", 
-        unsafe_allow_html=True
-    )
+    st.markdown("#### Interactive Visual Share Map")
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Cohorts Overlaid"] + demo_columns, horizontal=True)
     
     chart_df = df_matrix.copy()
-    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({
-        "TELEVISAUNIVISION": "TVSA/UNI",
-        "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
-        "MEDIASET ESPANA": "MEDIASET ES",
-        "MFE (MEDIASET)": "MFE",
-        "GROUPO RECORD": "RECORD"
-    })
+    chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     chart_df = chart_df.set_index("Platform/Publisher")
     chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
@@ -313,10 +309,10 @@ with tab1:
         st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
     elif market_choice == "Mexico":
         st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons, including consolidated cross-screen volumes for Claro Sports and Uno TV. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
+    elif market_choice in ["France", "Germany", "United Kingdom", "Italy", "Spain"]:
+        st.markdown(f"<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: {market_choice.upper()}</strong><br>Platform totals represent unified holding corporate structures. Traditional TV volumes are scaled using audited single-screen panel metrics from regional state-backed systems (including BARB, Médiamétrie, and Agf/Gfk) and balanced against hardware-level handset logs. Multi-screening and background device noise programmatically flattened through duplication discounts to retain zero-sum integrity.</p>", unsafe_allow_html=True)
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
-
-
 with tab2:
     st.subheader("Why ECSAI? Understanding the Cross-Screen Attention Index")
     st.markdown("In the commercial Media industry, measurement has always been divided by screens. No major auditing bureau or currency panel has ever forced television meters, handset timestamps, and browser logs into a singular, logic-enforced, zero-sum attention budget. **This is collective malpractice.** If you still treat social video and television as separate silos, to twist the age-old Wanamaker adage: *You are wasting half your money.*")
@@ -351,6 +347,8 @@ with tab2:
     st.markdown("The numbers in this index are from companies we all know. So is the point of view. We ask the right questions - in this case, where is the attention of the whole consumer actually going — because everyone asked us.")
     st.markdown("That fear of finding out is the systemic blindness now pushing our industry off a cliff. Thus, the ECSAI - the ESHAP Cross-Screen Attention Index. It's our new compass toward today's audience: The Whole Consumer.")
     st.write("---")
+    
+    # Fully bolded, style-responsive outro block configured for auto white-balancing in dark mode themes
     st.markdown(
         "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
@@ -383,6 +381,8 @@ with tab3:
     st.markdown("The index must be stress-tested against markets that actively resist international digital migration through aggressive state intervention and distinct cultural infrastructure, such as Italy, France, and Spain. By forcing the zero-sum model to process these three protectionist territories, by engineering specialized local policy friction curves to honor their defensive cushions, the index can be a flexible global tool, not just a cookie-cutter American proxy. To balance the inverted, aging demographic pyramids of Europe, the index integrates the two heavyweights of Latin America. Brazil and Mexico represent massive, youth-heavy populations that boast some of the highest daily smartphone video consumption lengths on earth. Including these territories allows us to visualize the absolute opposite end of the media lifecycle: markets where traditional pay-TV infrastructures are entirely bypassable, mobile-velocity acceleration is absolute, and tech utilities operate at an unprecedented 97% to 98% workforce density.")
     st.markdown("We did not include Asia or a wider Latin American footprint in this initial launch for one reason: data maturity and local currency standardization. To deliver a logic-enforced zero-sum matrix, the index requires every country baseline to sit completely transparently in the public domain. The foundational data layers - specifically, open regulatory white papers, audited public broadcaster disclosures, and standardized local device telemetry panels - must possess structural transparency. Markets like Japan, South Korea, India, and smaller Latin American territories currently operate on highly fragmented, proprietary, or state-cloaked measurement silos. Trying to force those opaque systems into a strict human daily clock, right now, requires speculative modeling that compromises the index's standard of data integrity.")
     st.write("---")
+    
+    # Fully bolded, style-responsive outro block configured for auto white-balancing in dark mode themes
     st.markdown(
         "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
