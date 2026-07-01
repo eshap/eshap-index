@@ -209,7 +209,11 @@ if abs(total_shifted_hours) > 0.01:
     while abs(remaining_deficit) > 0.01 and len(surviving_entities) > 0:
         current_pool_total = df_matrix[df_matrix["Platform/Publisher"].isin(surviving_entities)]["P13+"].sum()
         
-        if current_pool_total  0 else 1.0
+        if current_pool_total  0 else 0.0
+            pro_rata_share = -step_deficit * pro_rata_weight
+            proposed_p13 = p13_current + pro_rata_share
+            
+            if proposed_p13  0 else 1.0
                 df_matrix.loc[idx, "P13+"] = proposed_p13
                 df_matrix.loc[idx, "13-54 Majority"] = max(0.0, proposed_p13 - df_static_base.loc[idx, "55+ GenX+"].values[0])
                 df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values[0] * ratio
@@ -228,7 +232,6 @@ f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "
 active_flag = f_map.get(market_choice, "🇺🇸")
 
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
-
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.75rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
