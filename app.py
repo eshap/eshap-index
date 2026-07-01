@@ -2,20 +2,27 @@ import streamlit as st
 import pandas as pd
 import base64, os, io
 
-# Performance Cache Shield: Completely isolates the IO filesystem overhead from the application thread
-@st.cache_data(ttl=3600, max_entries=32, show_spinner=False)
-def load_text_asset_cached(filename):
-    if os.path.exists(filename):
-        try:
-            with open(filename, "r", encoding="utf-8") as f:
-                return str(f.read().strip())
-        except Exception:
-            return ""
-    return ""
+# Universal Token Matrix for System Initialization Mapping
+CORE_TOKENS = ["us", "fr", "uk", "it", "de", "sp", "br", "mx"]
+
+# Instant Memory Cache Bootstrapper: Reads the filesystem once and retains data permanently in RAM
+if "text_memory_cache" not in st.session_state:
+    st.session_state.text_memory_cache = {}
+    for token in CORE_TOKENS:
+        for prefix in ["methodology", "sources"]:
+            filename = f"{prefix}_{token}.txt"
+            content = ""
+            if os.path.exists(filename):
+                try:
+                    with open(filename, "r", encoding="utf-8") as f:
+                        content = str(f.read().strip())
+                except Exception:
+                    content = ""
+            st.session_state.text_memory_cache[filename] = content
 
 def load_text_asset(filename, default_text=""):
-    content = load_text_asset_cached(filename)
-    return content if content else default_text
+    cached_content = st.session_state.text_memory_cache.get(filename, "")
+    return cached_content if cached_content else default_text
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
@@ -33,6 +40,7 @@ US_BASE = [
     ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
     ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
 ]
+
 
 FR_BASE = [
     ["YOUTUBE", 485.0, 95.0, 390.0, 273.0, 212.9, 129.9],
@@ -420,6 +428,8 @@ with tab4:
     t_map = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}
     f_token = w_map.get(market_choice, "us")
     w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
+    
+    # Pure Memory-Cached Retrieval: Wipes file storage lag loops completely out of your tab matrix frames
     with sub_method:
         st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
         st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
