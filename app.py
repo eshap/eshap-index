@@ -40,8 +40,6 @@ US_BASE = [
     ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
     ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
 ]
-
-
 FR_BASE = [
     ["YOUTUBE", 485.0, 95.0, 390.0, 273.0, 212.9, 129.9],
     ["TIKTOK", 335.0, 12.0, 323.0, 251.9, 206.6, 150.8],
@@ -148,7 +146,7 @@ bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
     with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
 
-# Mobile Viewport Optimization Shield: Injects style markers to force seamless unclipped scrolling
+# Mobile Viewport Optimization Shield: Injects style rules to force un-clipped swipe data layers
 st.html("""
     <style>
     span[data-testid='stWidgetLabel'] p, button[data-testid='stBaseButton-secondary'] p, [data-baseweb='tab'] p {
@@ -158,16 +156,12 @@ st.html("""
         content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
         background-image: url('data:image/png;base64,{bullet_base64}') !important;
     }}""" if bullet_base64 else "") + """
-    div[data-testid="stDataFrame"] {
-        width: 100% !important;
-        overflow-x: auto !important;
-    }
-    div[data-testid="stDataFrame"] data-grid {
-        min-width: 820px !important;
-    }
+    div[data-testid="stDataFrame"] { width: 100% !important; overflow-x: auto !important; }
+    div[data-testid="stDataFrame"] data-grid { min-width: 820px !important; }
     </style>
     """)
 
+# Clean Sidebar Pronunciation Line: Stripped cleanly of bold/italic properties to sit subtly at sidebar apex
 st.sidebar.markdown(
     "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
     "ECSAI: pronounced EE-say"
@@ -218,16 +212,16 @@ st.markdown(
 )
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
-
-# Market Context Reset Shield: Wipes memory cache instantly upon changing territories to prevent conversion loop crashes
-if "previous_market" not in st.session_state:
-    st.session_state.previous_market = market_choice
-
-if st.session_state.previous_market != market_choice:
-    st.session_state.previous_market = market_choice
+# Callback Shield: Destroys memory loops instantly on country switch to prevent lag spikes
+def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
-    st.rerun()
+
+market_choice = st.sidebar.radio(
+    "Territory", 
+    ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], 
+    key="market_choice_sync",
+    on_change=handle_market_switch_callback
+)
 
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
@@ -249,10 +243,8 @@ if merge_meta:
         df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
         df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
 
-# Enforce float casting immediately at start to prevent calculation mismatch value errors
 df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
 
-# Uniformize data presentation layer text across ledger, CSV export, and charting arrays
 df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
     "TELEVISAUNIVISION": "TVSA/UNI",
     "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
@@ -279,14 +271,14 @@ if active_shifts:
     for entity, shift_val in active_shifts.items():
         idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
         if len(idx) > 0:
-            p13_orig = df_static_base.loc[idx, "P13+"].values.item()
+            p13_orig = df_static_base.loc[idx, "P13+"].values
             adj_p13 = max(0.0, p13_orig + shift_val)
             ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
             df_matrix.loc[idx, "P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values.item())
-            df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values.item() * ratio
-            df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values.item() * ratio
-            df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values.item() * ratio
+            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
+            df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
+            df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
+            df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
 total_shifted_hours = sum(active_shifts.values())
 
 if abs(total_shifted_hours) > 0.01:
@@ -298,7 +290,7 @@ if abs(total_shifted_hours) > 0.01:
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
             
             # Extract the raw float scalar value out of the array to prevent type conversion errors
-            p13_orig_val = float(df_static_base.loc[idx, "P13+"].values[0])
+            p13_orig_val = float(df_static_base.loc[idx, "P13+"].values)
             pro_rata_weight = p13_orig_val / total_non_shifted_pool
             absorbed_share = -total_shifted_hours * pro_rata_weight
             
@@ -307,10 +299,10 @@ if abs(total_shifted_hours) > 0.01:
             ratio = adj_p13 / p13_orig_val if p13_orig_val > 0.0 else 1.0
             
             df_matrix.loc[idx, "P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].values[0]))
-            df_matrix.loc[idx, "13-44 NextGen"] = float(df_static_base.loc[idx, "13-44 NextGen"].values[0]) * ratio
-            df_matrix.loc[idx, "13-34 Youth"] = float(df_static_base.loc[idx, "13-34 Youth"].values[0]) * ratio
-            df_matrix.loc[idx, "13-24 GenA/Z"] = float(df_static_base.loc[idx, "13-24 GenA/Z"].values[0]) * ratio
+            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].values))
+            df_matrix.loc[idx, "13-44 NextGen"] = float(df_static_base.loc[idx, "13-44 NextGen"].values) * ratio
+            df_matrix.loc[idx, "13-34 Youth"] = float(df_static_base.loc[idx, "13-34 Youth"].values) * ratio
+            df_matrix.loc[idx, "13-24 GenA/Z"] = float(df_static_base.loc[idx, "13-24 GenA/Z"].values) * ratio
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
@@ -320,6 +312,7 @@ else: st.sidebar.success("Zero-Sum Balance Maintained")
 f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
+# Programmatic Tab 4-Interface Engine Initialization Split
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
@@ -387,7 +380,7 @@ with tab2:
         "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
         "We would love to know what you think. Please send your feedback and questions to "
-        "<a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
+        "<a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
         "Cheers!<br><br>"
         "ESHAP"
         "</p>", 
@@ -415,7 +408,7 @@ with tab3:
         "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
         "We would love to know what you think. Please send your feedback and questions to "
-        "<a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
+        "<a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
         "Cheers!<br><br>"
         "ESHAP"
         "</p>", 
@@ -423,17 +416,35 @@ with tab3:
     )
 
 with tab4:
-    sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     w_map = {"United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"}
     t_map = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}
     f_token = w_map.get(market_choice, "us")
     w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
     
-    # Pure Memory-Cached Retrieval: Wipes file storage lag loops completely out of your tab matrix frames
-    with sub_method:
+    # Initialize Document State Session Cache to block Streamlit sub-tab rendering latency loops
+    if "doc_view_mode" not in st.session_state:
+        st.session_state.doc_view_mode = "Blueprint"
+        
+    # High-Velocity Dynamic Button Segment: Flips layout text instantly from local RAM cache
+    btn_col1, btn_col2, _ = st.columns([1.2, 1.2, 5])
+    with btn_col1:
+        if st.button("📘 View Methodology Blueprint", use_container_width=True, type="primary" if st.session_state.doc_view_mode == "Blueprint" else "secondary"):
+            st.session_state.doc_view_mode = "Blueprint"
+            st.rerun()
+    with btn_col2:
+        if st.button("🗂️ View Sourcing Matrix", use_container_width=True, type="primary" if st.session_state.doc_view_mode == "Matrix" else "secondary"):
+            st.session_state.doc_view_mode = "Matrix"
+            st.rerun()
+            
+    st.write("")
+    
+    # Instantaneous Memory Array Render Loop execution window
+    if st.session_state.doc_view_mode == "Blueprint":
         st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
         st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
+        st.html("<div style='margin-bottom: 0.5rem;'></div>")
         st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
-    with sub_source:
+    else:
         st.markdown(f"### DATA SOURCES ({active_flag} {market_choice.upper()})")
+        st.html("<div style='margin-bottom: 0.5rem;'></div>")
         st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
