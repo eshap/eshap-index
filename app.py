@@ -264,19 +264,21 @@ if abs(total_shifted_hours) > 0.01:
     if total_non_shifted_pool > 0.0:
         for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            p13_orig = df_static_base.loc[idx, "P13+"].values
-            pro_rata_weight = p13_orig / total_non_shifted_pool
+            
+            # Extract the raw float scalar value out of the array to prevent type conversion errors
+            p13_orig_val = float(df_static_base.loc[idx, "P13+"].values[0])
+            pro_rata_weight = p13_orig_val / total_non_shifted_pool
             absorbed_share = -total_shifted_hours * pro_rata_weight
             
-            # Absolute Max Guard: Blocks values from ever dipping into negative numbers
-            adj_p13 = max(0.0, float(p13_orig + absorbed_share))
-            ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
+            # Absolute Max Guard: Safely handles single float values to block negative entries
+            adj_p13 = max(0.0, p13_orig_val + absorbed_share)
+            ratio = adj_p13 / p13_orig_val if p13_orig_val > 0.0 else 1.0
             
             df_matrix.loc[idx, "P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
-            df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
-            df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
-            df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
+            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].values[0]))
+            df_matrix.loc[idx, "13-44 NextGen"] = float(df_static_base.loc[idx, "13-44 NextGen"].values[0]) * ratio
+            df_matrix.loc[idx, "13-34 Youth"] = float(df_static_base.loc[idx, "13-34 Youth"].values[0]) * ratio
+            df_matrix.loc[idx, "13-24 GenA/Z"] = float(df_static_base.loc[idx, "13-24 GenA/Z"].values[0]) * ratio
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
