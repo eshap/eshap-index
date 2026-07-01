@@ -127,7 +127,6 @@ BR_BASE = [
     ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
     ["BAND (GRUPO)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
 ]
-
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
     with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
@@ -164,10 +163,9 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Global Unconditional Sidebar Toggle: Positioned right beneath the logo framework across all territories
+# Global Unconditional Sidebar Toggle: Activated and visible across all territory ledger grids uniformly
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
-
 st.html("""
     <style>
     section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
@@ -181,7 +179,7 @@ st.html("""
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
-# Main Scale Subhead Block
+# Main Scale Subhead Block: Stripped completely of bold
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
     "The Definitive Zero-Sum Cross-Screen Attention Scale"
@@ -189,15 +187,74 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link
+# Persistent Substack Newsletter Link: Hardcoded cleanly to point straight to ://substack.com
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://eshap.substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "For full analysis: <a href='https://://substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
 )
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
+market_choice = st.sidebar.radio("Territory", ["United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], key="market_choice_sync")
+cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
+
+if market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
+elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
+elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
+elif market_choice == "Italy": df_matrix = pd.DataFrame(IT_BASE, columns=cols)
+elif market_choice == "Germany": df_matrix = pd.DataFrame(DE_BASE, columns=cols)
+elif market_choice == "Spain": df_matrix = pd.DataFrame(ES_BASE, columns=cols)
+elif market_choice == "Brazil": df_matrix = pd.DataFrame(BR_BASE, columns=cols)
+else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
+
+if merge_meta:
+    meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+    non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+    if not meta_rows.empty:
+        summed_vals = meta_rows[cols[1:]].sum().tolist()
+        combined_row = [["META"] + summed_vals]
+        df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
+        df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
+
+# Enforce float casting immediately at start to prevent calculation mismatch value errors
+df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
+
+# Uniformize data presentation layer text across ledger, CSV export, and charting arrays
+df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
+    "TELEVISAUNIVISION": "TVSA/UNI",
+    "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
+    "MEDIASET ESPANA": "MEDIASET ES",
+    "MFE (MEDIASET)": "MFE",
+    "GROUPO RECORD": "GROUPO RECORD"
+})
+
+df_static_base = df_matrix.copy()
+
+st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
+user_shifts = {}
+for entity in df_matrix["Platform/Publisher"].unique():
+    user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
+
+if st.sidebar.button("Reset Defaults"):
+    st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
+    st.rerun()
+
+st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
+
+active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
+if active_shifts:
+    for entity, shift_val in active_shifts.items():
+        idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
+        if len(idx) > 0:
+            p13_orig = df_static_base.loc[idx, "P13+"].values
+            adj_p13 = max(0.0, p13_orig + shift_val)
+            ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
+            df_matrix.loc[idx, "P13+"] = adj_p13
+            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
+            df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
+            df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
+            df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
 total_shifted_hours = sum(active_shifts.values())
 
 # Deployment of the recursive loop protecting siphons from crashing through the 0.0 floor
@@ -235,8 +292,8 @@ else: st.sidebar.success("Zero-Sum Balance Maintained")
 f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
+# Programmatic Tab 4-Interface Engine Initialization Split
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
-
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.75rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
