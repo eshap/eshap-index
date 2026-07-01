@@ -419,36 +419,17 @@ with tab3:
     )
 
 with tab4:
+    # Restored Original Tab Styling Architecture: Syncs layout, fonts, and active design icons perfectly
+    sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     w_map = {"United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"}
     t_map = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}
     f_token = w_map.get(market_choice, "us")
     w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
     
-    # Verify or initialize memory allocation states safely
-    if "doc_view_mode" not in st.session_state:
-        st.session_state.doc_view_mode = "Blueprint"
-        
-    # Standard raw string layout buttons avoiding unlinked placeholder icons across native platforms
-    btn_col1, btn_col2, _ = st.columns([2.0, 2.0, 4])
-    with btn_col1:
-        if st.button("METHODOLOGY BLUEPRINT", use_container_width=True, type="primary" if st.session_state.doc_view_mode == "Blueprint" else "secondary"):
-            st.session_state.doc_view_mode = "Blueprint"
-            st.rerun()
-    with btn_col2:
-        if st.button("SOURCING MATRIX", use_container_width=True, type="primary" if st.session_state.doc_view_mode == "Matrix" else "secondary"):
-            st.session_state.doc_view_mode = "Matrix"
-            st.rerun()
-            
-    st.write("")
-    
-    # Pure container wrapper forcing un-fragmented loading loops straight from RAM
-    with st.container():
-        if st.session_state.doc_view_mode == "Blueprint":
-            st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
-            st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
-            st.html("<div style='margin-bottom: 0.5rem;'></div>")
-            st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
-        else:
-            st.markdown(f"### DATA SOURCES ({active_flag} {market_choice.upper()})")
-            st.html("<div style='margin-bottom: 0.5rem;'></div>")
-            st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
+    with sub_method:
+        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
+        st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
+        st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
+    with sub_source:
+        st.markdown(f"### DATA SOURCES ({active_flag} {market_choice.upper()})")
+        st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
