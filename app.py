@@ -257,32 +257,26 @@ if active_shifts:
             df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
 total_shifted_hours = sum(active_shifts.values())
 
-# Deployment of the recursive loop protecting siphons from crashing through the 0.0 floor
 if abs(total_shifted_hours) > 0.01:
-    surviving_entities = [e for e in df_static_base["Platform/Publisher"].unique() if e not in active_shifts.keys()]
-    remaining_deficit = total_shifted_hours
-    
-    # Run the compression logic loop until the entire attention deficit parameter is completely absorbed
-    while abs(remaining_deficit) > 0.01 and len(surviving_entities) > 0:
-        current_pool_total = float(df_matrix[df_matrix["Platform/Publisher"].isin(surviving_entities)]["P13+"].sum())
-        
-        if current_pool_total  0.0:
-                pro_rata_weight = p13_current / current_pool_total
-            else:
-                pro_rata_weight = 0.0
-                
-            pro_rata_share = -step_deficit * pro_rata_weight
-            proposed_p13 = p13_current + pro_rata_share
+    non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
+    total_non_shifted_pool = float(df_static_base[non_shifted_mask]["P13+"].sum())
+
+    if total_non_shifted_pool > 0.0:
+        for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
+            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
+            p13_orig = df_static_base.loc[idx, "P13+"].values
+            pro_rata_weight = p13_orig / total_non_shifted_pool
+            absorbed_share = -total_shifted_hours * pro_rata_weight
             
-            if proposed_p13  0 else 1.0
-                df_matrix.loc[idx, "P13+"] = proposed_p13
-                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, proposed_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
-                df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
-                df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
-                df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
-                
-        remaining_deficit += allocated_this_step
-        surviving_entities = [e for e in surviving_entities if e not in next_cycle_dropouts]
+            # Absolute Max Guard: Blocks values from ever dipping into negative numbers
+            adj_p13 = max(0.0, float(p13_orig + absorbed_share))
+            ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
+            
+            df_matrix.loc[idx, "P13+"] = adj_p13
+            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
+            df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
+            df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
+            df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
@@ -292,7 +286,6 @@ else: st.sidebar.success("Zero-Sum Balance Maintained")
 f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
-# Programmatic Tab 4-Interface Engine Initialization Split
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
@@ -356,8 +349,6 @@ with tab2:
     st.markdown("The numbers in this index are from companies we all know. So is the point of view. We ask the right questions - in this case, where is the attention of the whole consumer actually going — because everyone asked us.")
     st.markdown("That fear of finding out is the systemic blindness now pushing our industry off a cliff. Thus, the ECSAI - the ESHAP Cross-Screen Attention Index. It's our new compass toward today's audience: The Whole Consumer.")
     st.write("---")
-    
-    # Fully bolded, style-responsive outro block configured for auto white-balancing in dark mode themes
     st.markdown(
         "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
@@ -390,8 +381,6 @@ with tab3:
     st.markdown("The index must be stress-tested against markets that actively resist international digital migration through aggressive state intervention and distinct cultural infrastructure, such as Italy, France, and Spain. By forcing the zero-sum model to process these three protectionist territories, by engineering specialized local policy friction curves to honor their defensive cushions, the index can be a flexible global tool, not just a cookie-cutter American proxy. To balance the inverted, aging demographic pyramids of Europe, the index integrates the two heavyweights of Latin America. Brazil and Mexico represent massive, youth-heavy populations that boast some of the highest daily smartphone video consumption lengths on earth. Including these territories allows us to visualize the absolute opposite end of the media lifecycle: markets where traditional pay-TV infrastructures are entirely bypassable, mobile-velocity acceleration is absolute, and tech utilities operate at an unprecedented 97% to 98% workforce density.")
     st.markdown("We did not include Asia or a wider Latin American footprint in this initial launch for one reason: data maturity and local currency standardization. To deliver a logic-enforced zero-sum matrix, the index requires every country baseline to sit completely transparently in the public domain. The foundational data layers - specifically, open regulatory white papers, audited public broadcaster disclosures, and standardized local device telemetry panels - must possess structural transparency. Markets like Japan, South Korea, India, and smaller Latin American territories currently operate on highly fragmented, proprietary, or state-cloaked measurement silos. Trying to force those opaque systems into a strict human daily clock, right now, requires speculative modeling that compromises the index's standard of data integrity.")
     st.write("---")
-    
-    # Fully bolded, style-responsive outro block configured for auto white-balancing in dark mode themes
     st.markdown(
         "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
