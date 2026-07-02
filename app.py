@@ -343,7 +343,9 @@ with tab1:
     
     # Renders the cleanly isolated single-metric cohort slice straight from memory
     chart_metrics = [selected_demo]
-    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
+    
+    # Branded Color Overwrite: Forces native bar charts to draw in signature bright red (#FF0000)
+    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True, color="#FF0000")
     
     st.write("---")
     
