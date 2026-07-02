@@ -327,7 +327,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?",
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
     
-    # 1. VISUAL SHARE MAP: Shifted directly to the apex of the container
+    # 1. VISUAL SHARE MAP: Chart-First Architecture
     st.markdown("#### Interactive Visual Share Map")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
@@ -338,8 +338,14 @@ with tab1:
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     chart_df = chart_df.set_index("Platform/Publisher")
-    chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
-    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
+    
+    # Corrected Chart Logic Matrix: Switches from stacked layers to grouped clustered bars
+    if selected_demo == "Cohorts Overlaid":
+        chart_metrics = ["13-54 Majority", "55+ GenX+"]  # Exclude P13+ here to prevent double-counting totals visually
+        st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True, stack=False)
+    else:
+        chart_metrics = [selected_demo]
+        st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
     
     st.write("---")
     
