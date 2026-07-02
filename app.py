@@ -192,8 +192,6 @@ merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
 st.html("""
     <style>
-st.html("""
-    <style>
     section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
@@ -224,17 +222,6 @@ st.markdown(
 )
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-
-# Persistent Substack Newsletter Link: Hardcoded cleanly to point straight to ://substack.com
-st.markdown(
-    "<p style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://://substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
-    "</p>", 
-    unsafe_allow_html=True
-)
-
-st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-
 # Callback Shield: Programmatically wipes memory states cleanly without using loop rerun overhead
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
@@ -307,6 +294,30 @@ if active_shifts:
             df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
             df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
             df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
+total_shifted_hours = sum(active_shifts.values())
+
+if abs(total_shifted_hours) > 0.01:
+    non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
+    total_non_shifted_pool = float(df_static_base[non_shifted_mask]["P13+"].sum())
+
+    if total_non_shifted_pool > 0.0:
+        for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
+            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
+            
+            # Extract raw float scalar value from array to prevent type conversion errors
+            p13_orig_val = float(df_static_base.loc[idx, "P13+"].values[0])
+            pro_rata_weight = p13_orig_val / total_non_shifted_pool
+            absorbed_share = -total_shifted_hours * pro_rata_weight
+            
+            # Absolute Max Guard: Safely handles single float values to block negative entries
+            adj_p13 = max(0.0, p13_orig_val + absorbed_share)
+            ratio = adj_p13 / p13_orig_val if p13_orig_val > 0.0 else 1.0
+            
+            df_matrix.loc[idx, "P13+"] = adj_p13
+            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].values[0]))
+            df_matrix.loc[idx, "13-44 NextGen"] = float(df_static_base.loc[idx, "13-44 NextGen"].values[0]) * ratio
+            df_matrix.loc[idx, "13-34 Youth"] = float(df_static_base.loc[idx, "13-34 Youth"].values[0]) * ratio
+            df_matrix.loc[idx, "13-24 GenA/Z"] = float(df_static_base.loc[idx, "13-24 GenA/Z"].values[0]) * ratio
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
@@ -316,15 +327,13 @@ else: st.sidebar.success("Zero-Sum Balance Maintained")
 f_map = {"United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
-# Programmatic Tab 4-Interface Engine Initialization Split
+# Programmatic Tab Interface Engine Initialization
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
     
     # 1. VISUAL SHARE MAP: Chart-First Architecture
     st.markdown("#### Interactive Visual Share Map")
-    
-    # Main Stage Chart Label: Swapped style attributes to execute signature bright red text color override
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
@@ -340,10 +349,8 @@ with tab1:
     
     st.write("---")
     
-    # 2. TABULAR LEDGER MATRIX: Repositioned below the chart canvas
+    # 2. TABULAR LEDGER MATRIX: Repositioned below chart canvas
     st.markdown("#### Attention Allocation Ledger")
-    
-    # Main Stage Ledger Label: Swapped style attributes to execute signature bright red text color override
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
@@ -357,9 +364,7 @@ with tab1:
         st.markdown(f"<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: {market_choice.upper()}</strong><br>Platform totals represent unified holding corporate structures. Traditional TV volumes are scaled using audited single-screen panel metrics from regional state-backed systems (including BARB, Médiamétrie, and Agf/Gfk) and balanced against hardware-level handset logs. Multi-screening and background device noise programmatically flattened through duplication discounts to retain zero-sum integrity.</p>", unsafe_allow_html=True)
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
-
 with tab2:
-    # High-impact centered typography header block utilizing highly compressed line-height spacing and branded red
     st.markdown(
         "<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'>"
         "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>"
@@ -368,7 +373,7 @@ with tab2:
         "</div>",
         unsafe_allow_html=True
     )
-   
+    
     st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
     st.markdown("For years, the measurement establishment has relied on a self-serving mythology called 'premium attention quality' to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as 'low-tier digital noise.' This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
@@ -377,7 +382,7 @@ with tab2:
     if os.path.exists("eshap_us_devices.png"): 
         st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem (US Baseline Panel)", use_container_width=True)
     else: 
-        st.info("💡 *[Placeholder for eshap_us_devices.png: In recent telemetry tracking profiles like the MX8 index baseline, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen]*")
+        st.info("💡 *[Placeholder for eshap_us_devices.png: In recent survey telemetry tracking profiles like the MX8 index baseline, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen]*")
     
     st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Baby Boomers are the only group keeping traditional glass alive. Every other generation watches video on their phones two to three times more than their TVs.")
     st.markdown("The ESHAP Cross-Screen Attention Index (ESCAI) introduces a completely new analytical paradigm to capture this shift. We didn't build a local programmatic tool to place an individual ad spot next Tuesday. To look at this index and ask how to execute a DSP trade is to confuse a compass with a shovel.")
