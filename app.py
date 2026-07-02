@@ -203,10 +203,10 @@ st.html("""
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
-# Main Scale Subhead Block: Stripped completely of bold
+# Main Scale Subhead Block
 st.markdown(
     "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
-    "The Definitive Zero-Sum Cross-Screen Attention Scale"
+    "The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer"
     "</p>", 
     unsafe_allow_html=True
 )
