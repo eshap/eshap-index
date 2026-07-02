@@ -192,20 +192,24 @@ merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
 st.html("""
     <style>
+st.html("""
+    <style>
     section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
     section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p { color: #ffffff !important; }
     g[class*="role-axis"] text { font-weight: bold !important; font-size: 11px !important; }
-    .eshap-subhead-text, .eshap-subhead-text span { color: inherit !important; }
+    
+    /* Fixed Selector Shield: Injects the branded red style properties straight to the subhead class */
+    .eshap-subhead-text { color: #FF0000 !important; }
     </style>
     """)
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
-# Main Scale Subhead Block: Hardcoded cleanly to execute signature bright red text color override everywhere
+# Main Scale Subhead Block: Class rule will now natively enforce the bright red anchor color across all themes
 st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; color: #FF0000; font-style: normal;'>"
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; font-style: normal;'>"
     "The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer"
     "</p>", 
     unsafe_allow_html=True
@@ -213,13 +217,14 @@ st.markdown(
 
 # Persistent Substack Newsletter Link: Hardcoded cleanly to point straight to ://substack.com
 st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
+    "<p style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
     "For full analysis: <a href='https://://substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>", 
     unsafe_allow_html=True
 )
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
+
 # Callback Shield: Programmatically wipes memory states cleanly without using loop rerun overhead
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
