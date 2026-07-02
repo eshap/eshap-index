@@ -328,8 +328,7 @@ active_flag = f_map.get(market_choice, "🇺🇸")
 # Programmatic Tab Interface Engine Initialization
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
-    # Heading Update: Replaced "Cross-Screen Attention Ledger:" with "Cross-Screen Attention Tracker:"
-    st.subheader(f"Cross-Screen Attention Tracker: {active_flag} {market_choice}")
+    st.subheader(f"Cross-Screen Attention Allocation Tracker: {active_flag} {market_choice}")
     
     # 1. VISUAL SHARE MAP: Chart-First Architecture
     st.markdown("#### Interactive Visual Share Map")
@@ -349,7 +348,6 @@ with tab1:
     st.write("---")
     
     # 2. TABULAR LEDGER MATRIX: Repositioned below chart canvas
-    # Heading Update: Replaced "Attention Allocation Ledger" with "Cross Screen Attention Ledger"
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
@@ -365,6 +363,7 @@ with tab1:
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 with tab2:
+    # High-impact centered typography header block utilizing tight line-height spacing and branded red
     st.markdown(
         "<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'>"
         "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>"
@@ -375,30 +374,18 @@ with tab2:
     )
     
     st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
-    st.markdown("For years, the measurement establishment has relied on a self-serving mythology called 'premium attention quality' to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
-    st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as 'low-tier digital noise.' This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
-    st.markdown("When other industry signposts try to offer insight into this cross-screen crisis, they show up with a mallet rather than a magnifying glass. They aggregate soft consumer diaries, build clunky additive charts where the human daily clock magically stretches past 24 hours, or offer micro-level campaign widgets that count how many seconds an ad was technically 'on screen.' They are handing you a shovel to look at individual twigs while your entire forest is burning to the ground.")
+    st.markdown("For years, the measurement establishment has relied on a self-serving mythology called \"premium attention quality\" to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
+    st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"low-tier digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
+    st.markdown("When other industry signposts try to offer insight into this cross-screen crisis, they show up with a mallet rather than a magnifying glass. They aggregate soft consumer diaries, build clunky additive charts where the human daily clock magically stretches past 24 hours, or offer micro-level campaign widgets that count how many seconds an ad was technically \"on screen.\" They are handing you a shovel to look at individual twigs while your entire forest is burning to the ground.")
     
     if os.path.exists("eshap_us_devices.png"): 
         st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem (US Baseline Panel)", use_container_width=True)
     else: 
-        st.info("💡 *[Placeholder for eshap_us_devices.png: In recent survey telemetry tracking profiles like the MX8 index baseline, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen]*")
+        st.info("💡 *[Placeholder for eshap_us_devices.png: In recent telemetry tracking profiles like the MX8 index baseline, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen]*")
     
-    st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Baby Boomers are the only group keeping traditional glass alive. Every other generation watches video on their phones two to three times more than their TVs.")
+    st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Baby Boomers are the only group keeping traditional glass alive. Every other generation watches video on their phones two to three times more than on their TVs.")
     st.markdown("The ESHAP Cross-Screen Attention Index (ESCAI) introduces a completely new analytical paradigm to capture this shift. We didn't build a local programmatic tool to place an individual ad spot next Tuesday. To look at this index and ask how to execute a DSP trade is to confuse a compass with a shovel.")
     st.markdown("This scale is a macroeconomic strategy engine engineered for the C-suite to audit structural enterprise risk and investment. If your brand is allocating 60% of its capital to traditional glass viewing while our closed census time budget proves your active workforce demographic has permanently migrated its conscious time to a personal screen, that is an organizational asset failure.")
-    st.markdown("ESCAI enforces the absolute laws of human physics. Human time is a non-elastic, zero-sum commodity—a closed market sponge. Every single hour gained by an algorithm is an hour permanently destroyed for a broadcast tower.")
-    st.write("---")
-    st.markdown(
-        "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
-        "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
-        "We would love to know what you think. Please send your feedback and questions to "
-        "<a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
-        "Cheers!<br><br>"
-        "ESHAP"
-        "</p>", 
-        unsafe_allow_html=True
-    )
 with tab3:
     st.subheader("ECSAI Frequently Asked Questions (FAQs)")
     st.markdown("#### HOW DID WE CHOOSE THE VARIOUS COMBINATION OF SOURCES FOR THE INDEX ACROSS THE REGIONS?")
@@ -407,7 +394,7 @@ with tab3:
     st.markdown("To blend these completely disparate public inputs into a single, seamless cross-screen index for each territory, our model runs a three-step mathematical normalization loop that forces apples-and-oranges data into a strict, logic-enforced daily time budget. Because we use free, un-siloed data scattered across corporate and government reports, our system treats each country as a closed market sponge where total population and total available hours are hard constants.")
     st.markdown("Here is the exact step-by-step math mechanics of how the index blends glass data, census records, and consumer diaries into a single smooth number for each demographic cohort:")
     st.markdown("**Census Denominator Lock (The Total Volume Ceiling)**<br>The entire model is anchored on the local state census registry (such as INSEE, Destatis, ISTAT, or the U.S. Census Bureau). The index takes the total population headcount for the territory, filters for the P13+ universe. It then establishes a Total Available Awake Hours Budget per month (assuming a standardized 16-hour active day). This number is our absolute ceiling. It represents the total size of the market sponge. No matter how many apps or TV channels claim massive usage, the combined monthly hours in our index can never exceed this hard, census-backed population budget.", unsafe_allow_html=True)
-    st.markdown("**Normalizing Metrics into 'Absolute Attention Hours'**<br>Next, our model takes the fragmented public data points and converts them into a singular currency: Millions of Attention Hours per Month. *Blending the Glass and Feed Data:* Traditional linear TV currencies (like Médiamétrie or BARB) publish reach and 'Time Spent Viewing' (TSV) per day. The model takes the average daily TSV for a specific cohort, multiplies it by the demographic population weight from the census, and scales it to 30 days to find total linear hours. Big Tech investor filings and regulatory white papers present usage in 'Daily Active Users' (DAUs) or 'Monthly Active Users' (MAUs) paired with global or regional average session lengths. The model intercepts these ratios, applies the local territory footprint weight, and multiplies active users by daily active minutes to extract total digital hours. We take the stated number of users per digital platforms, apportion them by region/populations, then using diaries, surveys, public reports, and other regional research data, the model assigns pro rata usage hours per day in those regions.", unsafe_allow_html=True)
+    st.markdown("**Normalizing Metrics into 'Absolute Attention Hours'**<br>Next, our model takes the fragmented public data points and converts them into a singular currency: Millions of Attention Hours per Month. *Blending the Glass and Feed Data:* Traditional linear TV currencies (like Médiamétrie or BARB) publish reach and 'Time Spent Viewing' (TSV) per day. The model takes the average daily TV works, multiplies it by the demographic population weight from the census, and scales it to 30 days to find total linear hours. Big Tech investor filings and regulatory white papers present usage in 'Daily Active Users' (DAUs) or 'Monthly Active Users' (MAUs) paired with global or regional average session lengths. The model intercepts these ratios, applies the local territory footprint weight, and multiplies active users by daily active minutes to extract total digital hours. We take the stated number of users per digital platforms, apportion them by region/populations, then using diaries, surveys, public reports, and other regional research data, the model assigns pro rata usage hours per day in those regions.", unsafe_allow_html=True)
     st.markdown("#### THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
     st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening—a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France).")
     st.markdown("The model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
@@ -419,8 +406,10 @@ with tab3:
     st.markdown("#### PLEASE LOOK AT THE METHODOLOGY BLUEPRINTS AND SOURCE MATRICES FOR MORE DETAILS ON HOW WE BUILT THIS MODEL.")
     st.markdown("Perhaps the most important point for our industry: We didn't invent new numbers, and we didn't hide our math inside a proprietary black box. Every data point used to build this scale sits legitimately out in the open public domain, scattered across public broadcaster annual disclosures, investor relations filings, and sovereign regulatory white papers. Anyone could theoretically download these records and combine them to see the true division of human time for which they are competing. Until now, however, no one has.")
     st.markdown("Why? Because our industry incentivizes legacy silos. Because, among the most traditional of media and measurement experts, there is widespread fear of finding out how our consumers are actually spending their time and which half of their budgets are being wasted. The current system of content distribution and measurement is built by and for those who profit directly from it, whether or not it actually works.")
-    st.markdown("We have built what we believe is the ultimate 'Attention Model,' the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
-    st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>Media War & Peace</a>.", unsafe_allow_html=True)
+    st.markdown("We have built what we believe is the ultimate \"Attention Model,\" the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
+    
+    # Permanent Link Markdown Lock: Native un-sanitized notation forcing absolute target subdomain security
+    st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://substack.com)**.")
     st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
     st.markdown("Thanks for your attention!")
     st.markdown("**ESHAP**")
