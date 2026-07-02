@@ -190,8 +190,7 @@ if logo_base64:
 # Global Unconditional Sidebar Toggle: Activated and visible across all territory ledger grids uniformly
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
-
-st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)st.html("""
+st.html("""
     <style>
     section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
@@ -217,12 +216,11 @@ st.markdown(
 # Permanent Link Shield: Native isolated HTML anchor forcing absolute target destination security
 st.html(
     "<p style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://eshap.substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
     "</p>"
 )
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-
 # Callback Shield: Programmatically wipes memory states cleanly without using loop rerun overhead
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
@@ -306,7 +304,7 @@ if abs(total_shifted_hours) > 0.01:
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
             
             # Extract raw float scalar value from array to prevent type conversion errors
-            p13_orig_val = float(df_static_base.loc[idx, "P13+"].values[0])
+            p13_orig_val = float(df_static_base.loc[idx, "P13+"].values)
             pro_rata_weight = p13_orig_val / total_non_shifted_pool
             absorbed_share = -total_shifted_hours * pro_rata_weight
             
@@ -315,10 +313,10 @@ if abs(total_shifted_hours) > 0.01:
             ratio = adj_p13 / p13_orig_val if p13_orig_val > 0.0 else 1.0
             
             df_matrix.loc[idx, "P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].values[0]))
-            df_matrix.loc[idx, "13-44 NextGen"] = float(df_static_base.loc[idx, "13-44 NextGen"].values[0]) * ratio
-            df_matrix.loc[idx, "13-34 Youth"] = float(df_static_base.loc[idx, "13-34 Youth"].values[0]) * ratio
-            df_matrix.loc[idx, "13-24 GenA/Z"] = float(df_static_base.loc[idx, "13-24 GenA/Z"].values[0]) * ratio
+            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].values))
+            df_matrix.loc[idx, "13-44 NextGen"] = float(df_static_base.loc[idx, "13-44 NextGen"].values) * ratio
+            df_matrix.loc[idx, "13-34 Youth"] = float(df_static_base.loc[idx, "13-34 Youth"].values) * ratio
+            df_matrix.loc[idx, "13-24 GenA/Z"] = float(df_static_base.loc[idx, "13-24 GenA/Z"].values) * ratio
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
@@ -331,7 +329,7 @@ active_flag = f_map.get(market_choice, "🇺🇸")
 # Programmatic Tab Interface Engine Initialization
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
-    # Heading Update: Replaced "Cross-Screen Attention Allocation Tracker:" with "Cross-Screen Attention Tracker:"
+    # Heading Update: Replaced "Cross-Screen Attention Ledger:" with "Cross-Screen Attention Tracker:"
     st.subheader(f"Cross-Screen Attention Tracker: {active_flag} {market_choice}")
     
     # 1. VISUAL SHARE MAP: Chart-First Architecture
@@ -352,6 +350,7 @@ with tab1:
     st.write("---")
     
     # 2. TABULAR LEDGER MATRIX: Repositioned below chart canvas
+    # Heading Update: Replaced "Attention Allocation Ledger" with "Cross Screen Attention Ledger"
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
@@ -366,7 +365,6 @@ with tab1:
         st.markdown(f"<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: {market_choice.upper()}</strong><br>Platform totals represent unified holding corporate structures. Traditional TV volumes are scaled using audited single-screen panel metrics from regional state-backed systems (including BARB, Médiamétrie, and Agf/Gfk) and balanced against hardware-level handset logs. Multi-screening and background device noise programmatically flattened through duplication discounts to retain zero-sum integrity.</p>", unsafe_allow_html=True)
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
-
 with tab2:
     st.markdown(
         "<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'>"
@@ -429,6 +427,7 @@ with tab3:
     st.markdown("**ESHAP**")
 
 with tab4:
+    # Restored Original Tab Styling Architecture: Syncs layout, fonts, and active design icons perfectly
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     w_map = {"United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"}
     t_map = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}
