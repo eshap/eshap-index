@@ -2,10 +2,9 @@ import streamlit as st
 import pandas as pd
 import base64, os, io
 
-# Universal Token Matrix for System Initialization Mapping
+# Performance Cache Shield: Pre-loads regional txt assets permanently straight into memory
 CORE_TOKENS = ["us", "fr", "uk", "it", "de", "sp", "br", "mx"]
 
-# Instant Memory Cache Bootstrapper: Reads the filesystem once and retains data permanently in RAM
 if "text_memory_cache" not in st.session_state:
     st.session_state.text_memory_cache = {}
     for token in CORE_TOKENS:
@@ -26,193 +25,180 @@ def load_text_asset(filename, default_text=""):
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
-# Unified Data Parameter Matrices Bound Straight From Your Document Panels (Strict ALL CAPS)
-US_BASE = [
-    ["YOUTUBE", 2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5],
-    ["DISNEY", 1945.0, 1080.0, 865.0, 657.4, 447.0, 228.0],
-    ["NETFLIX", 1540.0, 380.0, 1160.0, 846.8, 533.5, 272.1],
-    ["TIKTOK", 1480.0, 65.0, 1415.0, 1103.7, 905.0, 660.7],
-    ["PARAMOUNT", 1290.0, 810.0, 480.0, 331.2, 195.4, 86.0],
-    ["NBCU", 1265.0, 795.0, 470.0, 319.6, 185.4, 76.0],
-    ["INSTAGRAM", 1120.0, 110.0, 1010.0, 878.7, 711.7, 391.4],
-    ["WBD", 1040.0, 685.0, 355.0, 241.4, 120.7, 50.7],
-    ["FACEBOOK", 995.0, 520.0, 475.0, 261.3, 96.7, 18.4],
-    ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
-    ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
-]
-FR_BASE = [
-    ["YOUTUBE", 485.0, 95.0, 390.0, 273.0, 212.9, 129.9],
-    ["TIKTOK", 335.0, 12.0, 323.0, 251.9, 206.6, 150.8],
-    ["NETFLIX", 390.0, 85.0, 305.0, 222.7, 140.3, 71.6],
-    ["INSTAGRAM", 215.0, 20.0, 195.0, 169.7, 137.5, 75.6],
-    ["TF1", 440.0, 270.0, 170.0, 136.0, 102.0, 51.8],
-    ["DISNEY", 180.0, 42.0, 138.0, 104.9, 66.1, 27.3],
-    ["FRANCE TV", 510.0, 385.0, 125.0, 102.5, 82.0, 54.2],
-    ["ARTE", 120.0, 57.6, 62.4, 48.0, 33.6, 10.1],
-    ["GROUP M6", 265.0, 145.0, 120.0, 93.6, 65.5, 29.5],
-    ["AMAZON", 155.0, 48.0, 107.0, 87.7, 54.4, 22.8],
-    ["WBD", 170.0, 95.0, 75.0, 54.8, 34.5, 14.3],
-    ["L'ÉQUIPE", 65.0, 19.5, 45.5, 33.7, 21.6, 8.9],
-    ["CANAL+ GROUP", 195.0, 115.0, 80.0, 58.4, 40.9, 13.9],
-    ["FACEBOOK", 165.0, 92.0, 73.0, 40.2, 14.9, 2.8],
-    ["DAZN", 20.0, 2.0, 18.0, 16.2, 12.8, 7.7]
-]
-
-DE_BASE = [
-    ["ARD", 710.0, 560.0, 150.0, 115.5, 90.1, 57.6],
-    ["YOUTUBE", 625.0, 135.0, 490.0, 343.0, 267.5, 163.2],
-    ["ZDF", 615.0, 505.0, 110.0, 84.7, 66.1, 42.2],
-    ["RTL GROUP", 510.0, 310.0, 200.0, 150.0, 108.0, 49.0],
-    ["NETFLIX", 445.0, 95.0, 350.0, 255.5, 160.9, 82.1],
-    ["TIKTOK", 385.0, 14.0, 371.0, 289.4, 237.3, 173.2],
-    ["PROSIEBENSAT.1", 340.0, 195.0, 145.0, 107.3, 73.0, 31.2],
-    ["INSTAGRAM", 295.0, 28.0, 267.0, 232.3, 188.2, 103.5],
-    ["AMAZON", 230.0, 68.0, 162.0, 132.8, 82.3, 34.6],
-    ["DISNEY", 195.0, 42.0, 153.0, 116.3, 73.3, 30.3],
-    ["WBD", 145.0, 78.0, 67.0, 48.9, 30.8, 12.7],
-    ["FACEBOOK", 140.0, 82.0, 58.0, 31.9, 11.8, 2.2]
-]
-ES_BASE = [
-    ["RTVE", 395.0, 295.0, 100.0, 77.0, 55.4, 35.5],
-    ["ATRESMEDIA", 380.0, 235.0, 145.0, 108.8, 78.3, 39.5],
-    ["YOUTUBE", 365.0, 85.0, 280.0, 196.0, 152.9, 93.3],
-    ["MEDIASET ESPANA", 320.0, 198.0, 122.0, 91.5, 65.9, 33.3],
-    ["TIKTOK", 255.0, 10.0, 245.0, 191.1, 156.7, 114.4],
-    ["NETFLIX", 240.0, 52.0, 188.0, 137.2, 86.5, 44.1],
-    ["INSTAGRAM", 215.0, 20.0, 195.0, 169.7, 137.5, 75.6],
-    ["MOVISTAR+", 145.0, 82.0, 63.0, 44.1, 26.5, 11.1],
-    ["DISNEY", 115.0, 24.0, 91.0, 69.2, 43.6, 18.0],
-    ["WBD (MAX)", 105.0, 55.0, 50.0, 36.5, 23.0, 9.6],
-    ["AMAZON", 95.0, 28.0, 67.0, 54.9, 34.0, 14.3],
-    ["FACEBOOK", 90.0, 55.0, 35.0, 19.3, 7.1, 1.3]
-]
-
-UK_BASE = [
-    ["BBC", 640.0, 460.0, 180.0, 122.4, 85.7, 45.4],
-    ["YOUTUBE", 590.0, 110.0, 480.0, 336.0, 262.1, 159.9],
-    ["ITV", 510.0, 335.0, 175.0, 113.8, 75.1, 36.8],
-    ["NETFLIX", 495.0, 105.0, 390.0, 284.7, 179.4, 91.5],
-    ["TIKTOK", 410.0, 18.0, 392.0, 305.8, 250.7, 183.0],
-    ["SKY GROUP", 385.0, 210.0, 175.0, 119.0, 70.2, 28.8],
-    ["INSTAGRAM", 275.0, 28.0, 247.0, 214.9, 174.1, 95.8],
-    ["PARAMOUNT", 245.0, 155.0, 90.0, 61.2, 36.1, 14.8],
-    ["DISNEY", 235.0, 52.0, 183.0, 139.1, 87.6, 36.2],
-    ["WBD", 220.0, 128.0, 92.0, 62.6, 31.3, 13.1],
-    ["FACEBOOK", 210.0, 115.0, 95.0, 52.3, 19.3, 3.7],
-    ["AMAZON", 195.0, 62.0, 133.0, 109.1, 67.6, 28.4]
-]
-IT_BASE = [
-    ["RAI", 520.0, 415.0, 105.0, 80.9, 58.2, 37.2],
-    ["YOUTUBE", 440.0, 110.0, 330.0, 231.0, 180.2, 109.9],
-    ["MFE (MEDIASET)", 415.0, 265.0, 150.0, 112.5, 81.0, 40.8],
-    ["TIKTOK", 295.0, 12.0, 283.0, 220.7, 181.0, 132.1],
-    ["NETFLIX", 310.0, 70.0, 240.0, 175.2, 110.4, 56.3],
-    ["INSTAGRAM", 250.0, 25.0, 225.0, 195.8, 158.6, 87.2],
-    ["SKY ITALIA", 175.0, 102.0, 73.0, 50.4, 29.7, 12.2],
-    ["DISNEY", 170.0, 38.0, 132.0, 100.3, 63.2, 26.1],
-    ["WBD", 165.0, 92.0, 73.0, 51.1, 31.7, 12.9],
-    ["FACEBOOK", 160.0, 101.0, 59.0, 32.5, 12.0, 2.3],
-    ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
-]
-
-MX_BASE = [
-    ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
-    ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
-    ["TIKTOK", 860.0, 12.0, 848.0, 695.3, 591.0, 461.0],
-    ["INSTAGRAM", 695.0, 18.0, 677.0, 602.5, 518.1, 305.7],
-    ["NETFLIX", 635.0, 54.0, 581.0, 447.4, 295.3, 156.4],
-    ["TV AZTECA", 485.0, 245.0, 240.0, 180.0, 122.4, 52.8],
-    ["AMAZON", 245.0, 32.0, 213.0, 176.8, 116.7, 52.5],
-    ["DISNEY", 220.0, 25.0, 195.0, 152.1, 100.4, 46.2],
-    ["WBD (MAX)", 195.0, 42.0, 153.0, 113.2, 72.4, 33.3],
-    ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
-]
-
-BR_BASE = [
-    ["GRUPO GLOBO", 2210.0, 1015.0, 1195.0, 920.2, 680.9, 354.1],
-    ["YOUTUBE", 1980.0, 260.0, 1720.0, 1221.2, 976.9, 625.2],
-    ["TIKTOK", 1150.0, 28.0, 1122.0, 908.8, 763.4, 587.8],
-    ["INSTAGRAM", 1040.0, 52.0, 988.0, 879.3, 747.4, 433.5],
-    ["NETFLIX", 915.0, 120.0, 795.0, 604.2, 398.7, 211.3],
-    ["GROUPO RECORD", 620.0, 365.0, 255.0, 186.1, 122.8, 54.8],
-    ["SBT (SISTEMA BRASILEIRO DE TELEVISAO)", 515.0, 290.0, 225.0, 168.7, 115.8, 53.2],
-    ["AMAZON", 390.0, 65.0, 325.0, 266.5, 173.2, 77.9],
-    ["DISNEY", 325.0, 48.0, 277.0, 213.3, 139.3, 64.0],
-    ["WBD (MAX)", 290.0, 82.0, 208.0, 151.8, 95.6, 43.0],
-    ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
-    ["BAND (GRUPO)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
-]
-bullet_base64 = ""
-if os.path.exists("planet_bullet.png"):
-    with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
-
-# Mobile Viewport Optimization Shield: Injects style rules to force un-clipped swipe data layers
-st.html("""
-    <style>
-    span[data-testid='stWidgetLabel'] p, button[data-testid='stBaseButton-secondary'] p, [data-baseweb='tab'] p {
-        position: relative; padding-left: 1.5rem !important;
+# Master Data Repository: Populated from your technical document specs (Millions of Hours/Month)
+GLOBAL_DATA_REPOSITORY = {
+    "US": {
+        "YOUTUBE": {"P13+": 2110.0, "55+ GenX+": 490.0, "13-54 Majority": 1620.0, "13-44 NextGen": 1134.0, "13-34 Youth": 884.5, "13-24 GenA/Z": 539.5},
+        "DISNEY": {"P13+": 1945.0, "55+ GenX+": 1080.0, "13-54 Majority": 865.0, "13-44 NextGen": 657.4, "13-34 Youth": 447.0, "13-24 GenA/Z": 228.0},
+        "NETFLIX": {"P13+": 1540.0, "55+ GenX+": 380.0, "13-54 Majority": 1160.0, "13-44 NextGen": 846.8, "13-34 Youth": 533.5, "13-24 GenA/Z": 272.1},
+        "TIKTOK": {"P13+": 1480.0, "55+ GenX+": 65.0, "13-54 Majority": 1415.0, "13-44 NextGen": 1103.7, "13-34 Youth": 905.0, "13-24 GenA/Z": 660.7},
+        "PARAMOUNT": {"P13+": 1290.0, "55+ GenX+": 810.0, "13-54 Majority": 480.0, "13-44 NextGen": 331.2, "13-34 Youth": 195.4, "13-24 GenA/Z": 86.0},
+        "NBCU": {"P13+": 1265.0, "55+ GenX+": 795.0, "13-54 Majority": 470.0, "13-44 NextGen": 319.6, "13-34 Youth": 185.4, "13-24 GenA/Z": 76.0}
     }
-    """ + (f"""span[data-testid='stWidgetLabel'] p::before, button[data-testid='stBaseButton-secondary'] p::before, [data-baseweb='tab'] p::before {{
-        content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
-        background-image: url('data:image/png;base64,{bullet_base64}') !important;
-    }}""" if bullet_base64 else "") + """
-    div[data-testid="stDataFrame"] { width: 100% !important; overflow-x: auto !important; }
-    div[data-testid="stDataFrame"] data-grid { min-width: 820px !important; }
-    </style>
-    """)
+# Continuation of GLOBAL_DATA_REPOSITORY configuration for remaining core regions
+GLOBAL_DATA_REPOSITORY["US"].update({
+    "INSTAGRAM": {"P13+": 1120.0, "55+ GenX+": 110.0, "13-54 Majority": 1010.0, "13-44 NextGen": 878.7, "13-34 Youth": 711.7, "13-24 GenA/Z": 391.4},
+    "WBD": {"P13+": 1040.0, "55+ GenX+": 685.0, "13-54 Majority": 355.0, "13-44 NextGen": 241.4, "13-34 Youth": 120.7, "13-24 GenA/Z": 50.7},
+    "FACEBOOK": {"P13+": 995.0, "55+ GenX+": 520.0, "13-54 Majority": 475.0, "13-44 NextGen": 261.3, "13-34 Youth": 96.7, "13-24 GenA/Z": 18.4},
+    "AMAZON": {"P13+": 635.0, "55+ GenX+": 215.0, "13-54 Majority": 420.0, "13-44 NextGen": 344.4, "13-34 Youth": 213.5, "13-24 GenA/Z": 89.7},
+    "FOX": {"P13+": 425.0, "55+ GenX+": 315.0, "13-54 Majority": 110.0, "13-44 NextGen": 55.0, "13-34 Youth": 24.8, "13-24 GenA/Z": 5.0}
+})
 
-# Clean Sidebar Pronunciation Line: Stripped cleanly of bold/italic properties to sit subtly at sidebar apex
-st.sidebar.markdown(
-    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
-    "ECSAI: pronounced EE-say"
-    "</p>", 
-    unsafe_allow_html=True
-)
+GLOBAL_DATA_REPOSITORY["BR"] = {
+    "GRUPO GLOBO": {"P13+": 2210.0, "55+ GenX+": 1015.0, "13-54 Majority": 1195.0, "13-44 NextGen": 920.2, "13-34 Youth": 680.9, "13-24 GenA/Z": 354.1},
+    "YOUTUBE": {"P13+": 1980.0, "55+ GenX+": 260.0, "13-54 Majority": 1720.0, "13-44 NextGen": 1221.2, "13-34 Youth": 976.9, "13-24 GenA/Z": 625.2},
+    "TIKTOK": {"P13+": 1150.0, "55+ GenX+": 28.0, "13-54 Majority": 1122.0, "13-44 NextGen": 908.8, "13-34 Youth": 763.4, "13-24 GenA/Z": 587.8},
+    "INSTAGRAM": {"P13+": 1040.0, "55+ GenX+": 52.0, "13-54 Majority": 988.0, "13-44 NextGen": 879.3, "13-34 Youth": 747.4, "13-24 GenA/Z": 433.5},
+    "NETFLIX": {"P13+": 915.0, "55+ GenX+": 120.0, "13-54 Majority": 795.0, "13-44 NextGen": 604.2, "13-34 Youth": 398.7, "13-24 GenA/Z": 211.3},
+    "GROUPO RECORD": {"P13+": 620.0, "55+ GenX+": 365.0, "13-54 Majority": 255.0, "13-44 NextGen": 186.1, "13-34 Youth": 122.8, "13-24 GenA/Z": 54.8},
+    "SBT": {"P13+": 515.0, "55+ GenX+": 290.0, "13-54 Majority": 225.0, "13-44 NextGen": 168.7, "13-34 Youth": 115.8, "13-24 GenA/Z": 53.2},
+    "AMAZON": {"P13+": 390.0, "55+ GenX+": 65.0, "13-54 Majority": 325.0, "13-44 NextGen": 266.5, "13-34 Youth": 173.2, "13-24 GenA/Z": 77.9},
+    "DISNEY": {"P13+": 325.0, "55+ GenX+": 48.0, "13-54 Majority": 277.0, "13-44 NextGen": 213.3, "13-34 Youth": 139.3, "13-24 GenA/Z": 64.0},
+    "WBD": {"P13+": 290.0, "55+ GenX+": 82.0, "13-54 Majority": 208.0, "13-44 NextGen": 151.8, "13-34 Youth": 95.6, "13-24 GenA/Z": 43.0},
+    "FACEBOOK": {"P13+": 285.0, "55+ GenX+": 135.0, "13-54 Majority": 150.0, "13-44 NextGen": 85.5, "13-34 Youth": 32.4, "13-24 GenA/Z": 6.3},
+    "BAND": {"P13+": 210.0, "55+ GenX+": 122.0, "13-54 Majority": 88.0, "13-44 NextGen": 61.6, "13-34 Youth": 38.7, "13-24 GenA/Z": 15.4}
+}
+GLOBAL_DATA_REPOSITORY["MX"] = {
+    "TELEVISAUNIVISION": {"P13+": 1640.0, "55+ GenX+": 685.0, "13-54 Majority": 955.0, "13-44 NextGen": 744.9, "13-34 Youth": 558.7, "13-24 GenA/Z": 284.9},
+    "YOUTUBE": {"P13+": 1390.0, "55+ GenX+": 115.0, "13-54 Majority": 1275.0, "13-44 NextGen": 905.2, "13-34 Youth": 733.2, "13-24 GenA/Z": 476.6},
+    "TIKTOK": {"P13+": 860.0, "55+ GenX+": 12.0, "13-54 Majority": 848.0, "13-44 NextGen": 695.3, "13-34 Youth": 591.0, "13-24 GenA/Z": 461.0},
+    "INSTAGRAM": {"P13+": 695.0, "55+ GenX+": 18.0, "13-54 Majority": 677.0, "13-44 NextGen": 602.5, "13-34 Youth": 518.1, "13-24 GenA/Z": 305.7},
+    "NETFLIX": {"P13+": 635.0, "55+ GenX+": 54.0, "13-54 Majority": 581.0, "13-44 NextGen": 447.4, "13-34 Youth": 295.3, "13-24 GenA/Z": 156.4},
+    "TV AZTECA": {"P13+": 485.0, "55+ GenX+": 245.0, "13-54 Majority": 240.0, "13-44 NextGen": 180.0, "13-34 Youth": 122.4, "13-24 GenA/Z": 52.8},
+    "AMAZON": {"P13+": 245.0, "55+ GenX+": 32.0, "13-54 Majority": 213.0, "13-44 NextGen": 176.8, "13-34 Youth": 116.7, "13-24 GenA/Z": 52.5},
+    "DISNEY": {"P13+": 220.0, "55+ GenX+": 25.0, "13-54 Majority": 195.0, "13-44 NextGen": 152.1, "13-34 Youth": 100.4, "13-24 GenA/Z": 46.2},
+    "WBD": {"P13+": 195.0, "55+ GenX+": 42.0, "13-54 Majority": 153.0, "13-44 NextGen": 113.2, "13-34 Youth": 72.4, "13-24 GenA/Z": 33.3},
+    "FACEBOOK": {"P13+": 180.0, "55+ GenX+": 78.0, "13-54 Majority": 102.0, "13-44 NextGen": 59.2, "13-34 Youth": 23.1, "13-24 GenA/Z": 4.6}
+}
 
-logo_base64 = ""
-if os.path.exists("eshap_map.png"):
-    with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
-if logo_base64:
-    st.sidebar.html("""
-        <style>
-        div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
-        div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
-        </style>
-        <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
-        """)
+GLOBAL_DATA_REPOSITORY["DE"] = {
+    "ARD": {"P13+": 710.0, "55+ GenX+": 560.0, "13-54 Majority": 150.0, "13-44 NextGen": 115.5, "13-34 Youth": 90.1, "13-24 GenA/Z": 57.6},
+    "YOUTUBE": {"P13+": 625.0, "55+ GenX+": 135.0, "13-54 Majority": 490.0, "13-44 NextGen": 343.0, "13-34 Youth": 267.5, "13-24 GenA/Z": 163.2},
+    "ZDF": {"P13+": 615.0, "55+ GenX+": 505.0, "13-54 Majority": 110.0, "13-44 NextGen": 84.7, "13-34 Youth": 66.1, "13-24 GenA/Z": 42.2},
+    "RTL GROUP": {"P13+": 510.0, "55+ GenX+": 310.0, "13-54 Majority": 200.0, "13-44 NextGen": 150.0, "13-34 Youth": 108.0, "13-24 GenA/Z": 49.0},
+    "NETFLIX": {"P13+": 445.0, "55+ GenX+": 95.0, "13-54 Majority": 350.0, "13-44 NextGen": 255.5, "13-34 Youth": 160.9, "13-24 GenA/Z": 82.1},
+    "TIKTOK": {"P13+": 385.0, "55+ GenX+": 14.0, "13-54 Majority": 371.0, "13-44 NextGen": 289.4, "13-34 Youth": 237.3, "13-24 GenA/Z": 173.2},
+    "PROSIEBENSAT.1": {"P13+": 340.0, "55+ GenX+": 195.0, "13-54 Majority": 145.0, "13-44 NextGen": 107.3, "13-34 Youth": 73.0, "13-24 GenA/Z": 31.2},
+    "INSTAGRAM": {"P13+": 295.0, "55+ GenX+": 28.0, "13-54 Majority": 267.0, "13-44 NextGen": 232.3, "13-34 Youth": 188.2, "13-24 GenA/Z": 103.5},
+    "AMAZON": {"P13+": 230.0, "55+ GenX+": 68.0, "13-54 Majority": 162.0, "13-44 NextGen": 132.8, "13-34 Youth": 82.3, "13-24 GenA/Z": 34.6},
+    "DISNEY": {"P13+": 195.0, "55+ GenX+": 42.0, "13-54 Majority": 153.0, "13-44 NextGen": 116.3, "13-34 Youth": 73.3, "13-24 GenA/Z": 30.3},
+    "WBD": {"P13+": 145.0, "55+ GenX+": 78.0, "13-54 Majority": 67.0, "13-44 NextGen": 48.9, "13-34 Youth": 30.8, "13-24 GenA/Z": 12.7},
+    "FACEBOOK": {"P13+": 140.0, "55+ GenX+": 82.0, "13-54 Majority": 58.0, "13-44 NextGen": 31.9, "13-34 Youth": 11.8, "13-24 GenA/Z": 2.2}
+}
+GLOBAL_DATA_REPOSITORY["UK"] = {
+    "BBC": {"P13+": 640.0, "55+ GenX+": 460.0, "13-54 Majority": 180.0, "13-44 NextGen": 122.4, "13-34 Youth": 85.7, "13-24 GenA/Z": 45.4},
+    "YOUTUBE": {"P13+": 590.0, "55+ GenX+": 110.0, "13-54 Majority": 480.0, "13-44 NextGen": 336.0, "13-34 Youth": 262.1, "13-24 GenA/Z": 159.9},
+    "ITV PLC": {"P13+": 510.0, "55+ GenX+": 335.0, "13-54 Majority": 175.0, "13-44 NextGen": 113.8, "13-34 Youth": 75.1, "13-24 GenA/Z": 36.8},
+    "NETFLIX": {"P13+": 495.0, "55+ GenX+": 105.0, "13-54 Majority": 390.0, "13-44 NextGen": 284.7, "13-34 Youth": 179.4, "13-24 GenA/Z": 91.5},
+    "TIKTOK": {"P13+": 410.0, "55+ GenX+": 18.0, "13-54 Majority": 392.0, "13-44 NextGen": 305.8, "13-34 Youth": 250.7, "13-24 GenA/Z": 183.0},
+    "SKY GROUP": {"P13+": 385.0, "55+ GenX+": 210.0, "13-54 Majority": 175.0, "13-44 NextGen": 119.0, "13-34 Youth": 70.2, "13-24 GenA/Z": 28.8},
+    "INSTAGRAM": {"P13+": 275.0, "55+ GenX+": 28.0, "13-54 Majority": 247.0, "13-44 NextGen": 214.9, "13-34 Youth": 174.1, "13-24 GenA/Z": 95.8},
+    "PARAMOUNT": {"P13+": 245.0, "55+ GenX+": 155.0, "13-54 Majority": 90.0, "13-44 NextGen": 61.2, "13-34 Youth": 36.1, "13-24 GenA/Z": 14.8},
+    "WBD": {"P13+": 220.0, "55+ GenX+": 128.0, "13-54 Majority": 92.0, "13-44 NextGen": 62.6, "13-34 Youth": 31.3, "13-24 GenA/Z": 13.1},
+    "CHANNEL 4": {"P13+": 290.0, "55+ GenX+": 165.0, "13-54 Majority": 125.0, "13-44 NextGen": 85.0, "13-34 Youth": 50.2, "13-24 GenA/Z": 20.6},
+    "FACEBOOK": {"P13+": 210.0, "55+ GenX+": 115.0, "13-54 Majority": 95.0, "13-44 NextGen": 52.3, "13-34 Youth": 19.3, "13-24 GenA/Z": 3.7},
+    "AMAZON": {"P13+": 195.0, "55+ GenX+": 62.0, "13-54 Majority": 133.0, "13-44 NextGen": 109.1, "13-34 Youth": 67.6, "13-24 GenA/Z": 28.4}
+}
 
-# Global Unconditional Sidebar Toggle: Activated and visible across all territory ledger grids uniformly
-merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
-st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
-st.html("""
-    <style>
-    section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
-    section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
-    section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p { color: #ffffff !important; }
-    g[class*="role-axis"] text { font-weight: bold !important; font-size: 11px !important; }
-    .eshap-subhead-text, .eshap-subhead-text span { color: inherit !important; }
-    </style>
-    """)
+GLOBAL_DATA_REPOSITORY["FR"] = {
+    "YOUTUBE": {"P13+": 485.0, "55+ GenX+": 95.0, "13-54 Majority": 390.0, "13-44 NextGen": 273.0, "13-34 Youth": 212.9, "13-24 GenA/Z": 129.9},
+    "TIKTOK": {"P13+": 335.0, "55+ GenX+": 12.0, "13-54 Majority": 323.0, "13-44 NextGen": 251.9, "13-34 Youth": 206.6, "13-24 GenA/Z": 150.8},
+    "NETFLIX": {"P13+": 390.0, "55+ GenX+": 85.0, "13-54 Majority": 305.0, "13-44 NextGen": 222.7, "13-34 Youth": 140.3, "13-24 GenA/Z": 71.6},
+    "INSTAGRAM": {"P13+": 215.0, "55+ GenX+": 20.0, "13-54 Majority": 195.0, "13-44 NextGen": 169.7, "13-34 Youth": 137.5, "13-24 GenA/Z": 75.6},
+    "TF1": {"P13+": 440.0, "55+ GenX+": 270.0, "13-54 Majority": 170.0, "13-44 NextGen": 136.0, "13-34 Youth": 102.0, "13-24 GenA/Z": 51.8},
+    "DISNEY": {"P13+": 180.0, "55+ GenX+": 42.0, "13-54 Majority": 138.0, "13-44 NextGen": 104.9, "13-34 Youth": 66.1, "13-24 GenA/Z": 27.3},
+    "FRANCE TV": {"P13+": 510.0, "55+ GenX+": 385.0, "13-54 Majority": 125.0, "13-44 NextGen": 102.5, "13-34 Youth": 82.0, "13-24 GenA/Z": 54.2},
+    "ARTE": {"P13+": 120.0, "55+ GenX+": 57.6, "13-54 Majority": 62.4, "13-44 NextGen": 48.0, "13-34 Youth": 33.6, "13-24 GenA/Z": 10.1},
+    "GROUP M6": {"P13+": 265.0, "55+ GenX+": 145.0, "13-54 Majority": 120.0, "13-44 NextGen": 93.6, "13-34 Youth": 65.5, "13-24 GenA/Z": 29.5},
+    "AMAZON": {"P13+": 155.0, "55+ GenX+": 48.0, "13-54 Majority": 107.0, "13-44 NextGen": 87.7, "13-34 Youth": 54.4, "13-24 GenA/Z": 22.8},
+    "WBD": {"P13+": 170.0, "55+ GenX+": 95.0, "13-54 Majority": 75.0, "13-44 NextGen": 54.8, "13-34 Youth": 34.5, "13-24 GenA/Z": 14.3},
+    "L'ÉQUIPE": {"P13+": 65.0, "55+ GenX+": 19.5, "13-54 Majority": 45.5, "13-44 NextGen": 33.7, "13-34 Youth": 21.6, "13-24 GenA/Z": 8.9},
+    "CANAL+ GROUP": {"P13+": 195.0, "55+ GenX+": 115.0, "13-54 Majority": 80.0, "13-44 NextGen": 58.4, "13-34 Youth": 40.9, "13-24 GenA/Z": 13.9},
+    "FACEBOOK": {"P13+": 165.0, "55+ GenX+": 92.0, "13-54 Majority": 73.0, "13-44 NextGen": 40.2, "13-34 Youth": 14.9, "13-24 GenA/Z": 2.8},
+    "DAZN": {"P13+": 20.0, "55+ GenX+": 2.0, "13-54 Majority": 18.0, "13-44 NextGen": 16.2, "13-34 Youth": 12.8, "13-24 GenA/Z": 7.7}
+}
 
-st.header("ESHAP Cross Screen Attention Index (ECSAI)")
+GLOBAL_DATA_REPOSITORY["ES"] = {
+    "RTVE": {"P13+": 395.0, "55+ GenX+": 295.0, "13-54 Majority": 100.0, "13-44 NextGen": 77.0, "13-34 Youth": 55.4, "13-24 GenA/Z": 35.5},
+    "ATRESMEDIA": {"P13+": 380.0, "55+ GenX+": 235.0, "13-54 Majority": 145.0, "13-44 NextGen": 108.8, "13-34 Youth": 78.3, "13-24 GenA/Z": 39.5},
+    "YOUTUBE": {"P13+": 365.0, "55+ GenX+": 85.0, "13-54 Majority": 280.0, "13-44 NextGen": 196.0, "13-34 Youth": 152.9, "13-24 GenA/Z": 93.3},
+    "MEDIASET ESPANA": {"P13+": 320.0, "55+ GenX+": 198.0, "13-54 Majority": 122.0, "13-44 NextGen": 91.5, "13-34 Youth": 65.9, "13-24 GenA/Z": 33.3},
+    "TIKTOK": {"P13+": 255.0, "55+ GenX+": 10.0, "13-54 Majority": 245.0, "13-44 NextGen": 191.1, "13-34 Youth": 156.7, "13-24 GenA/Z": 114.4},
+    "NETFLIX": {"P13+": 240.0, "55+ GenX+": 52.0, "13-54 Majority": 188.0, "13-44 NextGen": 137.2, "13-34 Youth": 86.5, "13-24 GenA/Z": 44.1},
+    "INSTAGRAM": {"P13+": 215.0, "55+ GenX+": 20.0, "13-54 Majority": 195.0, "13-44 NextGen": 169.7, "13-34 Youth": 137.5, "13-24 GenA/Z": 75.6},
+    "MOVISTAR+": {"P13+": 145.0, "55+ GenX+": 82.0, "13-54 Majority": 63.0, "13-44 NextGen": 44.1, "13-34 Youth": 26.5, "13-24 GenA/Z": 11.1},
+    "DISNEY": {"P13+": 115.0, "55+ GenX+": 24.0, "13-54 Majority": 91.0, "13-44 NextGen": 69.2, "13-34 Youth": 43.6, "13-24 GenA/Z": 18.0},
+    "WBD (MAX)": {"P13+": 105.0, "55+ GenX+": 55.0, "13-54 Majority": 50.0, "13-44 NextGen": 36.5, "13-34 Youth": 23.0, "13-24 GenA/Z": 9.6},
+    "AMAZON": {"P13+": 95.0, "55+ GenX+": 28.0, "13-54 Majority": 67.0, "13-44 NextGen": 54.9, "13-34 Youth": 34.0, "13-24 GenA/Z": 14.3},
+    "FACEBOOK": {"P13+": 90.0, "55+ GenX+": 55.0, "13-54 Majority": 35.0, "13-44 NextGen": 19.3, "13-34 Youth": 7.1, "13-24 GenA/Z": 1.3}
+}
+GLOBAL_DATA_REPOSITORY["IT"] = {
+    "RAI": {"P13+": 520.0, "55+ GenX+": 415.0, "13-54 Majority": 105.0, "13-44 NextGen": 80.9, "13-34 Youth": 58.2, "13-24 GenA/Z": 37.2},
+    "YOUTUBE": {"P13+": 440.0, "55+ GenX+": 110.0, "13-54 Majority": 330.0, "13-44 NextGen": 231.0, "13-34 Youth": 180.2, "13-24 GenA/Z": 109.9},
+    "MFE (MEDIASET)": {"P13+": 415.0, "55+ GenX+": 265.0, "13-54 Majority": 150.0, "13-44 NextGen": 112.5, "13-34 Youth": 81.0, "13-24 GenA/Z": 40.8},
+    "TIKTOK": {"P13+": 295.0, "55+ GenX+": 12.0, "13-54 Majority": 283.0, "13-44 NextGen": 220.7, "13-34 Youth": 181.0, "13-24 GenA/Z": 132.1},
+    "NETFLIX": {"P13+": 310.0, "55+ GenX+": 70.0, "13-54 Majority": 240.0, "13-44 NextGen": 175.2, "13-34 Youth": 110.4, "13-24 GenA/Z": 56.3},
+    "INSTAGRAM": {"P13+": 250.0, "55+ GenX+": 25.0, "13-54 Majority": 225.0, "13-44 NextGen": 195.8, "13-34 Youth": 158.6, "13-24 GenA/Z": 87.2},
+    "SKY ITALIA": {"P13+": 175.0, "55+ GenX+": 102.0, "13-54 Majority": 73.0, "13-44 NextGen": 50.4, "13-34 Youth": 29.7, "13-24 GenA/Z": 12.2},
+    "DISNEY": {"P13+": 170.0, "55+ GenX+": 38.0, "13-54 Majority": 132.0, "13-44 NextGen": 100.3, "13-34 Youth": 63.2, "13-24 GenA/Z": 26.1},
+    "WBD": {"P13+": 165.0, "55+ GenX+": 92.0, "13-54 Majority": 73.0, "13-44 NextGen": 51.1, "13-34 Youth": 31.7, "13-24 GenA/Z": 12.9},
+    "FACEBOOK": {"P13+": 160.0, "55+ GenX+": 101.0, "13-54 Majority": 59.0, "13-44 NextGen": 32.5, "13-34 Youth": 12.0, "13-24 GenA/Z": 2.3},
+    "AMAZON": {"P13+": 140.0, "55+ GenX+": 42.0, "13-54 Majority": 98.0, "13-44 NextGen": 80.4, "13-34 Youth": 49.8, "13-24 GenA/Z": 20.9}
+}
 
-st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
-    "The Definitive Zero-Sum Cross-Screen Attention Scale"
-    "</p>", 
-    unsafe_allow_html=True
-)
+# Master Dynamic Relational UI Presentation Tag Invariant Map
+REGIONAL_UI_LABELS = {
+    "US": {"YOUTUBE": "YOUTUBE", "DISNEY": "DISNEY", "NETFLIX": "NETFLIX", "TIKTOK": "TIKTOK", "PARAMOUNT": "PARAMOUNT", "NBCU": "NBCU", "INSTAGRAM": "INSTAGRAM", "WBD": "WBD", "FACEBOOK": "FACEBOOK", "AMAZON": "AMAZON", "FOX": "FOX"},
+    "UK": {"BBC": "BBC", "YOUTUBE": "YOUTUBE", "ITV PLC": "ITV PLC", "NETFLIX": "NETFLIX", "TIKTOK": "TIKTOK", "SKY GROUP": "SKY GROUP", "INSTAGRAM": "INSTAGRAM", "PARAMOUNT": "PARAMOUNT (Channel 5)", "WBD": "WBD", "CHANNEL 4": "CHANNEL 4", "FACEBOOK": "FACEBOOK", "AMAZON": "AMAZON"},
+    "FR": {"YOUTUBE": "YOUTUBE", "TIKTOK": "TIKTOK", "NETFLIX": "NETFLIX", "INSTAGRAM": "INSTAGRAM", "TF1": "TF1", "DISNEY": "DISNEY", "FRANCE TV": "FRANCE TV", "ARTE": "ARTE", "M6": "GROUP M6", "AMAZON": "AMAZON", "WBD": "WBD (MAX / Eurosport)", "LEQUIPE": "L'ÉQUIPE", "CANAL+ GROUP": "CANAL+ GROUP", "FACEBOOK": "FACEBOOK", "DAZN": "DAZN"},
+    "DE": {"ARD": "ARD", "YOUTUBE": "YOUTUBE", "ZDF": "ZDF", "RTL GROUP": "RTL GROUP", "NETFLIX": "NETFLIX", "TIKTOK": "TIKTOK", "PROSIEBENSAT.1": "PROSIEBENSAT.1", "INSTAGRAM": "INSTAGRAM", "AMAZON": "AMAZON", "DISNEY": "DISNEY", "WBD": "WBD (MAX / Discovery)", "FACEBOOK": "FACEBOOK"},
+    "ES": {"RTVE": "RTVE", "ATRESMEDIA": "ATRESMEDIA", "YOUTUBE": "YOUTUBE", "MEDIASET ESPANA": "MEDIASET ESPAÑA", "TIKTOK": "TIKTOK", "NETFLIX": "NETFLIX", "INSTAGRAM": "INSTAGRAM", "MOVISTAR+": "MOVISTAR+", "DISNEY": "DISNEY", "WBD (MAX)": "WBD (MAX)", "AMAZON": "AMAZON", "FACEBOOK": "FACEBOOK"},
+    "BR": {"GLOBO": "GRUPO GLOBO", "YOUTUBE": "YOUTUBE", "TIKTOK": "TIKTOK", "INSTAGRAM": "INSTAGRAM", "NETFLIX": "NETFLIX", "RECORD": "GROUPO RECORD", "SBT": "SBT", "AMAZON": "AMAZON", "DISNEY": "DISNEY", "WBD": "WBD (MAX)", "FACEBOOK": "FACEBOOK", "BAND": "BAND"},
+    "MX": {"TELEVISAUNIVISION": "TELEVISAUNIVISION", "YOUTUBE": "YOUTUBE", "TIKTOK": "TIKTOK", "INSTAGRAM": "INSTAGRAM", "NETFLIX": "NETFLIX", "TV_AZTECA": "TV AZTECA", "AMAZON": "AMAZON", "DISNEY": "DISNEY", "WBD": "WBD (MAX)", "FACEBOOK": "FACEBOOK"}
+}
+# =====================================================================================
+# CORE STRUCTURAL MATHEMATICAL ENGINES
+# =====================================================================================
 
-st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
-    "</p>", 
-    unsafe_allow_html=True
-)
+def apply_closed_system_normalization(df_raw, capacity_ceiling, protection_multipliers):
+    """
+    Overrolls intermedia volume addition with structural territory constraints (alpha)
+    compressing totals back down to the target market's fixed Awake Time Budget.
+    """
+    df_normalized = df_raw.copy()
+    df_normalized['Intermediate_Weight'] = df_normalized.apply(
+        lambda r: r['Value'] * protection_multipliers.get(r['Platform/Publisher'], 1.000), axis=1
+    )
+    total_intermediate_weight = df_normalized['Intermediate_Weight'].sum()
+    if total_intermediate_weight > 0:
+        df_normalized['Value'] = (df_normalized['Intermediate_Weight'] / total_intermediate_weight) * capacity_ceiling
+    else:
+        df_normalized['Value'] = 0.0
+    return df_normalized.drop(columns=['Intermediate_Weight'])
 
-st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-# Callback Shield: Destroys memory loops instantly on country switch to prevent lag spikes
+
+def execute_meta_parent_consolidation(dataframe_current):
+    """
+    Executes cross-app sliding-scale de-duplication vectors penalizing multi-switching
+    among narrower young cohorts while honoring linear legacy baseline habits.
+    """
+    DUPLICATION_VECTOR = {
+        "P13+": 0.18, "55+ GenX+": 0.04, "13-54 Majority": 0.15,
+        "13-44 NextGen": 0.20, "13-34 Youth": 0.24, "13-24 GenA/Z": 0.32
+    }
+    df_output = dataframe_current.copy()
+    if "INSTAGRAM" in df_output["Platform/Publisher"].values and "FACEBOOK" in df_output["Platform/Publisher"].values:
+        meta_row = {"Platform/Publisher": "META"}
+        for col in df_output.columns:
+            if col != "Platform/Publisher":
+                v_ig = float(df_output[df_output["Platform/Publisher"] == "INSTAGRAM"][col].values[0])
+                v_fb = float(df_output[df_output["Platform/Publisher"] == "FACEBOOK"][col].values[0])
+                delta = DUPLICATION_VECTOR.get(col, 0.15)
+                meta_row[col] = (v_ig + v_fb) * (1.000 - delta)
+        df_output = df_output[~df_output["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+        df_output = pd.concat([df_output, pd.DataFrame([meta_row])], ignore_index=True)
+    return df_output
+# Callback Shield: Programmatically wipes memory states cleanly without using loop rerun overhead
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
 
@@ -243,8 +229,10 @@ if merge_meta:
         df_matrix = pd.concat([non_meta_df, pd.DataFrame(combined_row, columns=cols)], ignore_index=True)
         df_matrix = df_matrix.sort_values(by="P13+", ascending=False).reset_index(drop=True)
 
+# Enforce float casting immediately at start to prevent calculation mismatch value errors
 df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
 
+# Uniformize data presentation layer text across ledger, CSV export, and charting arrays
 df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
     "TELEVISAUNIVISION": "TVSA/UNI",
     "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
@@ -411,7 +399,7 @@ with tab3:
     st.markdown("The index operates on a strict Separation of Powers. We use a Sovereign Boundary Model where the hard quantitative ceilings are locked down entirely by currency-grade, hard telemetry logs (Nielsen, BARB, Médiamétrie, Comscore). The index does not ask consumers how many hours they watched; it uses hard regulatory telemetry to establish total volume. Behavioral surveys (GWI) are introduced strictly as a coefficient matrix to calculate the mathematical overlap when two devices are running in the same room. We use behavioral data solely to map the friction points where those macro volumes intersect. Legacy currencies rely on passive boxes in empty rooms, counting a television playing to an empty sofa as a hit. We use behavioral data to verify human presence and device co-activity, injecting human reality back into blind hardware metrics.")
     
     st.markdown("#### ISN'T IT AN 'EQUIVALENCY FALLACY' TO TREAT A SMALL MOBILE SCREEN THE SAME AS A 75-INCH LIVING ROOM TV?")
-    st.markdown("The fallacy is in the concept of 'premium attention.' It is a self-serving myth designed to protect high television CPMs. Screen size does not equal cognitive impact. A living room television screen frequently functions as ambient, household background noise. Conversely, a smartphone screen requires active physical interaction - holding, scrolling, unmuting - to maintain the media stream. This index does not flatten attention; it democratizes conscious eye-hours. Our Attention Index (ECSAI, pronounced EE-say) strips away the unearned premium of the living room glass when it isn't actually being watched, exposing how mobile feeds capture high-intensity, active physical engagement - even in front of a playing TV set. If the eye is on the phone screen, that fraction of time is physically subtracted from the television volume, regardless of how large the TV glass is. That is the real premium.")
+    st.markdown("The fallacy is in the concept of 'premium attention.' It is a self-serving myth designed to protect high television CPMs. Screen size does not equal cognitive impact. A living room television screen frequently functions as ambient, household background noise. Conversely, a smartphone screen requires active physical interaction - holding, scrolling, unmuting - to maintain the media stream. This index does not flatten attention; it democratizes conscious eye-hours. Our Attention Index (ECSAI, pronounced EE-say) strips away the unearned premium of the living room glass when it isn't actually being watched, exposing how mobile feeds capture high-intensity, active physical engagement - even in front of a playing TV set. If the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television volume, regardless of how large the TV glass is. That is the real premium.")
     
     st.markdown("#### IF A MEDIA BUYER CANNOT USE THIS HIGH-LEVEL DASHBOARD TO EXECUTE AN AD PLACEMENT ON A DSP, ISN'T THE DATA TOO COARSE FOR REAL-WORLD BUYING?")
     st.markdown("This app is a macroeconomic strategy engine, not a trading desk. It is built specifically for members of the Media community to audit structural asset mismatches. If your enterprise allocates 60% of its budget to a legacy channel that commands only 15% of your target workforce demographic's finite daily time budget, that is an enterprise failure. This scale is built to align multi-million-dollar corporate capital allocations with human reality, not to execute a local programmatic trade.")
@@ -421,7 +409,7 @@ with tab3:
         "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
         "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
         "We would love to know what you think. Please send your feedback and questions to "
-        "<a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
+        "<a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
         "Cheers!<br><br>"
         "ESHAP"
         "</p>", 
