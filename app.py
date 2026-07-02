@@ -203,9 +203,9 @@ st.html("""
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
-# Main Scale Subhead Block
+# Main Scale Subhead Block: Hardcoded cleanly to execute signature bright red text color override everywhere
 st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: normal; margin-top: -1rem; margin-bottom: 0.5rem; color: #333333; font-style: normal;'>"
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; color: #FF0000; font-style: normal;'>"
     "The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer"
     "</p>", 
     unsafe_allow_html=True
