@@ -191,8 +191,7 @@ if logo_base64:
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
 
-st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
-st.html("""
+st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)st.html("""
     <style>
     section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
     section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3,
@@ -215,15 +214,15 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Persistent Substack Newsletter Link: Hardcoded cleanly to point straight to ://substack.com
-st.markdown(
+# Permanent Link Shield: Native isolated HTML anchor forcing absolute target destination security
+st.html(
     "<p style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://://substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
-    "</p>", 
-    unsafe_allow_html=True
+    "For full analysis: <a href='https://eshap.substack.com/' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
+    "</p>"
 )
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
+
 # Callback Shield: Programmatically wipes memory states cleanly without using loop rerun overhead
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
