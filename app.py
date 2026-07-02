@@ -354,16 +354,16 @@ with tab1:
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 
 with tab2:
-    # Centered unified H2 headline layout utilizing compressed line-height leading constraints
+    # High-impact centered typography header block utilizing highly compressed line-height spacing
     st.markdown(
-        "<div style='text-align: center; line-height: 1.15; margin-bottom: 1.5rem;'>"
-        "<h2 style='margin: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>"
-        "<h2 style='margin: 0; font-size: 1.8rem; font-weight: bold;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2>"
-        "<h2 style='margin: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2>"
+        "<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'>"
+        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>"
+        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2>"
+        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2>"
         "</div>",
         unsafe_allow_html=True
     )
-    
+   
     st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
     st.markdown("For years, the measurement establishment has relied on a self-serving mythology called 'premium attention quality' to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as 'low-tier digital noise.' This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
