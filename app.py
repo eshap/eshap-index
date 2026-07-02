@@ -352,8 +352,12 @@ with tab1:
         st.markdown(f"<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: {market_choice.upper()}</strong><br>Platform totals represent unified holding corporate structures. Traditional TV volumes are scaled using audited single-screen panel metrics from regional state-backed systems (including BARB, Médiamétrie, and Agf/Gfk) and balanced against hardware-level handset logs. Multi-screening and background device noise programmatically flattened through duplication discounts to retain zero-sum integrity.</p>", unsafe_allow_html=True)
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
+
 with tab2:
-    st.subheader("WHY ECSAI? (Why This Forest is on Fire)")
+    st.subheader("WHY THE ECSAI?")
+    st.markdown("### **BECAUSE ATTENTION IS FINITE. WE MUST TRACK IT AS SUCH.**")
+    st.html("<div style='margin-bottom: 1rem;'></div>")
+    
     st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
     st.markdown("For years, the measurement establishment has relied on a self-serving mythology called 'premium attention quality' to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as 'low-tier digital noise.' This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
@@ -362,9 +366,9 @@ with tab2:
     if os.path.exists("eshap_us_devices.png"): 
         st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem (US Baseline Panel)", use_container_width=True)
     else: 
-        st.info("💡 *[Placeholder for eshap_us_devices.png: In recent survey telemetry tracking profiles like the MX8 index baseline, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen]*")
+        st.info("💡 *[Placeholder for eshap_us_devices.png: In recent telemetry tracking profiles like the MX8 index baseline, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen]*")
     
-    st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Baby Boomers are the only group keeping traditional glass alive. Every other generation watches video on their phones two to three times more than on their TVs.")
+    st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Baby Boomers are the only group keeping traditional glass alive. Every other generation watches video on their phones two to three times more than their TVs.")
     st.markdown("The ESHAP Cross-Screen Attention Index (ESCAI) introduces a completely new analytical paradigm to capture this shift. We didn't build a local programmatic tool to place an individual ad spot next Tuesday. To look at this index and ask how to execute a DSP trade is to confuse a compass with a shovel.")
     st.markdown("This scale is a macroeconomic strategy engine engineered for the C-suite to audit structural enterprise risk and investment. If your brand is allocating 60% of its capital to traditional glass viewing while our closed census time budget proves your active workforce demographic has permanently migrated its conscious time to a personal screen, that is an organizational asset failure.")
     st.markdown("ESCAI enforces the absolute laws of human physics. Human time is a non-elastic, zero-sum commodity—a closed market sponge. Every single hour gained by an algorithm is an hour permanently destroyed for a broadcast tower.")
@@ -406,7 +410,6 @@ with tab3:
     st.markdown("**ESHAP**")
 
 with tab4:
-    # Restored Original Tab Styling Architecture: Syncs layout, fonts, and active design icons perfectly
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     w_map = {"United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"}
     t_map = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}
