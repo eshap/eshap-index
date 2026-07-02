@@ -332,20 +332,18 @@ with tab1:
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
+    
+    # Isolate pure columns to display exclusively discrete segments without overlay clutter
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
-    selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=["Cohorts Overlaid"] + demo_columns, horizontal=True)
+    selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=demo_columns, horizontal=True)
     
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     chart_df = chart_df.set_index("Platform/Publisher")
     
-    # Corrected Chart Logic Matrix: Switches from stacked layers to grouped clustered bars
-    if selected_demo == "Cohorts Overlaid":
-        chart_metrics = ["13-54 Majority", "55+ GenX+"]  # Exclude P13+ here to prevent double-counting totals visually
-        st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True, stack=False)
-    else:
-        chart_metrics = [selected_demo]
-        st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
+    # Renders the cleanly isolated single-metric cohort slice straight from memory
+    chart_metrics = [selected_demo]
+    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
     
     st.write("---")
     
