@@ -213,12 +213,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Permanent Link Shield: Native isolated HTML anchor forcing absolute target destination security
-st.html(
-    "<p style='font-size: 0.9rem; font-weight: normal; margin-top: 0rem; margin-bottom: 1.5rem; color: #555555; font-style: normal;'>"
-    "For full analysis: <a href='https://substack.com' target='_blank' style='color: #007bff; text-decoration: underline; font-weight: bold;'>ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION</a>"
-    "</p>"
-)
+# Permanent Link Markdown Lock: Native un-sanitized notation forcing absolute target subdomain security
+st.markdown("For full analysis: **[ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION](https://eshap.substack.com/)**")
+
+st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
+
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 # Callback Shield: Programmatically wipes memory states cleanly without using loop rerun overhead
