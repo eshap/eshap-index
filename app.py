@@ -354,9 +354,15 @@ with tab1:
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 
 with tab2:
-    st.subheader("WHY THE ECSAI?")
-    st.markdown("### **BECAUSE ATTENTION IS FINITE. WE MUST TRACK IT AS SUCH.**")
-    st.html("<div style='margin-bottom: 1rem;'></div>")
+    # Centered headline layout utilizing compressed line-height leading constraints
+    st.markdown(
+        "<div style='text-align: center; line-height: 1.15; margin-bottom: 1.5rem;'>"
+        "<h2 style='margin: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>"
+        "<h3 style='margin: 0; font-size: 1.4rem; font-weight: bold; color: var(--text-color, inherit);'>BECAUSE ATTENTION IS FINITE.</h3>"
+        "<h3 style='margin: 0; font-size: 1.4rem; font-weight: bold; color: var(--text-color, inherit);'>WE REALLY NEED TO TRACK IT AS SUCH.</h3>"
+        "</div>",
+        unsafe_allow_html=True
+    )
     
     st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
     st.markdown("For years, the measurement establishment has relied on a self-serving mythology called 'premium attention quality' to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
