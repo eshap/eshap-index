@@ -330,8 +330,8 @@ active_flag = f_map.get(market_choice, "🇺🇸")
 # Programmatic Tab Interface Engine Initialization
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
-    # Heading Update: Replaced "Cross-Screen Attention Ledger:" with "Cross-Screen Attention Tracker:"
-    st.subheader(f"Cross-Screen Attention Allocation Tracker: {active_flag} {market_choice}")
+    # Heading Update: Replaced "Cross-Screen Attention Allocation Tracker:" with "Cross-Screen Attention Tracker:"
+    st.subheader(f"Cross-Screen Attention Tracker: {active_flag} {market_choice}")
     
     # 1. VISUAL SHARE MAP: Chart-First Architecture
     st.markdown("#### Interactive Visual Share Map")
@@ -351,7 +351,6 @@ with tab1:
     st.write("---")
     
     # 2. TABULAR LEDGER MATRIX: Repositioned below chart canvas
-    # Heading Update: Replaced "Attention Allocation Ledger" with "Cross Screen Attention Ledger"
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
