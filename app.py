@@ -344,11 +344,11 @@ with tab1:
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 
 with tab2:
-    # High-impact centered typography header block utilizing highly compressed line-height spacing
+    # High-impact centered typography header block utilizing highly compressed line-height spacing and branded red
     st.markdown(
         "<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'>"
         "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>"
-        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2>"
+        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold; color: #FF0000;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2>"
         "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2>"
         "</div>",
         unsafe_allow_html=True
