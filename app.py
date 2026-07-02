@@ -142,11 +142,69 @@ BR_BASE = [
     ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
     ["BAND (GRUPO)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
 ]
+# Initialize persistent splash state toggle at system initialization boot
+if "splash_complete" not in st.session_state:
+    st.session_state.splash_complete = False
+
+# 1. SPLASH CANVAS CONTAINER: Fires automatically on first-time browser boot loops
+if not st.session_state.splash_complete:
+    # Force complete workspace layout override to isolate heading components cleanly in dead-center
+    st.html("""
+        <style>
+        /* Temporarily submerge sidebar fragments and native tab elements below viewport visibility */
+        [data-testid="stSidebar"], [data-testid="stHeader"], .stTabs, div.stMainBlockContainer {
+            visibility: hidden !important;
+            height: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+        div.eshap-splash-container {
+            position: fixed !important;
+            top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
+            background-color: var(--background-color, #ffffff) !important;
+            display: flex !important; flex-direction: column !important;
+            justify-content: center !important; align-items: center !important;
+            z-index: 999999 !important; padding: 2rem !important; box-sizing: border-box !important;
+        }
+        div.eshap-splash-content { text-align: center !important; max-width: 920px !important; line-height: 1.15 !important; }
+        h1.splash-title-massive {
+            font-size: 3.4rem !important; font-weight: 800 !important; margin: 0 0 1rem 0 !important;
+            color: var(--text-color, #111111) !important; letter-spacing: -0.02em !important;
+        }
+        p.splash-subhead-red {
+            font-size: 1.4rem !important; font-weight: 700 !important; margin: 0 0 2.5rem 0 !important;
+            color: #FF0000 !important; line-height: 1.3 !important;
+        }
+        button.splash-enter-trigger {
+            background-color: #FF0000 !important; color: #ffffff !important;
+            border: none !important; padding: 0.85rem 2.5rem !important; font-size: 1.1rem !important;
+            font-weight: bold !important; border-radius: 4px !important; cursor: pointer !important;
+            transition: opacity 0.2s ease !important; letter-spacing: 0.05em !important;
+        }
+        button.splash-enter-trigger:hover { opacity: 0.9 !important; }
+        </style>
+        
+        <div class="eshap-splash-container">
+            <div class="eshap-splash-content">
+                <h1 class="splash-title-massive">ESHAP Cross Screen Attention Index</h1>
+                <p class="splash-subhead-red">The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer</p>
+            </div>
+        </div>
+    """)
+    
+    # Render interactive entering button using dead-center alignment constraints
+    _, center_btn_col, _ = st.columns([2.5, 2.0, 2.5])
+    with center_btn_col:
+        if st.button("ENTER TRACKER", use_container_width=True, key="splash_activation_trigger"):
+            st.session_state.splash_complete = True
+            st.rerun()
+    st.stop()
+
+# 2. MAIN ENGINE CANVAS: Restores core dashboard styles instantly upon click validation
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
     with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
 
-# Mobile Viewport Optimization Shield: Injects global style markers to force seamless horizontal scrolling
 st.html("""
     <style>
     span[data-testid='stWidgetLabel'] p, button[data-testid='stBaseButton-secondary'] p, [data-baseweb='tab'] p {
@@ -156,24 +214,12 @@ st.html("""
         content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
         background-image: url('data:image/png;base64,{bullet_base64}') !important;
     }}""" if bullet_base64 else "") + """
-    /* Force unclipped mobile-responsive frames on data frames to let smartphone users swipe naturally */
-    div[data-testid="stDataFrame"] {
-        width: 100% !important;
-        overflow-x: auto !important;
-    }
-    div[data-testid="stDataFrame"] data-grid {
-        min-width: 820px !important;
-    }
+    div[data-testid="stDataFrame"] { width: 100% !important; overflow-x: auto !important; }
+    div[data-testid="stDataFrame"] data-grid { min-width: 820px !important; }
     </style>
     """)
 
-# Clean Sidebar Pronunciation Line: Stripped cleanly of bold/italic properties to sit subtly at sidebar apex
-st.sidebar.markdown(
-    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
-    "ECSAI: pronounced EE-say"
-    "</p>", 
-    unsafe_allow_html=True
-)
+st.sidebar.markdown("<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'>ECSAI: pronounced EE-say</p>", unsafe_allow_html=True)
 
 logo_base64 = ""
 if os.path.exists("eshap_map.png"):
@@ -187,8 +233,9 @@ if logo_base64:
         <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
         """)
 
-# Global Unconditional Sidebar Toggle: Activated and visible across all territory ledger grids uniformly
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
+st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
+
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
 st.html("""
     <style>
