@@ -265,7 +265,10 @@ df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
 
 df_static_base = df_matrix.copy()
 
-st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated\n## **MILLIONS OF HOURS**")
+# Sidebar Branded Units Label: Updates text block to point straight to bright red (#FF0000)
+st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
+st.sidebar.markdown("<h2 style='color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.5rem;'>MILLIONS OF HOURS</h2>", unsafe_allow_html=True)
+
 user_shifts = {}
 for entity in df_matrix["Platform/Publisher"].unique():
     user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", min_value=-200.0, max_value=200.0, value=0.0, step=5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
@@ -289,30 +292,6 @@ if active_shifts:
             df_matrix.loc[idx, "13-44 NextGen"] = df_static_base.loc[idx, "13-44 NextGen"].values * ratio
             df_matrix.loc[idx, "13-34 Youth"] = df_static_base.loc[idx, "13-34 Youth"].values * ratio
             df_matrix.loc[idx, "13-24 GenA/Z"] = df_static_base.loc[idx, "13-24 GenA/Z"].values * ratio
-total_shifted_hours = sum(active_shifts.values())
-
-if abs(total_shifted_hours) > 0.01:
-    non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
-    total_non_shifted_pool = float(df_static_base[non_shifted_mask]["P13+"].sum())
-
-    if total_non_shifted_pool > 0.0:
-        for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
-            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            
-            # Extract the raw float scalar value out of the array to prevent type conversion errors
-            p13_orig_val = float(df_static_base.loc[idx, "P13+"].values)
-            pro_rata_weight = p13_orig_val / total_non_shifted_pool
-            absorbed_share = -total_shifted_hours * pro_rata_weight
-            
-            # Absolute Max Guard: Safely handles single float values to block negative entries
-            adj_p13 = max(0.0, p13_orig_val + absorbed_share)
-            ratio = adj_p13 / p13_orig_val if p13_orig_val > 0.0 else 1.0
-            
-            df_matrix.loc[idx, "P13+"] = adj_p13
-            df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].values))
-            df_matrix.loc[idx, "13-44 NextGen"] = float(df_static_base.loc[idx, "13-44 NextGen"].values) * ratio
-            df_matrix.loc[idx, "13-34 Youth"] = float(df_static_base.loc[idx, "13-34 Youth"].values) * ratio
-            df_matrix.loc[idx, "13-24 GenA/Z"] = float(df_static_base.loc[idx, "13-24 GenA/Z"].values) * ratio
 
 df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 net_balance = df_matrix["P13+"].sum() - df_static_base["P13+"].sum()
@@ -329,11 +308,11 @@ with tab1:
     
     # 1. VISUAL SHARE MAP: Chart-First Architecture
     st.markdown("#### Interactive Visual Share Map")
-    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
+    
+    # Main Stage Chart Label: Swapped style attributes to execute signature bright red text color override
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
-    
-    # Isolate pure columns to display exclusively discrete segments without overlay clutter
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=demo_columns, horizontal=True)
     
@@ -341,17 +320,16 @@ with tab1:
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     chart_df = chart_df.set_index("Platform/Publisher")
     
-    # Renders the cleanly isolated single-metric cohort slice straight from memory
     chart_metrics = [selected_demo]
-    
-    # Branded Color Overwrite: Forces native bar charts to draw in signature bright red (#FF0000)
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True, color="#FF0000")
     
     st.write("---")
     
     # 2. TABULAR LEDGER MATRIX: Repositioned below the chart canvas
     st.markdown("#### Attention Allocation Ledger")
-    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
+    
+    # Main Stage Ledger Label: Swapped style attributes to execute signature bright red text color override
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
     st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.write("")
