@@ -326,11 +326,8 @@ active_flag = f_map.get(market_choice, "🇺🇸")
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
     st.subheader(f"Cross-Screen Attention Allocation Ledger: {active_flag} {market_choice}")
-    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.75rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
-    st.dataframe(df_matrix, use_container_width=True, hide_index=True)
-    st.write("")
-    
+    # 1. VISUAL SHARE MAP: Shifted directly to the apex of the container
     st.markdown("#### Interactive Visual Share Map")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
@@ -343,6 +340,15 @@ with tab1:
     chart_df = chart_df.set_index("Platform/Publisher")
     chart_metrics = ["P13+", "13-54 Majority", "55+ GenX+"] if selected_demo == "Cohorts Overlaid" else [selected_demo]
     st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True)
+    
+    st.write("---")
+    
+    # 2. TABULAR LEDGER MATRIX: Repositioned below the chart canvas
+    st.markdown("#### Attention Allocation Ledger")
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: var(--text-color, inherit); margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
+    
+    st.dataframe(df_matrix, use_container_width=True, hide_index=True)
+    st.write("")
     
     if market_choice == "Brazil":
         st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross-Screen Attention Allocation Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
