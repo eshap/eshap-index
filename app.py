@@ -214,7 +214,7 @@ st.markdown(
 )
 
 # Permanent Link Markdown Lock: Native un-sanitized notation forcing absolute target subdomain security
-st.markdown("This index will update monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data from Evan Shapiro on **[Media War & Peace](https://eshap.substack.com/)**.")
+st.markdown("This index will update monthly, on a rolling six months basis. Simultaneously, we will drop our analysis of the latest data on **[Media War & Peace](https://eshap.substack.com/)**.")
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 
