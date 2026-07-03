@@ -179,17 +179,19 @@ logo_base64 = ""
 if os.path.exists("eshap_map.png"):
     with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
 if logo_base64:
+    # Sidebar Map Anchor Lock: Explicitly routes the map logo layout directly to the Substack maps link tree
     st.sidebar.html("""
         <style>
         div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><img src="data:image/png;base64,""" + logo_base64 + """"></div>
+        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 # Global Unconditional Sidebar Toggle: Activated and visible across all territory ledger grids uniformly
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
+
 st.html("""
     <style>
     section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
