@@ -185,7 +185,7 @@ if logo_base64:
         div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
+        <div class="sidebar-logo-container"><a href="https://eshap.substack.com/p/media-universe-maps-2020-2026" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 # Global Unconditional Sidebar Toggle: Activated and visible across all territory ledger grids uniformly
