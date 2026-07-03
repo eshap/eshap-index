@@ -388,7 +388,7 @@ with tab2:
         unsafe_allow_html=True
     )
     
-    st.markdown("The data is also clear: Since COVID and the arrival of TikTok, the phone has replaced the television as the center of video gravity. 60% of the world's video attention is now on mobile phones. If you are a media company and you are investing 100% of your budget on TV sets, you are mapping your course to irrelevancy and/or bankruptcy.")
+    st.markdown("The data is also clear: Since COVID and the arrival of TikTok, the phone has replaced the television as the center of video gravity. 60% of the world's video attention is now on mobile phones. If you are a media company and you are investing 100% of your budget on TV sets, you are mapping a course to irrelevancy and/or bankruptcy.")
     st.markdown("So much of our measurement investment is spent on measuring television viewing - even when the TV is not being watched!")
     st.markdown("As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that ONLY captures 40% of video consumption. That's not just bad business; it's a suicide mission.")
     
