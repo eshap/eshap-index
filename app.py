@@ -214,7 +214,7 @@ st.markdown(
 )
 
 # Permanent Link Markdown Lock: Native un-sanitized notation forcing absolute target subdomain security
-st.markdown("We will update this index monthly, on a rolling six months basis. Silultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://eshap.substack.com/)**.")
+st.markdown("This index will update monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data from Evan Shapiro on **[Media War & Peace](https://eshap.substack.com/)**.")
 
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 
@@ -419,7 +419,7 @@ with tab2:
     st.markdown("We have built what we believe is the ultimate \"Attention Model,” the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
     
     # Permanent Markdown Link Lock: Enforces absolute target routing security directly to your domain
-    st.markdown("We will update this index monthly, on a rolling six months basis. Silultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://eshap.substack.com/)**.")
+    st.markdown("This index will update monthly, on a rolling six months basis. Each month, we will also drop our analysis of the latest data on **[Media War & Peace](https://eshap.substack.com/)**.")
     st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
     st.markdown("Thanks for your attention!")
     st.markdown("**ESHAP**")
