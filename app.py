@@ -373,39 +373,7 @@ with tab2:
         unsafe_allow_html=True
     )
     
-    st.markdown("Let’s face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
-    st.markdown("For years, the measurement establishment has relied on a self-serving mythology called \"premium attention quality\" to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
-    st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"low-tier digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
-    st.markdown("When other industry signposts try to offer insight into this cross-screen crisis, they show up with a mallet rather than a magnifying glass. They aggregate soft consumer diaries, build clunky additive charts where the human daily clock magically stretches past 24 hours, or offer micro-level campaign widgets that count how many seconds an ad was technically \"on screen.\" They are handing you a shovel to look at individual twigs while your entire forest is burning to the ground.")
-    
-    if os.path.exists("eshap_us_devices.png"): 
-        st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem (US Baseline Panel)", use_container_width=True)
-    else: 
-        st.info("💡 *[Placeholder for eshap_us_devices.png: In recent telemetry tracking profiles like the MX8 index baseline, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen]*")
-    
-    st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Baby Boomers are the only group keeping traditional glass alive. Every other generation watches video on their phones two to three times more than their TVs.")
-    st.markdown("The ESHAP Cross-Screen Attention Index (ESCAI) introduces a completely new analytical paradigm to capture this shift. We didn't build a local programmatic tool to place an individual ad spot next Tuesday. To look at this index and ask how to execute a DSP trade is to confuse a compass with a shovel.")
-    st.markdown("This scale is a macroeconomic strategy engine engineered for the C-suite to audit structural enterprise risk and investment. If your brand is allocating 60% of its capital to traditional glass viewing while our closed census time budget proves your active workforce demographic has permanently migrated its conscious time to a personal screen, that is an organizational asset failure.")
-    st.markdown("ESCAI enforces the absolute laws of human physics. Human time is a non-elastic, zero-sum commodity—a closed market sponge. Every single hour gained by an algorithm is an hour permanently destroyed for a broadcast tower.")
-    st.write("---")
-    
-    # Permanent Markdown Link Lock: Enforces absolute target routing security directly to your domain
-    st.markdown("We will update this index monthly, on a rolling six months basis. Silultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://substack.com)**.")
-    st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
-    st.markdown("Thanks for your attention!")
-    st.markdown("**ESHAP**")
-with tab2:
-    # High-impact centered typography header block utilizing tight line-height spacing and branded red
-    st.markdown(
-        "<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'>\n"
-        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>\n"
-        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold; color: #FF0000;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2>\n"
-        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2>\n"
-        "</div>",
-        unsafe_allow_html=True
-    )
-    
-    # Complete verbatim copy blocks matching pages 1 and 2 of your newly attached master document
+    # Cleaned narrative body matching pages 1 and 2 of your attached document exclusively
     st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
     st.markdown("For years, the measurement establishment has relied on a self-serving mythology called \"premium attention quality\" to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"low-tier digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
@@ -465,12 +433,12 @@ with tab3:
 
     st.write("---")
     st.markdown(
-        "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>"
-        "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>"
-        "We would love to know what you think. Please send your feedback and questions to "
-        "<a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>"
-        "Cheers!<br><br>"
-        "ESHAP"
+        "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5; color: var(--text-color, inherit); font-style: normal;'>\n"
+        "There is more to come &ndash; more regions, more detailed data cuts, more!<br><br>\n"
+        "We would love to know what you think. Please send your feedback and questions to \n"
+        "<a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>\n"
+        "Cheers!<br><br>\n"
+        "ESHAP\n"
         "</p>", 
         unsafe_allow_html=True
     )
