@@ -338,20 +338,17 @@ with tab1:
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     chart_df = chart_df.set_index("Platform/Publisher")
     st.bar_chart(chart_df[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
-    st.write("---")
+        st.write("---")
     
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>ATTENTION PERCENTAGE VALUE</p>" if market_choice == "Global Attention Index" else "<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
-        # Column Presentation Guard: Natively appends percent sign suffixes dynamically to Global rows
+    
+    # Direct Format Override Shield: Forces native string percent generation onto the table cleanly
     if market_choice == "Global Attention Index":
-        st.dataframe(
-            df_matrix, 
-            use_container_width=True, 
-            hide_index=True,
-            column_config={
-                c: st.column_config.NumberColumn(format="%.2f%%") for c in cols[1:]
-            }
-        )
+        display_df = df_matrix.copy()
+        for c in cols[1:]:
+            display_df[c] = display_df[c].apply(lambda x: f"{x:.2f}%")
+        st.dataframe(display_df, use_container_width=True, hide_index=True)
     else:
         st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.write("")
