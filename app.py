@@ -351,7 +351,7 @@ with tab1:
             y_config=st.column_config.NumberColumn(format="%.2f%%")
         )
     else:
-    st.bar_chart(chart_df[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
+            st.bar_chart(chart_df[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
     
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>ATTENTION PERCENTAGE VALUE</p>" if market_choice == "Global Attention Index" else "<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
