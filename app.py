@@ -336,18 +336,26 @@ with tab1:
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     
-    # Restored Native Chart Shield: Solves word cutting and forces percent display axis properties
+    import altair as alt
+    
     if market_choice == "Global Attention Index":
-        st.bar_chart(
-            chart_df,
-            x="Platform/Publisher",
-            y=selected_demo,
-            horizontal=True,
-            height=380,
-            use_container_width=True,
-            color="#FF0000",
-            x_config=st.column_config.NumberColumn(format="%.2f%%")
+        # Fraction Conversion Engine: Converts 16.32 to 0.1632 so Altair plots the percentage accurately
+        render_df = chart_df.copy()
+        for c in cols[1:]:
+            render_df[c] = render_df[c] / 100.0
+            
+        # Braced String Mapping: Safely evaluates space/plus characters in column strings without data drops
+        base_chart = alt.Chart(render_df).mark_bar(color="#FF0000").encode(
+            x=alt.X(f"datum['{selected_demo}']:Q", axis=alt.Axis(format=".1%"), title="Attention Share"),
+            y=alt.Y("Platform/Publisher:N", sort="-x", title=None, axis=alt.Axis(labelLimit=300)),
+            tooltip=[
+                alt.Tooltip("Platform/Publisher:N", title="Publisher"),
+                alt.Tooltip(f"datum['{selected_demo}']:Q", format=".2f%", title="Share")
+            ]
+        ).properties(height=380).configure_axis(
+            labelFontWeight="bold"
         )
+        st.altair_chart(base_chart, use_container_width=True)
     else:
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
