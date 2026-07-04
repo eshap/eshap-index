@@ -421,7 +421,7 @@ with tab2:
     st.markdown("We have built what we believe is the ultimate \"Attention Model,” the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
     
     # Permanent Markdown Link Lock: Enforces absolute target routing security directly to your domain
-    st.markdown("This index will update monthly, on a rolling six months basis. And each month, we will also drop our analysis of the latest data on **[Media War & Peace](https://eshap.substack.com/)**.")
+    st.markdown("This index will update every quarter, with rolling six months of data. Simultaneouly, we will also drop our analysis of the latest data on **[Media War & Peace](https://eshap.substack.com/)**.")
     st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
     st.markdown("Thanks for your attention!")
     st.markdown("**ESHAP**")
