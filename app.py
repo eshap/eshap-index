@@ -26,6 +26,23 @@ def load_text_asset(filename, default_text=""):
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
 
+# Hardcoded Global Attention Index Parameters Matrix (Percentage Shares)
+GLOBAL_BASE = [
+    ["YOUTUBE", 16.32, 8.56, 18.42, 19.04, 19.46, 19.64],
+    ["LOCAL LEGACY MEDIA", 12.02, 19.09, 9.23, 7.90, 6.85, 5.22],
+    ["NETFLIX", 11.58, 6.30, 13.06, 13.59, 13.27, 12.60],
+    ["TIKTOK", 11.50, 0.97, 14.34, 16.59, 18.23, 21.05],
+    ["INSTAGRAM", 9.36, 1.73, 11.45, 12.75, 13.43, 12.98],
+    ["DISNEY", 8.17, 10.87, 7.31, 7.56, 7.17, 6.44],
+    ["FACEBOOK", 4.79, 7.48, 3.95, 3.42, 2.14, 0.79],
+    ["WBD", 4.33, 5.92, 3.83, 3.63, 3.23, 2.61],
+    ["AMAZON", 4.17, 3.26, 4.40, 4.83, 4.73, 4.15],
+    ["PARAMOUNT", 3.17, 4.85, 2.30, 2.22, 1.91, 1.50],
+    ["NBCU", 2.44, 3.82, 1.94, 1.86, 1.62, 1.15],
+    ["FOX", 0.82, 1.51, 0.45, 0.32, 0.22, 0.08]
+]
+
+
 # Unified Data Parameter Matrices Bound Straight From Your Document Panels (Strict ALL CAPS)
 US_BASE = [
     ["YOUTUBE", 2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5],
