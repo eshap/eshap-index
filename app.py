@@ -334,70 +334,29 @@ with tab1:
     
     # 1. VISUAL SHARE MAP: Chart-First Architecture
     st.markdown("#### Interactive Visual Share Map")
-    if market_choice == "Global Attention Index":
-        st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>ATTENTION PERCENTAGE VALUE</p>", unsafe_allow_html=True)
-    else:
-        st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
-        
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
+    
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=demo_columns, horizontal=True)
     
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
+    chart_df = chart_df.set_index("Platform/Publisher")
     
-    import altair as alt
+    chart_metrics = [selected_demo]
+    st.bar_chart(chart_df[chart_metrics], horizontal=True, height=380, use_container_width=True, color="#FF0000")
     
-    if market_choice == "Global Attention Index":
-        # Fraction Scaler Loop: Converts 16.32 to 0.1632 for accurate percentage scale plotting
-        render_df = chart_df.copy()
-        for c in cols[1:]:
-            render_df[c] = render_df[c] / 100.0
-            
-        # Alphanumeric Sanitizer Shield: Wipes illegal special characters only inside the chart object
-        clean_mapped_cols = {col: col.replace(" ", "_").replace("+", "_plus") for col in render_df.columns}
-        render_df = render_df.rename(columns=clean_mapped_cols)
-        clean_selected_field = selected_demo.replace(" ", "_").replace("+", "_plus")
-        
-        # Production Altair Module: Enforces 300px label breathing limits and absolute sorted percentage readouts
-        base_chart = alt.Chart(render_df).mark_bar(color="#FF0000").encode(
-            x=alt.X(f"{clean_selected_field}:Q", axis=alt.Axis(format=".1%"), title=None),
-            y=alt.Y("Platform/Publisher:N", sort="-x", title=None, axis=alt.Axis(labelLimit=300)),
-            tooltip=[
-                alt.Tooltip("Platform/Publisher:N", title="Publisher"),
-                alt.Tooltip(f"{clean_selected_field}:Q", format=".2f%", title="Share")
-            ]
-        ).properties(height=380).configure_axis(
-            labelFontWeight="bold"
-        )
-        st.altair_chart(base_chart, use_container_width=True)
-    else:
-        chart_df_fixed = chart_df.set_index("Platform/Publisher")
-        st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
-        
     st.write("---")
     
     # 2. TABULAR LEDGER MATRIX: Repositioned below chart canvas
     st.markdown("#### Cross Screen Attention Ledger")
-    if market_choice == "Global Attention Index":
-        st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>ATTENTION PERCENTAGE VALUE</p>", unsafe_allow_html=True)
-    else:
-        st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
-        
-    # Table Presentation Layer: Appends explicit percentage formatting to the table view matrix
-    if market_choice == "Global Attention Index":
-        display_df = df_matrix.copy()
-        for c in cols[1:]:
-            display_df[c] = display_df[c].apply(lambda x: f"{x:.2f}%")
-        st.dataframe(display_df, use_container_width=True, hide_index=True)
-    else:
-        st.dataframe(df_matrix, use_container_width=True, hide_index=True)
-        
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
+    
+    st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.write("")
     
-    if market_choice == "Global Attention Index":
-        st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: GLOBAL INDEX</strong><br>Values represent aggregated, normalized global attention share coefficients across tracking dimensions. All core Big Tech layers encompass consolidated multi-regional footprint parameters.</p>", unsafe_allow_html=True)
-    elif market_choice == "Brazil":
+    if market_choice == "Brazil":
         st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
     elif market_choice == "Mexico":
         st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons, including consolidated cross-screen volumes for Claro Sports and Uno TV. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
@@ -405,7 +364,6 @@ with tab1:
         st.markdown(f"<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: {market_choice.upper()}</strong><br>Platform totals represent unified holding corporate structures. Traditional TV volumes are scaled using audited single-screen panel metrics from regional state-backed systems (including BARB, Médiamétrie, and Agf/Gfk) and balanced against hardware-level handset logs. Multi-screening and background device noise programmatically flattened through duplication discounts to retain zero-sum integrity.</p>", unsafe_allow_html=True)
         
     st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
-
 with tab2:
     # High-impact centered typography header block utilizing tight line-height spacing and branded red
     st.markdown(
