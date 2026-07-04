@@ -335,15 +335,30 @@ with tab1:
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=demo_columns, horizontal=True)
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
-    chart_df = chart_df.set_index("Platform/Publisher")
     
-    # Native Format Shield: Guarantees full responsive bars populate immediately across all layout views
+    import altair as alt
+    
+    # Custom Layout Engine: Expands label margins to stop word cutting and forces percent display formatting
     if market_choice == "Global Attention Index":
-        render_df = chart_df[[selected_demo]].copy()
-        st.bar_chart(render_df, horizontal=True, height=380, use_container_width=True, color="#FF0000")
+        render_df = chart_df.copy()
+        for c in cols[1:]:
+            render_df[c] = render_df[c] / 100.0
+            
+        base_chart = alt.Chart(render_df).mark_bar(color="#FF0000").encode(
+            x=alt.X(f"{selected_demo}:Q", axis=alt.Axis(format=".1%"), title="Attention Share"),
+            y=alt.Y("Platform/Publisher:N", sort="-x", title=None, axis=alt.Axis(labelLimit=300)),
+            tooltip=[
+                alt.Tooltip("Platform/Publisher:N", title="Publisher"),
+                alt.Tooltip(f"{selected_demo}:Q", format=".2f%", title="Share")
+            ]
+        ).properties(height=380).configure_axis(
+            labelFontWeight="bold"
+        )
+        st.altair_chart(base_chart, use_container_width=True)
     else:
-        st.bar_chart(chart_df[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
-    
+        chart_df_fixed = chart_df.set_index("Platform/Publisher")
+        st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
+
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>ATTENTION PERCENTAGE VALUE</p>" if market_choice == "Global Attention Index" else "<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
     
