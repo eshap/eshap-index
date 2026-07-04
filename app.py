@@ -286,18 +286,29 @@ with tab1:
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     
     import altair as alt
+    
     if market_choice == "Global Attention Index":
+        # Fraction Conversion Engine: Converts 16.32 to 0.1632 so Altair plots percentages accurately
         render_df = chart_df.copy()
-        for c in cols[1:]: render_df[c] = render_df[c] / 100.0
+        for c in cols[1:]:
+            render_df[c] = render_df[c] / 100.0
+            
+        # Shorthand Encoder Lock: Natively handles space/plus string headers safely without crashing
         base_chart = alt.Chart(render_df).mark_bar(color="#FF0000").encode(
-            x=alt.X(alt.Field(selected_demo, type='quantitative'), axis=alt.Axis(format=".1%"), title=None),
+            x=alt.X(shorthand=f"{selected_demo}:Q", axis=alt.Axis(format=".1%"), title=None),
             y=alt.Y("Platform/Publisher:N", sort="-x", title=None, axis=alt.Axis(labelLimit=300)),
-            tooltip=[alt.Tooltip("Platform/Publisher:N", title="Publisher"), alt.Tooltip(alt.Field(selected_demo, type='quantitative'), format=".2f%", title="Share")]
-        ).properties(height=380).configure_axis(labelFontWeight="bold")
+            tooltip=[
+                alt.Tooltip("Platform/Publisher:N", title="Publisher"),
+                alt.Tooltip(shorthand=f"{selected_demo}:Q", format=".2f%", title="Share")
+            ]
+        ).properties(height=380).configure_axis(
+            labelFontWeight="bold"
+        )
         st.altair_chart(base_chart, use_container_width=True)
     else:
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
+
     st.write("---")
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>ATTENTION PERCENTAGE VALUE</p>" if market_choice == "Global Attention Index" else "<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
