@@ -342,7 +342,18 @@ with tab1:
     
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>ATTENTION PERCENTAGE VALUE</p>" if market_choice == "Global Attention Index" else "<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
-    st.dataframe(df_matrix, use_container_width=True, hide_index=True)
+        # Column Presentation Guard: Natively appends percent sign suffixes dynamically to Global rows
+    if market_choice == "Global Attention Index":
+        st.dataframe(
+            df_matrix, 
+            use_container_width=True, 
+            hide_index=True,
+            column_config={
+                c: st.column_config.NumberColumn(format="%.2f%%") for c in cols[1:]
+            }
+        )
+    else:
+        st.dataframe(df_matrix, use_container_width=True, hide_index=True)
     st.write("")
     
     if market_choice == "Global Attention Index":
