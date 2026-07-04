@@ -336,25 +336,18 @@ with tab1:
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     
-    import altair as alt
-    
-    # Custom Layout Engine: Expands label margins to stop word cutting and forces percent display formatting
+    # Restored Native Chart Shield: Solves word cutting and forces percent display axis properties
     if market_choice == "Global Attention Index":
-        render_df = chart_df.copy()
-        for c in cols[1:]:
-            render_df[c] = render_df[c] / 100.0
-            
-        base_chart = alt.Chart(render_df).mark_bar(color="#FF0000").encode(
-            x=alt.X(f"{selected_demo}:Q", axis=alt.Axis(format=".1%"), title="Attention Share"),
-            y=alt.Y("Platform/Publisher:N", sort="-x", title=None, axis=alt.Axis(labelLimit=300)),
-            tooltip=[
-                alt.Tooltip("Platform/Publisher:N", title="Publisher"),
-                alt.Tooltip(f"{selected_demo}:Q", format=".2f%", title="Share")
-            ]
-        ).properties(height=380).configure_axis(
-            labelFontWeight="bold"
+        st.bar_chart(
+            chart_df,
+            x="Platform/Publisher",
+            y=selected_demo,
+            horizontal=True,
+            height=380,
+            use_container_width=True,
+            color="#FF0000",
+            x_config=st.column_config.NumberColumn(format="%.2f%%")
         )
-        st.altair_chart(base_chart, use_container_width=True)
     else:
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
