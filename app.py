@@ -334,7 +334,7 @@ with tab1:
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=demo_columns, horizontal=True)
     
-     chart_df = df_matrix.copy()
+    chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     chart_df = chart_df.set_index("Platform/Publisher")
     
