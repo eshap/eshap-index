@@ -336,9 +336,23 @@ with tab1:
     
     chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
-    chart_df = chart_df.set_index("Platform/Publisher")
-    st.bar_chart(chart_df[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
-    st.write("---")
+    
+    # Altair Percent Engine Mapping: Overrides native bar layers with explicit display metrics
+    import altair as alt
+    
+    if market_choice == "Global Attention Index":
+        base_chart = alt.Chart(chart_df).mark_bar(color="#FF0000").encode(
+            x=alt.X(f"{selected_demo}:Q", axis=alt.Axis(format=".2f%"), title="Attention Share"),
+            y=alt.Y("Platform/Publisher:N", sort="-x", title=None),
+            tooltip=[
+                alt.Tooltip("Platform/Publisher:N"),
+                alt.Tooltip(f"{selected_demo}:Q", format=".2f%", title="Share")
+            ]
+        ).properties(height=380)
+        st.altair_chart(base_chart, use_container_width=True)
+    else:
+        chart_df_fixed = chart_df.set_index("Platform/Publisher")
+        st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
     
     st.markdown("#### Cross Screen Attention Ledger")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>ATTENTION PERCENTAGE VALUE</p>" if market_choice == "Global Attention Index" else "<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
