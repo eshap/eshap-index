@@ -333,16 +333,19 @@ with tab1:
     st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
     demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
     selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=demo_columns, horizontal=True)
-    
-    chart_df = df_matrix.copy()
+        chart_df = df_matrix.copy()
     chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
     
-    # Restored Altair Integration: Safely formats axis and tooltips as percentages without parameter drops
     import altair as alt
     
     if market_choice == "Global Attention Index":
-        base_chart = alt.Chart(chart_df.reset_index()).mark_bar(color="#FF0000").encode(
-            x=alt.X(f"{selected_demo}:Q", axis=alt.Axis(format=".2f%"), title="Attention Share"),
+        # Fraction Conversion Engine: Converts 16.32 to 0.1632 so Altair plots the percentage accurately
+        render_df = chart_df.copy()
+        for c in cols[1:]:
+            render_df[c] = render_df[c] / 100.0
+            
+        base_chart = alt.Chart(render_df).mark_bar(color="#FF0000").encode(
+            x=alt.X(f"{selected_demo}:Q", axis=alt.Axis(format=".1%"), title="Attention Share"),
             y=alt.Y("Platform/Publisher:N", sort="-x", title=None),
             tooltip=[
                 alt.Tooltip("Platform/Publisher:N", title="Publisher"),
