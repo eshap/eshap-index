@@ -6,9 +6,6 @@ Television glass viewing shares from Kantar IBOPE Media Mexico and application s
 
 To isolate the commercially vital workforce pool and eliminate legacy reach distortions, the index applies an unyielding zero-sum filter that strips the heavy 55+ demographic retirement layer directly out of the gen-pop baseline. The narrower, nested generational cohorts (13–44, 13–34, and 13–24) are then programmatically processed through a proprietary mathematical curve. This curve uses established transitional benchmarks to calculate historical territory lag and local market friction—such as deep-seated domestic broadcast network duopoly loyalty, open unscripted television formats, and mobile-first community viewing dynamics—while automatically enforcing a nested safety guard that guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data covers the December 2025 through May 2026 cycle, tracking absolute volume of attention across both total video and active social media usage.
 
-***
-
-Platform Inclusions Addendum (Mexico Footnote Specifications)
 *   OTHER: Completes the absolute IFT consumer time capacity budget. This category encompasses independent state public broadcasters, localized regional television stations, long-tail independent streaming applications, and minor digital platform operations that operate outside the heavy attention centers of TelevisaUnivision and TV Azteca.
 *   TELEVISAUNIVISION: Complete structural consolidation of the entire public and commercial linear network portfolio natively integrated with all cross-screen digital sessions via the ViX application.
 *   YOUTUBE: Complete native mobile application, desktop, and CTV session tracking and video platform attention volume.
