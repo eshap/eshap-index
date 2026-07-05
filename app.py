@@ -497,12 +497,14 @@ with tab4:
         st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
         st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
         
-        # Pulls basic text asset variables
-        st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
+        # Ingestion Engine: Safely pulls your current text from your repository cache memory
+        raw_text_body = load_text_asset(f"methodology_{f_token}.txt", "")
         
-        st.write("---")
-        # Injects the specific regional explainer safely with zero mixing or text overflows
-        st.markdown(other_explainers.get(market_choice, ""))
+        # Prepend Engine: Glues the OTHER bullet directly to the absolute top of the existing list body
+        other_bullet = other_explainers.get(market_choice, "")
+        combined_methodology_text = f"{other_bullet}\n\n{raw_text_body}" if raw_text_body else other_bullet
+        # Single-Canvas Renderer: Forces the combined string to draw as one continuous list
+        st.markdown(combined_methodology_text)
         
     with sub_source:
         st.markdown(f"### DATA SOURCES ({active_flag} {market_choice.upper()})")
