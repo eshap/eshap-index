@@ -9,6 +9,7 @@ To isolate the commercially vital workforce pool and eliminate legacy reach dist
 ***
 
 Platform Inclusions Addendum (Mexico Footnote Specifications)
+*   OTHER: Completes the absolute IFT consumer time capacity budget. This category encompasses independent state public broadcasters, localized regional television stations, long-tail independent streaming applications, and minor digital platform operations that operate outside the heavy attention centers of TelevisaUnivision and TV Azteca.
 *   TELEVISAUNIVISION: Complete structural consolidation of the entire public and commercial linear network portfolio natively integrated with all cross-screen digital sessions via the ViX application.
 *   YOUTUBE: Complete native mobile application, desktop, and CTV session tracking and video platform attention volume.
 *   TIKTOK: Complete native mobile application session tracking and short-form video platform attention volume.
