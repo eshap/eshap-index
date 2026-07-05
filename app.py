@@ -419,10 +419,91 @@ with tab4:
     t_map = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}
     f_token = w_map.get(market_choice, "us")
     w1, w2 = t_map.get(market_choice, ("64.2%", "35.8%"))
+    
+    # Hardcoded Regional Explainer Dictionary to split text safely across processing blocks
+    other_explainers = {}
+    other_explainers["United States"] = (
+        "### REGIONAL PROFILE: THE 'OTHER' LAYER\n"
+        "**UNITED STATES • OTHER_LONG_TAIL**\n\n"
+        "Tracks unallocated P13+ focus hours capturing smaller fragments of workforce and youth attention "
+        "outside the top-monetized ecosystem rows. This long-tail bucket captures independent AVOD platforms, "
+        "niche streaming services, and standalone gaming video streams (such as Tubi, Pluto TV, Roku Channel, "
+        "Apple TV+, and localized premium Twitch/Kick streams) when not explicitly rolled up into their "
+        "corporate parent lines, alongside tail web-video fragments."
+    )
+    
+    other_explainers["United Kingdom"] = (
+        "### REGIONAL PROFILE: THE 'OTHER' LAYER\n"
+        "**UNITED KINGDOM • OTHER_LONG_TAIL**\n\n"
+        "Accounts for residual linear glass and digital feed attention volume, explicitly locking the territory "
+        "ceiling to hard BARB telemetry. This includes the long-tail of smaller thematic cable networks, "
+        "alternative public service tiers, secondary regional news feeds, and independent niche streaming "
+        "applications (such as UKTV networks, narrative channels, and local digital hubs) operating beneath "
+        "tier-1 parent holding company reporting thresholds."
+    )
+    
+    other_explainers["France"] = (
+        "### REGIONAL PROFILE: THE 'OTHER' LAYER\n"
+        "**FRANCE • OTHER_LONG_TAIL**\n\n"
+        "フランス • アンテナベースライン。 This block handles unallocated attention hours distributed across independent "
+        "TNT thematic channels, minor digital premium catch-up tiers, localized digital video storefronts, "
+        "and niche subscription apps that fall outside the major corporate empires of France Télévisions, "
+        "TF1, Group M6, Canal+, and international tech utilities."
+    )
+    other_explainers["Germany"] = (
+        "### REGIONAL PROFILE: THE 'OTHER' LAYER\n"
+        "**GERMANY • OTHER_LONG_TAIL**\n\n"
+        "Secures 100% database calibration against Destatis population caps and local telemetry books. "
+        "It absorbs fragmented long-tail attention hours split across independent regional third-programs, "
+        "minor thematic cable networks, localized FAST configurations, and alternative web-video utilities "
+        "that operate beneath the macro monetization thresholds of the ARD, ZDF, RTL, and ProSiebenSat.1 groups."
+    )
+    
+    other_explainers["Italy"] = (
+        "### REGIONAL PROFILE: THE 'OTHER' LAYER\n"
+        "**ITALY • OTHER_LONG_TAIL**\n\n"
+        "Represents the unallocated attention residual that completes the Auditel telemetry boundary layer. "
+        "This captures independent digital terrestrial TV (DTT) channels, minor regional broadcast networks, "
+        "and independent digital applications that do not route monetization or volume into the dominant "
+        "local duopoly of RAI and Mediaset or the global streaming giants."
+    )
+    
+    other_explainers["Spain"] = (
+        "### REGIONAL PROFILE: THE 'OTHER' LAYER\n"
+        "**SPAIN • OTHER_LONG_TAIL**\n\n"
+        "Locks down the remaining focus hour capacity under the sovereign CNMC framework. This includes "
+        "independent regional autonomic networks (FORTA channels), minor thematic linear pay-TV slots, "
+        "alternative hybrid streaming offerings, and long-tail digital video operations outside the core "
+        "footprints of RTVE, Atresmedia, and Mediaset España."
+    )
+    other_explainers["Brazil"] = (
+        "### REGIONAL PROFILE: THE 'OTHER' LAYER\n"
+        "**BRAZIL • OTHER_LONG_TAIL**\n\n"
+        "Calculates the remaining focus hours within the hyper-mobile Brazilian time budget. "
+        "While tier-1 players control over 95% of active monetization, this residual captures minor local "
+        "free-to-air broadcast feeds, regional niche TV networks, independent AVOD experiments, and emerging "
+        "long-tail web utilities operating outside the massive pipelines of Grupo Globo, Record, SBT, and Band."
+    )
+    
+    other_explainers["Mexico"] = (
+        "### REGIONAL PROFILE: THE 'OTHER' LAYER\n"
+        "**MEXICO • OTHER_LONG_TAIL**\n\n"
+        "Completes the absolute IFT consumer time capacity budget. This category encompasses independent state "
+        "public broadcasters, localized regional television stations, long-tail independent streaming applications, "
+        "and minor digital platform operations that operate outside the heavy attention centers of TelevisaUnivision "
+        "and TV Azteca."
+    )
     with sub_method:
         st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
         st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
+        
+        # Pulls basic text asset variables
         st.write(load_text_asset(f"methodology_{f_token}.txt", f"{market_choice} methodology text loading..."))
+        
+        st.write("---")
+        # Injects the specific regional explainer safely with zero mixing or text overflows
+        st.markdown(other_explainers.get(market_choice, ""))
+        
     with sub_source:
         st.markdown(f"### DATA SOURCES ({active_flag} {market_choice.upper()})")
         st.write(load_text_asset(f"sources_{f_token}.txt", f"{market_choice} sourcing data loading..."))
