@@ -197,11 +197,15 @@ st.html("""
     g[class*="role-axis"] text { font-weight: bold !important; font-size: 11px !important; }
     .eshap-subhead-text { color: #FF0000 !important; }
     
-    /* Universal Button Text Shield: Forces reset labels to remain bold and legible in light/dark transitions */
+    /* Universal Button Text Shield: Forces parent and child text nodes to render sharp dark ink */
     button[data-testid="stBaseButton-secondary"] {
         color: #111111 !important;
         background-color: #ffffff !important;
         border: 1px solid #cccccc !important;
+        font-weight: bold !important;
+    }
+    button[data-testid="stBaseButton-secondary"] p {
+        color: #111111 !important;
         font-weight: bold !important;
     }
     button[data-testid="stBaseButton-secondary"]:hover {
@@ -210,6 +214,18 @@ st.html("""
     }
     </style>
     """)
+
+st.header("ESHAP Cross Screen Attention Index (ECSAI)")
+
+st.markdown(
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; font-style: normal;'>"
+    "The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer"
+    "</p>", 
+    unsafe_allow_html=True
+)
+
+st.markdown("For full analysis: **[Media War & Peace](https://substack.com)**")
+st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 
