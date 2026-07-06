@@ -480,29 +480,43 @@ with tab2:
 with tab3:
     st.subheader("ECSAI Frequently Asked Questions (FAQs)")
     st.markdown("#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
-    if os.path.exists("ecsai_flow.png"): st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
+    if os.path.exists("ecsai_flow.png"): 
+        st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
     st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). The model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
     st.write("---")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>Cheers!<br><br>ESHAP</p>", unsafe_allow_html=True)
 
 with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
-    is_global_view = market_choice == "Global Index Overview"
-    f_token = "us" if is_global_view else {"United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"}._explainers.get(market_choice, "us")
+    is_global_view = (market_choice == "Global Index Overview")
+    # Certified Dictionary Mapper Shield: Wipes out the broken dot-explainers syntax error permanently
+    token_dict = {
+        "United States": "us", "France": "fr", "United Kingdom": "uk", 
+        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
+    }
+    f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
     
     with sub_method:
         st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
         if not is_global_view:
-            w1, w2 = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}.get(market_choice, ("64.2%", "35.8%"))
+            w_dict = {
+                "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
+                "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
+                "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
+            }
+            w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
             st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
-        
-        # Methodology file dynamic layout loaders
+        # Safeguarded File IO Canvas Stream Line Builders
         if os.path.exists(f"methodology_{f_token}.txt"):
-            with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: st.write(m_f.read())
-        else: st.info(f"{market_choice} methodology text loading...")
+            with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: 
+                st.write(m_f.read())
+        else: 
+            st.info(f"{market_choice} methodology text loading...")
             
     with sub_source:
         st.markdown(f"### DATA SOURCES ({active_flag} {market_choice.upper()})")
         if os.path.exists(f"sources_{f_token}.txt"):
-            with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: st.write(s_f.read())
-        else: st.info(f"{market_choice} sourcing data loading...")
+            with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: 
+                st.write(s_f.read())
+        else: 
+            st.info(f"{market_choice} sourcing data loading...")
