@@ -260,8 +260,11 @@ if df_matrix is not None:
 
     st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
 else:
-    st.sidebar.info("💡 *Global Index Overview mode active. Reallocation sliders are hidden for high-level macro baseline analysis.*")
-    user_shifts = {}if df_matrix is not None:
+    st.sidebar.info("💡 *Global Overview mode active. Reallocation sliders are hidden for high-level macro baseline analysis.*")
+    user_shifts = {}
+
+if df_matrix is not None:
+
     active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
     if active_shifts:
         for entity, shift_val in active_shifts.items():
