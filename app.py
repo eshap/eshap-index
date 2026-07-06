@@ -386,6 +386,7 @@ with tab1:
         else:
             st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
     else:
+        # Fixed Local Layout: Aligned cleanly to sit perfectly inside the master tab1 scope
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
@@ -397,6 +398,8 @@ with tab1:
         chart_df = df_matrix.copy()
         chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
+        st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
+
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
         st.write("---")
         st.markdown("#### Cross Screen Attention Ledger")
