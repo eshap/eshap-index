@@ -280,25 +280,42 @@ if df_matrix is not None:
     st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
     st.sidebar.markdown("<h2 style='color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.5rem;'>MILLIONS OF HOURS</h2>", unsafe_allow_html=True)
 if df_matrix is not None:
-    user_shifts = {}
-    for entity in df_matrix["Platform/Publisher"].unique():
-        user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", -200.0, 200.0, 0.0, 5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
-
-    if st.sidebar.button("Reset Defaults"):
-        st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
-        st.rerun()
-
+    active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
+    if active_shifts:
+        for entity, shift_val in active_shifts.items():
+            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
+            if len(idx) > 0:
+                p13_orig = float(df_static_base.loc[idx, "P13+"].iloc[0])
+                adj_p13 = max(0.0, p13_orig + shift_val)
+                ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
+                df_matrix.loc[idx, "P13+"] = adj_p13
+                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
+                for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
+                    df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
+    total_shifted_hours = sum(active_shifts.values())
+    if abs(total_shifted_hours) > 0.01:
+        non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
+        total_non_shifted_pool = float(df_static_base[non_shifted_mask]["P13+"].sum())
+        if total_non_shifted_pool > 0.0:
+            for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
+                idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
+                if len(idx) > 0:
+                    p13_orig_val = float(df_static_base.loc[idx, "P13+"].iloc[0])
+                    ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
+                    df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
+                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
+                    for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
+                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
     df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 
-# Unconditional Map Dictionary Shield: Placed completely outside indented loops to prevent NameErrors
-f_map = {
-    "Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", 
-    "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", 
-    "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"
-}
-active_flag = f_map.get(market_choice, "🇺🇸")
-# Master Dashboard Container Tab Initializer
+# Master Dashboard Container Tab Initializer Framework
 tab1, tab2, tab3, tab4 = st.tabs([
+    "CSAI Interactive Index Matrix", 
+    "Why ECSAI?", 
+    "ECSAI FAQs", 
+    "Index Architecture & Methodology"
+])
+
     "CSAI Interactive Index Matrix", 
     "Why ECSAI?", 
     "ECSAI FAQs", 
