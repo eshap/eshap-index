@@ -322,13 +322,8 @@ if df_matrix is not None:
                     for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
                         df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
     df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
-    if abs(df_matrix["P13+"].sum() - df_static_base["P13+"].sum()) > 0.1:
-        st.sidebar.warning("Simulated Shift Imbalance Detected")
-    else:
-        st.sidebar.success("Zero-Sum Balance Maintained")
 
 f_map = {"Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
-active_flag = f_map.get(market_choice, "🇺🇸")
 
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 
