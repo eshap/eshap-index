@@ -298,9 +298,9 @@ active_flag = f_map.get(market_choice, "🇺🇸")
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
     if market_choice == "Global Index Overview":
-        # ----------------================================================================----------------
-        # HIGH-LEVEL GLOBAL INDEX CANVAS MODE: Renders Brief Document Layout Elements (Splits text strictly)
-        # ----------------================================================================----------------
+        # ----------------================================================================================
+        # HIGH-LEVEL GLOBAL INDEX CANVAS MODE: Continuous Narrative Sequence Architecture
+        # --------------------------------================================================================
         st.subheader("THE GLOBAL INDEX")
         st.markdown(
             "What happens when we drop the pretense that TV is premium and social video is not? "
@@ -312,7 +312,7 @@ with tab1:
         if os.path.exists("global_index_13+.png"):
             st.image("global_index_13+.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13+ (DEC 2025 - MAY 2026)", use_container_width=True)
         else:
-            st.warning("⚠️ `global_index_13+.png` asset missing from repository folder. Verify file location boundaries.")
+            st.warning("⚠️ `global_index_13+.png` asset missing from repository folder.")
         st.markdown("Look at this chart.")
         st.markdown(
             "You can see the share of consumer attention, spread across all eight regions in The Index, for all "
@@ -329,7 +329,7 @@ with tab1:
         if os.path.exists("global_index_13-54.png"):
             st.image("global_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13-54 (DEC 2025 - MAY 2026)", use_container_width=True)
         else:
-            st.warning("⚠️ `global_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
+            st.warning("⚠️ `global_index_13-54.png` asset missing from repository folder.")
         st.markdown(
             "##### **Of all the data in this report, the most crucial datapoint is this: 82% of the world population — 73% of the people in these eight regions — are now under 54.**"
         )
@@ -351,9 +351,7 @@ with tab1:
             "our intent with this new, free, interactive, user-driven index, is to provide a strategic fiscal and "
             "investment planning compass for *each* of these regions."
         )
-        st.markdown("---")
-        st.subheader("US REGIONAL DEMOGRAPHIC PROFILE FOCUS")
-# Removed line break and heading to let the text flow continuously across columns
+        # Removed break and heading lines to maintain a perfectly unified text stream directly into US profile
         st.markdown(
             "The ESHAP Cross-Screen Attention Index is hard-wired with data for total cross-device "
             "attention, for France, Brazil, Mexico, UK, France, Italy, Spain, and the US, from December 2025 "
@@ -371,8 +369,7 @@ with tab1:
         if os.path.exists("us_index_13-54.png"):
             st.image("us_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - US MONTHLY TIME: P13-54 (SOURCE: NIELSEN, COMSCORE, GWI, FCC)", use_container_width=True)
         else:
-            st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
-
+            st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder.")
         st.markdown(
             "While Trad Media continues to cling to an aging audience, **in ALL EIGHT MAJOR REGIONS**, even "
             "where Legacy Media is deeply entrenched in the free Media culture, and protected by local "
@@ -384,22 +381,56 @@ with tab1:
             "##### **In fact, as this new data shows for the first time, in many regions — particularly in the US — while YouTube is tops in total attention, TikTok actually beats YouTube among Gen Z and Gen A (consumers 13-34).**"
         )
         
-        # Stacked Final Comparative Age Frames
+        # Dual Column Layout for Side-by-Side Generation Profiles
         c1, c2 = st.columns(2)
         with c1:
-            if os.path.exists("us_index_13-34.png"):
-                st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
-            else:
-                st.warning("⚠️ `us_index_13-34.png` missing.")
+            if os.path.exists("us_index_13-34.png"): st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
+            else: st.warning("⚠️ `us_index_13-34.png` missing.")
         with c2:
-            if os.path.exists("us_index_13-24.png"):
-                st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
-            else:
-                st.warning("⚠️ `us_index_13-24.png` missing.")
+            if os.path.exists("us_index_13-24.png"): st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
+            else: st.warning("⚠️ `us_index_13-24.png` missing.")
+        # Restored unclipped script tail ensuring narrative copy wraps down to the end seamlessly
+        st.markdown(
+            "And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring "
+            "all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid "
+            "signposts that tells us “YouTube is #1 on TV!” (with P2+ and without counting phones, laptops, "
+            "or tablets)."
+        )
+        st.markdown(
+            "Traditional currencies track the device canvas; they do not track the human. They count a "
+            "television playing to a room as an absolute, while treating a high-intensity mobile session that "
+            "requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective "
+            "industry blindness. Legacy tracking systems want you to look at media through isolated reach "
+            "silos — treating an open screen in an empty room as equal to an active, single-screen consumer "
+            "focus."
+        )
+        st.markdown(
+            "So much of our Media measurement investment is spent measuring television "
+            "viewing — even when that TV is not being watched. As a result, the Media "
+            "Industrial complex spends a disproportionate amount of time, energy and "
+            "resources fighting over control of a screen that *only captures 40% of video "
+            "consumption*. That's not just bad business; it's a suicide mission."
+        )
+        st.markdown(
+            "The Index is designed to prevent that — designed to show, specifically, where the entirety of "
+            "consumer attention is actually being paid, so that Media professionals can invest in content, "
+            "advertising, overhead, and infrastructure, accordingly."
+        )
+        st.markdown(
+            "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
+            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://eshap.substack.com/), "
+            "with deep analysis of the data and the trends, right here on Substack."
+        )
+        st.markdown(
+            "This is different from other measurement offerings, which provide small, irrelevant glimpses of "
+            "data for free, then charge clients millions to fund it, while keeping the vast majority of us who "
+            "work in Media in the dark. This incentivizes the measurement industrial complex to keep our "
+            "data in silos, dividing and double-counting consumer attention."
+        )
     else:
         # ----------------================================================================================
         # STANDARD LOCAL TERRITORY ENGINE INTERFACE: Renders charts and slider grids natively
-        # ----------------================================================================================
+        # --------------------------------================================================================
         st.subheader(f"Cross-Screen Attention Tracker: {active_flag} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
@@ -412,7 +443,6 @@ with tab1:
         chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
-            
         st.write("---")
         st.markdown("#### Cross Screen Attention Ledger")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
@@ -433,7 +463,7 @@ with tab2:
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos — treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
     st.markdown("So much of our Media measurement investment is spent measuring television viewing — even when that TV is not being watched. As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that **only captures 40% of video consumption**. That's not just bad business; it's a suicide mission.")
     st.markdown("The Index is designed to prevent that — designed to show, specifically, where the entirety of consumer attention is actually being paid, so that Media professionals can invest in content, advertising, overhead, and infrastructure, accordingly.")
-    st.markdown("Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six months basis. Simultaneously, we will drop an Index Report, on **[Media War & Peace](https://substack.com)**, with deep analysis of the data and the trends, right here on Substack.", unsafe_allow_html=True)
+    st.markdown("Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six months basis. Simultaneously, we will drop an Index Report, on **[Media War & Peace](https://eshap.substack.com/)**, with deep analysis of the data and the trends, right here on Substack.", unsafe_allow_html=True)
     st.markdown("This is different from other measurement offerings, which provide small, irrelevant glimpses of data for free, then charge clients millions to fund it, while keeping the vast majority of us who work in Media in the dark. This incentivizes the measurement industrial complex to keep our data in silos, dividing and double-counting consumer attention.")
     st.markdown("### HERE ARE THE RED HOT TAKES FROM THE FIRST ESCAI REPORT:")
     st.markdown("* While Local & Global Traditional Media in all eight regions continues to draw attention from local consumers, their businesses have become senior living societies — disproportionately dependent on the minority of their populations over the age of 55.")
@@ -458,7 +488,7 @@ with tab3:
 with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     is_global_view = market_choice == "Global Index Overview"
-    f_token = "us" if is_global_view else {"United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"}.get(market_choice, "us")
+    f_token = "us" if is_global_view else {"United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"}._explainers.get(market_choice, "us")
     
     with sub_method:
         st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
@@ -466,7 +496,7 @@ with tab4:
             w1, w2 = {"United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")}.get(market_choice, ("64.2%", "35.8%"))
             st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
         
-        # Method line-by-line file injector
+        # Methodology file dynamic layout loaders
         if os.path.exists(f"methodology_{f_token}.txt"):
             with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: st.write(m_f.read())
         else: st.info(f"{market_choice} methodology text loading...")
