@@ -183,7 +183,7 @@ if logo_base64:
         div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
+        <div class="sidebar-logo-container"><a href="https://eshap.substack.com/" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
@@ -216,7 +216,7 @@ st.html("""
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 st.markdown("<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; font-style: normal;'>The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer</p>", unsafe_allow_html=True)
-st.markdown("For full analysis: **[Media War & Peace](https://substack.com)**")
+st.markdown("For full analysis: **[Media War & Peace](https://eshap.substack.com/)**")
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
@@ -429,7 +429,7 @@ with tab1:
         )
         st.markdown(
             "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
-            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://substack.com), "
+            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://eshap.substack.com/), "
             "with deep analysis of the data and the trends, right here on Substack."
         )
         st.markdown(
@@ -486,7 +486,7 @@ with tab2:
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos — treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
     st.markdown("So much of our Media measurement investment is spent measuring television viewing — even when that TV is not being watched. As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that **only captures 40% of video consumption**. That's not just bad business; it's a suicide mission.")
     st.markdown("The Index is designed to prevent that — designed to show, specifically, where the entirety of consumer attention is actually being paid, so that Media professionals can invest in content, advertising, overhead, and infrastructure, accordingly.")
-    st.markdown("Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six months basis. Simultaneously, we will drop an Index Report, on **[Media War & Peace](https://substack.com)**, with deep analysis of the data and the trends, right here on Substack.", unsafe_allow_html=True)
+    st.markdown("Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six months basis. Simultaneously, we will drop an Index Report, on **[Media War & Peace](https://eshap.substack.com/)**, with deep analysis of the data and the trends, right here on Substack.", unsafe_allow_html=True)
     st.markdown("This is different from other measurement offerings, which provide small, irrelevant glimpses of data for free, then charge clients millions to fund it, while keeping the vast majority of us who work in Media in the dark. This incentivizes the measurement industrial complex to keep our data in silos, dividing and double-counting consumer attention.")
     st.markdown("### HERE ARE THE RED HOT TAKES FROM THE FIRST ESCAI REPORT:")
     st.markdown("* While Local & Global Traditional Media in all eight regions continues to draw attention from local consumers, their businesses have become senior living societies — disproportionately dependent on the minority of their populations over the age of 55.")
