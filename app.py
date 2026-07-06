@@ -512,7 +512,7 @@ with tab1:
             "based on the actual needs of real consumers. We will keep following the data where it leads us."
         )
         st.markdown(
-        # Self-Contained Flag Engine: Safe inline icon mapping that eliminates external NameErrors entirely
+                # Self-Contained Flag Engine: Safe inline icon mapping that eliminates external NameErrors entirely
         flag_icon = {"Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}.get(market_choice, "🇺🇸")
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
 
