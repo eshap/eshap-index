@@ -460,13 +460,18 @@ with tab1:
             "based on the actual needs of real consumers. We will keep following the data where it leads us."
         )
         st.markdown(
+            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
+            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
+            "痕跡 yet. It's a mountain of data and it tells a remarkable story about the future of Media "
+            "based on the actual needs of real consumers. We will keep following the data where it leads us."
+        )
+        st.markdown(
             "<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
             "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
-            "font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!",
-            "<br><br>ESHAP</p>", 
+            "font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!"
+            "<br><br>Cheers!<br><br>ESHAP</p>", 
             unsafe_allow_html=True
         )
-
 
     else:
         # ----------------================================================================================
