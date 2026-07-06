@@ -300,11 +300,24 @@ if df_matrix is not None:
 
     df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 
+# Global Selector Flag Shield: Positioned flush left outside of all loops to eradicate NameErrors entirely
+flag_icon = {
+    "Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", 
+    "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", 
+    "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"
+}.get(market_choice, "🇺🇸")
+
+# Flat Single-Line Initializer: Declares the global layout container variables before they are called
 tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
 tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
+
 with tab1:
     if market_choice == "Global Overview":
+        # ----------------================================================================================
+        # HIGH-LEVEL GLOBAL INDEX CANVAS MODE: Continuous Narrative Sequence Architecture
+        # --------------------------------================================================================
         st.subheader("THE GLOBAL INDEX")
+
         st.markdown(
             "What happens when we drop the pretense that TV is premium and social video is not? "
             "What becomes of the mainstream mindset when we take down the silo walls and measure Media "
