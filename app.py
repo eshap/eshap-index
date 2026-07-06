@@ -317,7 +317,7 @@ with tab1:
             "embarked on this mission to measure it all, side-by-side."
         )
 
-                ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
+ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
                 df_matrix.loc[idx, "P13+"] = adj_p13
                 df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
                 for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
