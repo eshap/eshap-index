@@ -22,8 +22,6 @@ def load_text_asset(filename, default_text=""):
     return st.session_state.text_memory_cache.get(filename, default_text)
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
-
-# Hardcoded United States Matrix Array with OTHER Long-Tail Layer Integrated
 US_BASE = [
     ["YOUTUBE", 2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5],
     ["OTHER", 1120.0, 210.0, 910.0, 780.0, 620.0, 310.0],
@@ -101,7 +99,6 @@ UK_BASE = [
     ["FACEBOOK", 210.0, 115.0, 95.0, 52.3, 19.3, 3.7],
     ["AMAZON", 195.0, 62.0, 133.0, 109.1, 67.6, 28.4]
 ]
-
 IT_BASE = [
     ["RAI", 520.0, 415.0, 105.0, 80.9, 58.2, 37.2],
     ["YOUTUBE", 440.0, 110.0, 330.0, 231.0, 180.2, 109.9],
@@ -158,22 +155,12 @@ st.html("""
         content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
         background-image: url('data:image/png;base64,{bullet_base64}') !important;
     }}""" if bullet_base64 else "") + """
-    div[data-testid="stDataFrame"] {
-        width: 100% !important;
-        overflow-x: auto !important;
-    }
-    div[data-testid="stDataFrame"] data-grid {
-        min-width: 820px !important;
-    }
+    div[data-testid="stDataFrame"] { width: 100% !important; overflow-x: auto !important; }
+    div[data-testid="stDataFrame"] data-grid { min-width: 820px !important; }
     </style>
     """)
 
-st.sidebar.markdown(
-    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
-    "ECSAI: pronounced EE-say"
-    "</p>", 
-    unsafe_allow_html=True
-)
+st.sidebar.markdown("<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'>ECSAI: pronounced EE-say</p>", unsafe_allow_html=True)
 logo_base64 = ""
 if os.path.exists("eshap_map.png"):
     with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
@@ -183,7 +170,7 @@ if logo_base64:
         div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><a href="https://eshap.substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
+        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
@@ -197,7 +184,6 @@ st.html("""
     g[class*="role-axis"] text { font-weight: bold !important; font-size: 11px !important; }
     .eshap-subhead-text { color: #FF0000 !important; }
     
-    /* Universal Button Text Shield: Forces parent and child text nodes to render sharp dark ink */
     button[data-testid="stBaseButton-secondary"] {
         color: #111111 !important;
         background-color: #ffffff !important;
@@ -216,29 +202,8 @@ st.html("""
     """)
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
-
-st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; font-style: normal;'>"
-    "The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer"
-    "</p>", 
-    unsafe_allow_html=True
-)
-
+st.markdown("<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; font-style: normal;'>The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer</p>", unsafe_allow_html=True)
 st.markdown("For full analysis: **[Media War & Peace](https://substack.com)**")
-st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-
-st.header("ESHAP Cross Screen Attention Index (ECSAI)")
-
-st.markdown(
-    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; font-style: normal;'>"
-    "The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer"
-    "</p>", 
-    unsafe_allow_html=True
-)
-
-st.markdown("For full analysis: **[ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION](https://substack.com)**")
-st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
-
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
@@ -252,7 +217,6 @@ market_choice = st.sidebar.radio(
 
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
-# Direct Data Router Matrix
 if market_choice == "Global Overview": df_matrix = None
 elif market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
@@ -280,108 +244,24 @@ if df_matrix is not None:
     st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
     st.sidebar.markdown("<h2 style='color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.5rem;'>MILLIONS OF HOURS</h2>", unsafe_allow_html=True)
 if df_matrix is not None:
+    user_shifts = {}
+    for entity in df_matrix["Platform/Publisher"].unique():
+        user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", -200.0, 200.0, 0.0, 5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
+
+    if st.sidebar.button("Reset Defaults"):
+        st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
+        st.rerun()
+
+    st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
+else:
+    st.sidebar.info("💡 *Global Overview mode active. Reallocation sliders are hidden for high-level macro baseline analysis.*")
+    user_shifts = {}
+if df_matrix is not None:
     active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
     if active_shifts:
         for entity, shift_val in active_shifts.items():
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            if len(idx) > 0:
-                p13_orig = float(df_static_base.loc[idx, "P13+"].iloc[0])
-                adj_p13 = max(0.0, p13_orig + shift_val)
-                ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-                df_matrix.loc[idx, "P13+"] = adj_p13
-                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
-                for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                    df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
-    total_shifted_hours = sum(active_shifts.values())
-    if abs(total_shifted_hours) > 0.01:
-        non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
-        total_non_shifted_pool = float(df_static_base[non_shifted_mask]["P13+"].sum())
-        if total_non_shifted_pool > 0.0:
-            for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
-                idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-                if len(idx) > 0:
-                    p13_orig_val = float(df_static_base.loc[idx, "P13+"].iloc[0])
-                    ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
-                    df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
-                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
-                    for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
-    df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
-
-# Master Dashboard Container Tab Initializer Framework
-tab1, tab2, tab3, tab4 = st.tabs([
-"CSAI Interactive Index Matrix", 
-"Why ECSAI?", 
-"ECSAI FAQs", 
-"Index Architecture & Methodology"
-])
-
-    "CSAI Interactive Index Matrix", 
-    "Why ECSAI?", 
-    "ECSAI FAQs", 
-    "Index Architecture & Methodology"
-])
-
-    "CSAI Interactive Index Matrix", 
-    "Why ECSAI?", 
-    "ECSAI FAQs", 
-    "Index Architecture & Methodology"
-])
-with tab1:
-    if market_choice == "Global Overview":
-        # ----------------================================================================================
-        # HIGH-LEVEL GLOBAL INDEX CANVAS MODE: Continuous Narrative Sequence Architecture
-        # --------------------------------================================================================
-        st.subheader("THE GLOBAL INDEX")
-        st.markdown(
-            "What happens when we drop the pretense that TV is premium and social video is not? "
-            "What becomes of the mainstream mindset when we take down the silo walls and measure Media "
-            "consumption not BY device, but rather ACROSS devices? Turns out, a lot. Which is why we "
-            "embarked on this mission to measure it all, side-by-side."
-        )
-
-ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-                df_matrix.loc[idx, "P13+"] = adj_p13
-                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
-                for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                    df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
-    total_shifted_hours = sum(active_shifts.values())
-    if abs(total_shifted_hours) > 0.01:
-        non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
-        total_non_shifted_pool = float(df_static_base[non_shifted_mask]["P13+"].sum())
-        if total_non_shifted_pool > 0.0:
-            for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
-                idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-                if len(idx) > 0:
-                    p13_orig_val = float(df_static_base.loc[idx, "P13+"].iloc[0])
-                    ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
-                    df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
-                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
-                    for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
-    df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
-
-f_map = {"Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
-
-tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
-
-with tab1:
-    if market_choice == "Global Overview":
-        # ----------------================================================================================
-        # HIGH-LEVEL GLOBAL INDEX CANVAS MODE: Continuous Narrative Sequence Architecture
-        # --------------------------------================================================================
-        st.subheader("THE GLOBAL INDEX")
-        st.markdown(
-            "What happens when we drop the pretense that TV is premium and social video is not? "
-            "What becomes of the mainstream mindset when we take down the silo walls and measure Media "
-            "consumption not BY device, but rather ACROSS devices? Turns out, a lot. Which is why we "
-            "embarked on this mission to measure it all, side-by-side."
-        )
-        
-        if os.path.exists("global_index_13+.png"):
-            st.image("global_index_13+.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13+ (DEC 2025 - MAY 2026)", use_container_width=True)
-        else:
-            st.warning("⚠️ `global_index_13+.png` asset missing from repository folder.")
+            
         st.markdown("Look at this chart.")
         st.markdown(
             "You can see the share of consumer attention, spread across all eight regions in The Index, for all "
@@ -398,7 +278,7 @@ with tab1:
         if os.path.exists("global_index_13-54.png"):
             st.image("global_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13-54 (DEC 2025 - MAY 2026)", use_container_width=True)
         else:
-            st.warning("⚠️ `global_index_13-54.png` asset missing from repository folder.")
+            st.warning("⚠️ `global_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
         st.markdown(
             "##### **Of all the data in this report, the most crucial datapoint is this: 82% of the world population — 73% of the people in these eight regions — are now under 54.**"
         )
@@ -420,7 +300,6 @@ with tab1:
             "our intent with this new, free, interactive, user-driven index, is to provide a strategic fiscal and "
             "investment planning compass for *each* of these regions."
         )
-        # Removed break and heading lines to maintain a perfectly unified text stream directly into US profile
         st.markdown(
             "The ESHAP Cross-Screen Attention Index is hard-wired with data for total cross-device "
             "attention, for France, Brazil, Mexico, UK, France, Italy, Spain, and the US, from December 2025 "
@@ -438,7 +317,7 @@ with tab1:
         if os.path.exists("us_index_13-54.png"):
             st.image("us_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - US MONTHLY TIME: P13-54 (SOURCE: NIELSEN, COMSCORE, GWI, FCC)", use_container_width=True)
         else:
-            st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder.")
+            st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
         st.markdown(
             "While Trad Media continues to cling to an aging audience, **in ALL EIGHT MAJOR REGIONS**, even "
             "where Legacy Media is deeply entrenched in the free Media culture, and protected by local "
@@ -453,26 +332,15 @@ with tab1:
         # Dual Column Layout for Side-by-Side Generation Profiles
         c1, c2 = st.columns(2)
         with c1:
-            if os.path.exists("us_index_13-34.png"): st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
-            else: st.warning("⚠️ `us_index_13-34.png` missing.")
+            if os.path.exists("us_index_13-34.png"): 
+                st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
+            else: 
+                st.warning("⚠️ `us_index_13-34.png` missing.")
         with c2:
-            if os.path.exists("us_index_13-24.png"): st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
-            else: st.warning("⚠️ `us_index_13-24.png` missing.")
-        # Restored unclipped script tail ensuring narrative copy wraps down to the end seamlessly
-        st.markdown(
-            "And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring "
-            "all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid "
-            "signposts that tells us “YouTube is #1 on TV!” (with P2+ and without counting phones, laptops, "
-            "or tablets)."
-        )
-        st.markdown(
-            "Traditional currencies track the device canvas; they do not track the human. They count a "
-            "television playing to a room as an absolute, while treating a high-intensity mobile session that "
-            "requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective "
-            "industry blindness. Legacy tracking systems want you to look at media through isolated reach "
-            "silos — treating an open screen in an empty room as equal to an active, single-screen consumer "
-            "focus."
-        )        # Indentation-Fixed Narrative Canvas Tail: Shifted inward by 8 spaces to lock it inside the Global Index loop
+            if os.path.exists("us_index_13-24.png"): 
+                st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
+            else: 
+                st.warning("⚠️ `us_index_13-24.png` missing.")
         st.markdown(
             "And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring "
             "all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid "
@@ -513,32 +381,9 @@ with tab1:
         st.markdown(
             "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
             "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
-            "痕跡 yet. It's a mountain of data and it tells a remarkable story about the future of Media "
+            "endeavor yet. It's a mountain of data and it tells a remarkable story about the future of Media "
             "based on the actual needs of real consumers. We will keep following the data where it leads us."
         )
-        st.markdown(
-            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
-            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
-            "痕跡 yet. It's a mountain of data and it tells a remarkable story about the future of Media "
-            "based on the actual needs of real consumers. We will keep following the data where it leads us."
-        )
-        st.markdown(
-            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
-            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
-            "痕跡 yet. It's a mountain of data and it tells a remarkable story about the future of Media "
-            "based on the actual needs of real consumers. We will keep following the data where it leads us."
-        )
-        st.markdown(
-            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
-            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
-            "痕跡 yet. It's a mountain of data and it tells a remarkable story about the future of Media "
-            "based on the actual needs of real consumers. We will keep following the data where it leads us."
-        )
-        st.markdown(
-                # Self-Contained Flag Engine: Safe inline icon mapping that eliminates external NameErrors entirely
-        flag_icon = {"Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}.get(market_choice, "🇺🇸")
-        st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
-
         st.markdown(
             "<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
             "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
@@ -546,12 +391,8 @@ with tab1:
             "<br><br>ESHAP</p>", 
             unsafe_allow_html=True
         )
-
     else:
-        # ----------------================================================================================
-        # STANDARD LOCAL TERRITORY ENGINE INTERFACE: Renders charts and slider grids natively
-        # --------------------------------================================================================
-        st.subheader(f"Cross-Screen Attention Tracker: {active_flag} {market_choice}")
+        st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
         
@@ -563,6 +404,7 @@ with tab1:
         chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
+            
         st.write("---")
         st.markdown("#### Cross Screen Attention Ledger")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
@@ -583,7 +425,7 @@ with tab2:
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos — treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
     st.markdown("So much of our Media measurement investment is spent measuring television viewing — even when that TV is not being watched. As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that **only captures 40% of video consumption**. That's not just bad business; it's a suicide mission.")
     st.markdown("The Index is designed to prevent that — designed to show, specifically, where the entirety of consumer attention is actually being paid, so that Media professionals can invest in content, advertising, overhead, and infrastructure, accordingly.")
-    st.markdown("Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six months basis. Simultaneously, we will drop an Index Report, on **[Media War & Peace](https://eshap.substack.com/)**, with deep analysis of the data and the trends, right here on Substack.", unsafe_allow_html=True)
+    st.markdown("Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six months basis. Simultaneously, we will drop an Index Report, on **[Media War & Peace](https://substack.com)**, with deep analysis of the data and the trends, right here on Substack.", unsafe_allow_html=True)
     st.markdown("This is different from other measurement offerings, which provide small, irrelevant glimpses of data for free, then charge clients millions to fund it, while keeping the vast majority of us who work in Media in the dark. This incentivizes the measurement industrial complex to keep our data in silos, dividing and double-counting consumer attention.")
     st.markdown("### HERE ARE THE RED HOT TAKES FROM THE FIRST ESCAI REPORT:")
     st.markdown("* While Local & Global Traditional Media in all eight regions continues to draw attention from local consumers, their businesses have become senior living societies — disproportionately dependent on the minority of their populations over the age of 55.")
@@ -602,14 +444,13 @@ with tab3:
     st.markdown("#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
     if os.path.exists("ecsai_flow.png"): 
         st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
-    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). The model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
+    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
     st.write("---")
-    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>Cheers!<br><br>ESHAP</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>ESHAP</p>", unsafe_allow_html=True)
 
 with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     is_global_view = (market_choice == "Global Overview")
-    # Certified Dictionary Mapper Shield: Wipes out the broken dot-explainers syntax error permanently
     token_dict = {
         "United States": "us", "France": "fr", "United Kingdom": "uk", 
         "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
@@ -617,7 +458,7 @@ with tab4:
     f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
     
     with sub_method:
-        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({active_flag} {market_choice.upper()})")
+        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({flag_icon} {market_choice.upper()})")
         if not is_global_view:
             w_dict = {
                 "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
@@ -626,7 +467,7 @@ with tab4:
             }
             w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
             st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
-        # Safeguarded File IO Canvas Stream Line Builders
+        
         if os.path.exists(f"methodology_{f_token}.txt"):
             with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: 
                 st.write(m_f.read())
@@ -634,7 +475,7 @@ with tab4:
             st.info(f"{market_choice} methodology text loading...")
             
     with sub_source:
-        st.markdown(f"### DATA SOURCES ({active_flag} {market_choice.upper()})")
+        st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
         if os.path.exists(f"sources_{f_token}.txt"):
             with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: 
                 st.write(s_f.read())
