@@ -353,6 +353,7 @@ with tab1:
         )
         st.markdown("---")
         st.subheader("US REGIONAL DEMOGRAPHIC PROFILE FOCUS")
+# Removed line break and heading to let the text flow continuously across columns
         st.markdown(
             "The ESHAP Cross-Screen Attention Index is hard-wired with data for total cross-device "
             "attention, for France, Brazil, Mexico, UK, France, Italy, Spain, and the US, from December 2025 "
@@ -371,6 +372,7 @@ with tab1:
             st.image("us_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - US MONTHLY TIME: P13-54 (SOURCE: NIELSEN, COMSCORE, GWI, FCC)", use_container_width=True)
         else:
             st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
+
         st.markdown(
             "While Trad Media continues to cling to an aging audience, **in ALL EIGHT MAJOR REGIONS**, even "
             "where Legacy Media is deeply entrenched in the free Media culture, and protected by local "
