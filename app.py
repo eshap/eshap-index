@@ -261,20 +261,19 @@ if df_matrix is not None:
     st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
 else:
     st.sidebar.info("💡 *Global Index Overview mode active. Reallocation sliders are hidden for high-level macro baseline analysis.*")
-    user_shifts = {}
-if df_matrix is not None:
+    user_shifts = {}if df_matrix is not None:
     active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
     if active_shifts:
         for entity, shift_val in active_shifts.items():
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
             if len(idx) > 0:
-                p13_orig = df_static_base.loc[idx, "P13+"].values
+                p13_orig = float(df_static_base.loc[idx, "P13+"].iloc[0])
                 adj_p13 = max(0.0, p13_orig + shift_val)
                 ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
                 df_matrix.loc[idx, "P13+"] = adj_p13
-                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - df_static_base.loc[idx, "55+ GenX+"].values)
-                for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]: df_matrix.loc[idx, c] = df_static_base.loc[idx, c].values * ratio
-
+                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
+                for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
+                    df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
     total_shifted_hours = sum(active_shifts.values())
     if abs(total_shifted_hours) > 0.01:
         non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
@@ -282,20 +281,24 @@ if df_matrix is not None:
         if total_non_shifted_pool > 0.0:
             for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
                 idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-                p13_orig_val = float(df_static_base.loc[idx, "P13+"].values)
-                ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
-                df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
-                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].values))
-                for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]: df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].values) * ratio
-
+                if len(idx) > 0:
+                    p13_orig_val = float(df_static_base.loc[idx, "P13+"].iloc[0])
+                    ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
+                    df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
+                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
+                    for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
+                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
     df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
-    if abs(df_matrix["P13+"].sum() - df_static_base["P13+"].sum()) > 0.1: st.sidebar.warning("Simulated Shift Imbalance Detected")
-    else: st.sidebar.success("Zero-Sum Balance Maintained")
+    if abs(df_matrix["P13+"].sum() - df_static_base["P13+"].sum()) > 0.1:
+        st.sidebar.warning("Simulated Shift Imbalance Detected")
+    else:
+        st.sidebar.success("Zero-Sum Balance Maintained")
 
 f_map = {"Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
+
 with tab1:
     if market_choice == "Global Overview":
         # ----------------================================================================================
