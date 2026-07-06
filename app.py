@@ -70,21 +70,6 @@ DE_BASE = [
     ["WBD", 145.0, 78.0, 67.0, 48.9, 30.8, 12.7],
     ["FACEBOOK", 140.0, 82.0, 58.0, 31.9, 11.8, 2.2]
 ]
-ES_BASE = [
-    ["RTVE", 395.0, 295.0, 100.0, 77.0, 55.4, 35.5],
-    ["ATRESMEDIA", 380.0, 235.0, 145.0, 108.8, 78.3, 39.5],
-    ["YOUTUBE", 365.0, 85.0, 280.0, 196.0, 152.9, 93.3],
-    ["MEDIASET ESPANA", 320.0, 198.0, 122.0, 91.5, 65.9, 33.3],
-    ["TIKTOK", 255.0, 10.0, 245.0, 191.1, 156.7, 114.4],
-    ["NETFLIX", 240.0, 52.0, 188.0, 137.2, 86.5, 44.1],
-    ["OTHER", 215.0, 82.0, 133.0, 90.0, 58.0, 21.0],
-    ["INSTAGRAM", 215.0, 20.0, 195.0, 169.7, 137.5, 75.6],
-    ["MOVISTAR+", 145.0, 82.0, 63.0, 44.1, 26.5, 11.1],
-    ["DISNEY", 115.0, 24.0, 91.0, 69.2, 43.6, 18.0],
-    ["WBD (MAX)", 105.0, 55.0, 50.0, 36.5, 23.0, 9.6],
-    ["AMAZON", 95.0, 28.0, 67.0, 54.9, 34.0, 14.3],
-    ["FACEBOOK", 90.0, 55.0, 35.0, 19.3, 7.1, 1.3]
-]
 UK_BASE = [
     ["BBC", 640.0, 460.0, 180.0, 122.4, 85.7, 45.4],
     ["OTHER", 640.0, 480.0, 160.0, 95.0, 50.0, 15.0],
@@ -100,6 +85,7 @@ UK_BASE = [
     ["FACEBOOK", 210.0, 115.0, 95.0, 52.3, 19.3, 3.7],
     ["AMAZON", 195.0, 62.0, 133.0, 109.1, 67.6, 28.4]
 ]
+
 IT_BASE = [
     ["RAI", 520.0, 415.0, 105.0, 80.9, 58.2, 37.2],
     ["YOUTUBE", 440.0, 110.0, 330.0, 231.0, 180.2, 109.9],
@@ -113,6 +99,21 @@ IT_BASE = [
     ["WBD", 165.0, 92.0, 73.0, 51.1, 31.7, 12.9],
     ["FACEBOOK", 160.0, 101.0, 59.0, 32.5, 12.0, 2.3],
     ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
+]
+ES_BASE = [
+    ["RTVE", 395.0, 295.0, 100.0, 77.0, 55.4, 35.5],
+    ["ATRESMEDIA", 380.0, 235.0, 145.0, 108.8, 78.3, 39.5],
+    ["YOUTUBE", 365.0, 85.0, 280.0, 196.0, 152.9, 93.3],
+    ["MEDIASET ESPANA", 320.0, 198.0, 122.0, 91.5, 65.9, 33.3],
+    ["TIKTOK", 255.0, 10.0, 245.0, 191.1, 156.7, 114.4],
+    ["NETFLIX", 240.0, 52.0, 188.0, 137.2, 86.5, 44.1],
+    ["OTHER", 215.0, 82.0, 133.0, 90.0, 58.0, 21.0],
+    ["INSTAGRAM", 215.0, 20.0, 195.0, 169.7, 137.5, 75.6],
+    ["MOVISTAR+", 145.0, 82.0, 63.0, 44.1, 26.5, 11.1],
+    ["DISNEY", 115.0, 24.0, 91.0, 69.2, 43.6, 18.0],
+    ["WBD (MAX)", 105.0, 55.0, 50.0, 36.5, 23.0, 9.6],
+    ["AMAZON", 95.0, 28.0, 67.0, 54.9, 34.0, 14.3],
+    ["FACEBOOK", 90.0, 55.0, 35.0, 19.3, 7.1, 1.3]
 ]
 
 MX_BASE = [
@@ -128,6 +129,7 @@ MX_BASE = [
     ["WBD", 195.0, 42.0, 153.0, 113.2, 72.4, 33.3],
     ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
 ]
+
 BR_BASE = [
     ["GRUPO GLOBO", 2210.0, 1015.0, 1195.0, 920.2, 680.9, 354.1],
     ["YOUTUBE", 1980.0, 260.0, 1720.0, 1221.2, 976.9, 625.2],
@@ -146,8 +148,7 @@ BR_BASE = [
 
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
-    with open("planet_bullet.png", "rb") as b_f:
-        bullet_base64 = base64.b64encode(b_f.read()).decode()
+    with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
 st.html("""
     <style>
     span[data-testid='stWidgetLabel'] p, button[data-testid='stBaseButton-secondary'] p, [data-baseweb='tab'] p {
@@ -175,15 +176,14 @@ st.sidebar.markdown(
 )
 logo_base64 = ""
 if os.path.exists("eshap_map.png"):
-    with open("eshap_map.png", "rb") as img_f:
-        logo_base64 = base64.b64encode(img_f.read()).decode()
+    with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
 if logo_base64:
     st.sidebar.html("""
         <style>
         div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><a href="https://eshap.substack.com/" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
+        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
@@ -215,8 +215,15 @@ st.html("""
     """)
 
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
-st.markdown("<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; font-style: normal;'>The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer</p>", unsafe_allow_html=True)
-st.markdown("For full analysis: **[Media War & Peace](https://eshap.substack.com/)**")
+
+st.markdown(
+    "<p class='eshap-subhead-text' style='font-size: 0.9rem; font-weight: bold; margin-top: -1rem; margin-bottom: 0.5rem; font-style: normal;'>"
+    "The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer"
+    "</p>", 
+    unsafe_allow_html=True
+)
+
+st.markdown("For full analysis: **[Media War & Peace](https://substack.com)**")
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
@@ -240,6 +247,23 @@ elif market_choice == "Spain": df_matrix = pd.DataFrame(ES_BASE, columns=cols)
 elif market_choice == "Brazil": df_matrix = pd.DataFrame(BR_BASE, columns=cols)
 else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
 if df_matrix is not None:
+    if merge_meta:
+        meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+        non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
+        if not meta_rows.empty:
+            summed_vals = meta_rows[cols[1:]].sum().tolist()
+            df_matrix = pd.concat([non_meta_df, pd.DataFrame([["META"] + summed_vals], columns=cols)], ignore_index=True).sort_values(by="P13+", ascending=False).reset_index(drop=True)
+
+    df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
+    df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
+        "TELEVISAUNIVISION": "TVSA/UNI", "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
+        "MEDIASET ESPANA": "MEDIASET ES", "MFE (MEDIASET)": "MFE", "GROUPO RECORD": "GROUPO RECORD"
+    })
+    df_static_base = df_matrix.copy()
+
+    st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
+    st.sidebar.markdown("<h2 style='color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.5rem;'>MILLIONS OF HOURS</h2>", unsafe_allow_html=True)
+if df_matrix is not None:
     user_shifts = {}
     for entity in df_matrix["Platform/Publisher"].unique():
         user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", -200.0, 200.0, 0.0, 5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
@@ -250,9 +274,7 @@ if df_matrix is not None:
 
     st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
 else:
-    # Safely instantiates the empty variable dictionary on the Global page with no sidebar notice container
     user_shifts = {}
-
 if df_matrix is not None:
     active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
     if active_shifts:
@@ -266,6 +288,7 @@ if df_matrix is not None:
                 df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
                 for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
                     df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
+
     total_shifted_hours = sum(active_shifts.values())
     if abs(total_shifted_hours) > 0.01:
         non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
@@ -280,6 +303,7 @@ if df_matrix is not None:
                     df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
                     for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
                         df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
+
     df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 
 # Global Selector Flag Shield: Positioned flush left outside of all loops to eradicate NameErrors entirely
@@ -292,12 +316,11 @@ flag_icon = {
 # Flat Single-Line Initializer: Enforces zero leading spaces to make indentation crashes physically impossible
 tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
 tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
-
 with tab1:
     if market_choice == "Global Overview":
         # ----------------================================================================================
         # HIGH-LEVEL GLOBAL OVERVIEW CANVAS MODE: Continuous Narrative Sequence Architecture
-        # --------------------------------================================================================
+        # --------------------------------------------------------------------------------================
         st.subheader("THE GLOBAL INDEX")
         st.markdown(
             "What happens when we drop the pretense that TV is premium and social video is not? "
@@ -413,7 +436,7 @@ with tab1:
         )
         st.markdown(
             "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
-            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://eshap.substack.com/), "
+            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://substack.com), "
             "with deep analysis of the data and the trends, right here on Substack."
         )
         st.markdown(
@@ -436,7 +459,6 @@ with tab1:
             unsafe_allow_html=True
         )
     else:
-        # Single Chart Architecture: No duplicates, nested cleanly inside the conditional execution branch
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
@@ -478,6 +500,7 @@ with tab2:
     st.markdown("For years, the measurement establishment has relied on a self-serving mythology called \"premium attention quality\" to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"low-tier digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
     st.markdown("When other industry signposts try to offer insight into this cross-screen crisis, they show up with a mallet rather than a magnifying glass. They aggregate soft consumer diaries, build clunky additive charts where the human daily clock magically stretches past 24 hours, or offer micro-level campaign widgets that count how many seconds an ad was technically \"on screen.\" They are handing you a shovel to look at individual twigs while your entire forest is burning to the ground.")
+
     st.markdown(
         "<div style='text-align: center; line-height: 1.1; margin-top: 1rem; margin-bottom: 1.5rem;'>\n"
         "<p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>TO BE CLEAR:</p>\n"
@@ -490,6 +513,7 @@ with tab2:
     st.markdown("The data is also clear: Since COVID and the arrival of TikTok, the phone has replaced the television as the center of video gravity. 60% of the world's video attention is now on mobile phones. If you are a media company and you are investing 100% of your budget on tv sets, you are mapping your course to irrelevancy and/or bankruptcy.")
     st.markdown("So much of our measurement investment is spent on measuring television viewing - even when the TV is not being watched!")
     st.markdown("As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that ONLY captures 40% of video consumption. That's not just bad business; it's a suicide mission.")
+
     if os.path.exists("eshap_us_devices.png"): 
         st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem", use_container_width=True)
     else: 
@@ -499,6 +523,7 @@ with tab2:
     st.markdown("The ESHAP Cross-Screen Attention Index (ESCAI) introduces a completely new analytical paradigm to capture this shift. We didn't build a local programmatic tool to place an individual ad spot next Tuesday. To look at this index and ask how to execute a DSP trade is to confuse a compass with a shovel.")
     st.markdown("This scale is a macroeconomic strategy engine engineered for the C-suite to audit structural enterprise risk and investment. If your brand is allocating 60% of its capital to traditional glass viewing while our closed census time budget proves your active workforce demographic has permanently migrated its conscious time to a personal screen, that is an organizational asset failure.")
     st.markdown("ESCAI enforces the absolute laws of human physics. Human time is a non-elastic, zero-sum commodity—a closed market sponge. Every single hour gained by an algorithm is an hour permanently destroyed for a broadcast tower.")
+
     st.markdown("### THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
     st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening—a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France).")
     st.markdown("The model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
@@ -513,3 +538,45 @@ with tab2:
     st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
     st.markdown("Thanks for your attention!")
     st.markdown("**ESHAP**")
+with tab3:
+    st.subheader("ECSAI Frequently Asked Questions (FAQs)")
+    st.markdown("#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
+    if os.path.exists("ecsai_flow.png"): 
+        st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
+    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
+    st.write("---")
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>ESHAP</p>", unsafe_allow_html=True)
+
+with tab4:
+    sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
+    is_global_view = (market_choice == "Global Overview")
+    token_dict = {
+        "United States": "us", "France": "fr", "United Kingdom": "uk", 
+        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
+    }
+    f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
+    
+    with sub_method:
+        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({flag_icon} {market_choice.upper()})")
+        if not is_global_view:
+            w_dict = {
+                "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
+                "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
+                "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
+            }
+            w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
+            st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
+        
+        if os.path.exists(f"methodology_{f_token}.txt"):
+            with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: 
+                st.write(m_f.read())
+        else: 
+            st.info(f"{market_choice} methodology text loading...")
+            
+    with sub_source:
+        st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
+        if os.path.exists(f"sources_{f_token}.txt"):
+            with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: 
+                st.write(s_f.read())
+        else: 
+            st.info(f"{market_choice} sourcing data loading...")
