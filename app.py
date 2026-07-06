@@ -307,17 +307,15 @@ flag_icon = {
     "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"
 }.get(market_choice, "🇺🇸")
 
-# Flat Single-Line Initializer: Declares the global layout container variables before they are called
+# Flat Single-Line Initializer: Enforces zero leading spaces to make indentation crashes physically impossible
 tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
 tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
-
 with tab1:
     if market_choice == "Global Overview":
         # ----------------================================================================================
-        # HIGH-LEVEL GLOBAL INDEX CANVAS MODE: Continuous Narrative Sequence Architecture
+        # HIGH-LEVEL GLOBAL OVERVIEW CANVAS MODE: Continuous Narrative Sequence Architecture
         # --------------------------------================================================================
         st.subheader("THE GLOBAL INDEX")
-
         st.markdown(
             "What happens when we drop the pretense that TV is premium and social video is not? "
             "What becomes of the mainstream mindset when we take down the silo walls and measure Media "
@@ -345,7 +343,7 @@ with tab1:
         if os.path.exists("global_index_13-54.png"):
             st.image("global_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13-54 (DEC 2025 - MAY 2026)", use_container_width=True)
         else:
-            st.warning("⚠️ `global_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
+            st.warning("⚠️ `global_index_13-54.png` asset missing from repository folder.")
         st.markdown(
             "##### **Of all the data in this report, the most crucial datapoint is this: 82% of the world population — 73% of the people in these eight regions — are now under 54.**"
         )
@@ -384,9 +382,78 @@ with tab1:
         if os.path.exists("us_index_13-54.png"):
             st.image("us_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - US MONTHLY TIME: P13-54 (SOURCE: NIELSEN, COMSCORE, GWI, FCC)", use_container_width=True)
         else:
-            st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
+            st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder.")
+        st.markdown(
+            "While Trad Media continues to cling to an aging audience, **in ALL EIGHT MAJOR REGIONS**, even "
+            "where Legacy Media is deeply entrenched in the free Media culture, and protected by local "
+            "regulations, among the 13-54 majority YouTube is the most used platform, by a sizable margin. "
+            "Netflix plays well across all eight regions, but among 13-54 and all the younger demos, especially "
+            "with Millennials, Gen Z, and Gen A, in most of these areas, TikTok outpaces Netflix, and all other comers."
+        )
+        st.markdown(
+            "##### **In fact, as this new data shows for the first time, in many regions — particularly in the US — while YouTube is tops in total attention, TikTok actually beats YouTube among Gen Z and Gen A (consumers 13-34).**"
+        )
+        
+        # Dual Column Layout for Side-by-Side Generation Profiles
+        c1, c2 = st.columns(2)
+        with c1:
+            if os.path.exists("us_index_13-34.png"): st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
+            else: st.warning("⚠️ `us_index_13-34.png` missing.")
+        with c2:
+            if os.path.exists("us_index_13-24.png"): st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
+            else: st.warning("⚠️ `us_index_13-24.png` missing.")
+        st.markdown(
+            "And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring "
+            "all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid "
+            "signposts that tells us “YouTube is #1 on TV!” (with P2+ and without counting phones, laptops, "
+            "or tablets)."
+        )
+        st.markdown(
+            "Traditional currencies track the device canvas; they do not track the human. They count a "
+            "television playing to a room as an absolute, while treating a high-intensity mobile session that "
+            "requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective "
+            "industry blindness. Legacy tracking systems want you to look at media through isolated reach "
+            "silos — treating an open screen in an empty room as equal to an active, single-screen consumer "
+            "focus."
+        )
+        st.markdown(
+            "So much of our Media measurement investment is spent measuring television "
+            "viewing — even when that TV is not being watched. As a result, the Media "
+            "Industrial complex spends a disproportionate amount of time, energy and "
+            "resources fighting over control of a screen that *only captures 40% of video "
+            "consumption*. That's not just bad business; it's a suicide mission."
+        )
+        st.markdown(
+            "The Index is designed to prevent that — designed to show, specifically, where the entirety of "
+            "consumer attention is actually being paid, so that Media professionals can invest in content, "
+            "advertising, overhead, and infrastructure, accordingly."
+        )
+        st.markdown(
+            "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
+            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://substack.com), "
+            "with deep analysis of the data and the trends, right here on Substack."
+        )
+        st.markdown(
+            "This is different from other measurement offerings, which provide small, irrelevant glimpses of "
+            "data for free, then charge clients millions to fund it, while keeping the vast majority of us who "
+            "work in Media in the dark. This incentivizes the measurement industrial complex to keep our "
+            "data in silos, dividing and double-counting consumer attention."
+        )
+        st.markdown(
+            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
+            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
+            "endeavor yet. It's a mountain of data and it tells a remarkable story about the future of Media "
+            "based on the actual needs of real consumers. We will keep following the data where it leads us."
+        )
+        st.markdown(
+            "<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
+            "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
+            "font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!"
+            "<br><br>ESHAP</p>", 
+            unsafe_allow_html=True
+        )
     else:
-        # Fixed Local Layout: Aligned cleanly to sit perfectly inside the master tab1 scope
+        # Single Chart Architecture: No duplicates, nested cleanly inside the conditional execution branch
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
@@ -399,8 +466,7 @@ with tab1:
         chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
-
-        st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
+            
         st.write("---")
         st.markdown("#### Cross Screen Attention Ledger")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
