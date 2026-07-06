@@ -512,11 +512,10 @@ with tab1:
             "based on the actual needs of real consumers. We will keep following the data where it leads us."
         )
         st.markdown(
-            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
-            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
-            "endeavor yet. It's a mountain of data and it tells a remarkable story about the future of Media "
-            "based on the actual needs of real consumers. We will keep following the data where it leads us."
-        )
+        # Self-Contained Flag Engine: Safe inline icon mapping that eliminates external NameErrors entirely
+        flag_icon = {"Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}.get(market_choice, "🇺🇸")
+        st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
+
         st.markdown(
             "<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
             "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
