@@ -183,7 +183,7 @@ if logo_base64:
         div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
+        <div class="sidebar-logo-container"><a href="https://eshap.substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
@@ -223,7 +223,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("For full analysis: **[Media War & Peace](https://substack.com)**")
+st.markdown("For full analysis: **[Media War & Peace](https://eshap.substack.com)**")
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
@@ -436,7 +436,7 @@ with tab1:
         )
         st.markdown(
             "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
-            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://substack.com), "
+            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://eshap.substack.com), "
             "with deep analysis of the data and the trends, right here on Substack."
         )
         st.markdown(
@@ -534,7 +534,7 @@ with tab2:
     st.markdown("Perhaps the most important point for our industry: We didn't invent new numbers, and we didn't hide our math inside a proprietary black box. Every data point used to build this scale sits legitimately out in the open public domain, scattered across public broadcaster annual disclosures, investor relations filings, and sovereign regulatory white papers. Anyone could theoretically download these records and combine them to see the true division of human time for which they are competing. Until now, however, no one has.")
     st.markdown("Why? Because our industry incentivizes legacy silos. Because, among the most traditional of media and measurement experts, there is widespread fear of finding out how our consumers are actually spending their time and which half of their budgets are being wasted. The current system of content distribution and measurement is built by and for those who profit directly from it, whether or not it actually works.")
     st.markdown("We have built what we believe is the ultimate \"Attention Model,\" the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
-    st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://substack.com)**.")
+    st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://eshap.substack.com)**.")
     st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
     st.markdown("Thanks for your attention!")
     st.markdown("**ESHAP**")
