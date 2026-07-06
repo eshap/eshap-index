@@ -310,6 +310,12 @@ if df_matrix is not None:
 
 # Master Dashboard Container Tab Initializer Framework
 tab1, tab2, tab3, tab4 = st.tabs([
+"CSAI Interactive Index Matrix", 
+"Why ECSAI?", 
+"ECSAI FAQs", 
+"Index Architecture & Methodology"
+])
+
     "CSAI Interactive Index Matrix", 
     "Why ECSAI?", 
     "ECSAI FAQs", 
