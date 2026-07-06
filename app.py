@@ -451,7 +451,6 @@ with tab1:
             "<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
             "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
             "font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!"
-            "<br><br>Cheers!<br><br>ESHAP</p>", 
             unsafe_allow_html=True
         )
 
