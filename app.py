@@ -275,14 +275,13 @@ if df_matrix is not None:
         for entity, shift_val in active_shifts.items():
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
             if len(idx) > 0:
-                p13_orig = float(df_static_base.loc[idx, "P13+"].iloc)
+                p13_orig = float(df_static_base.loc[idx, "P13+"].iloc[0])
                 adj_p13 = max(0.0, p13_orig + shift_val)
                 ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
                 df_matrix.loc[idx, "P13+"] = adj_p13
-                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc))
+                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
                 for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                    df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc) * ratio
-
+                    df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
     total_shifted_hours = sum(active_shifts.values())
     if abs(total_shifted_hours) > 0.01:
         non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
@@ -291,13 +290,12 @@ if df_matrix is not None:
             for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
                 idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
                 if len(idx) > 0:
-                    p13_orig_val = float(df_static_base.loc[idx, "P13+"].iloc)
+                    p13_orig_val = float(df_static_base.loc[idx, "P13+"].iloc[0])
                     ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
                     df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
-                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc))
+                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
                     for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc) * ratio
-
+                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
     df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 
 # Global Selector Flag Shield: Positioned flush left outside of all loops to eradicate NameErrors entirely
@@ -310,6 +308,7 @@ flag_icon = {
 # Flat Single-Line Initializer: Enforces zero leading spaces to make indentation crashes physically impossible
 tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
 tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
+
 with tab1:
     if market_choice == "Global Overview":
         # ----------------================================================================================
