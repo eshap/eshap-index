@@ -4,6 +4,7 @@ import base64, os, io
 
 CORE_TOKENS = ["us", "fr", "uk", "it", "de", "sp", "br", "mx"]
 
+# Instant Memory Cache Bootstrapper: Reads the filesystem once and retains data permanently in RAM
 if "text_memory_cache" not in st.session_state:
     st.session_state.text_memory_cache = {}
     for token in CORE_TOKENS:
@@ -113,6 +114,7 @@ IT_BASE = [
     ["FACEBOOK", 160.0, 101.0, 59.0, 32.5, 12.0, 2.3],
     ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
 ]
+
 MX_BASE = [
     ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
     ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
@@ -126,7 +128,6 @@ MX_BASE = [
     ["WBD", 195.0, 42.0, 153.0, 113.2, 72.4, 33.3],
     ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
 ]
-
 BR_BASE = [
     ["GRUPO GLOBO", 2210.0, 1015.0, 1195.0, 920.2, 680.9, 354.1],
     ["YOUTUBE", 1980.0, 260.0, 1720.0, 1221.2, 976.9, 625.2],
@@ -145,7 +146,8 @@ BR_BASE = [
 
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
-    with open("planet_bullet.png", "rb") as b_f: bullet_base64 = base64.b64encode(b_f.read()).decode()
+    with open("planet_bullet.png", "rb") as b_f:
+        bullet_base64 = base64.b64encode(b_f.read()).decode()
 st.html("""
     <style>
     span[data-testid='stWidgetLabel'] p, button[data-testid='stBaseButton-secondary'] p, [data-baseweb='tab'] p {
@@ -155,15 +157,26 @@ st.html("""
         content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat;
         background-image: url('data:image/png;base64,{bullet_base64}') !important;
     }}""" if bullet_base64 else "") + """
-    div[data-testid="stDataFrame"] { width: 100% !important; overflow-x: auto !important; }
-    div[data-testid="stDataFrame"] data-grid { min-width: 820px !important; }
+    div[data-testid="stDataFrame"] {
+        width: 100% !important;
+        overflow-x: auto !important;
+    }
+    div[data-testid="stDataFrame"] data-grid {
+        min-width: 820px !important;
+    }
     </style>
     """)
 
-st.sidebar.markdown("<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'>ECSAI: pronounced EE-say</p>", unsafe_allow_html=True)
+st.sidebar.markdown(
+    "<p style='font-size: 0.82rem; font-weight: normal; font-style: normal; color: #dddddd; margin-bottom: 0.75rem; text-align: center; letter-spacing: 0.05em;'> "
+    "ECSAI: pronounced EE-say"
+    "</p>", 
+    unsafe_allow_html=True
+)
 logo_base64 = ""
 if os.path.exists("eshap_map.png"):
-    with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
+    with open("eshap_map.png", "rb") as img_f:
+        logo_base64 = base64.b64encode(img_f.read()).decode()
 if logo_base64:
     st.sidebar.html("""
         <style>
@@ -243,7 +256,7 @@ if df_matrix is not None:
 
     st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
     st.sidebar.markdown("<h2 style='color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.5rem;'>MILLIONS OF HOURS</h2>", unsafe_allow_html=True)
-if df_matrix is not None:
+    
     user_shifts = {}
     for entity in df_matrix["Platform/Publisher"].unique():
         user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", -200.0, 200.0, 0.0, 5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
@@ -261,7 +274,48 @@ if df_matrix is not None:
     if active_shifts:
         for entity, shift_val in active_shifts.items():
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            
+            if len(idx) > 0:
+                p13_orig = float(df_static_base.loc[idx, "P13+"].iloc)
+                adj_p13 = max(0.0, p13_orig + shift_val)
+                ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
+                df_matrix.loc[idx, "P13+"] = adj_p13
+                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc))
+                for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
+                    df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc) * ratio
+
+    total_shifted_hours = sum(active_shifts.values())
+    if abs(total_shifted_hours) > 0.01:
+        non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
+        total_non_shifted_pool = float(df_static_base[non_shifted_mask]["P13+"].sum())
+        if total_non_shifted_pool > 0.0:
+            for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
+                idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
+                if len(idx) > 0:
+                    p13_orig_val = float(df_static_base.loc[idx, "P13+"].iloc)
+                    ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
+                    df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
+                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc))
+                    for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
+                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc) * ratio
+
+    df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
+
+tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
+tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
+with tab1:
+    if market_choice == "Global Overview":
+        st.subheader("THE GLOBAL INDEX")
+        st.markdown(
+            "What happens when we drop the pretense that TV is premium and social video is not? "
+            "What becomes of the mainstream mindset when we take down the silo walls and measure Media "
+            "consumption not BY device, but rather ACROSS devices? Turns out, a lot. Which is why we "
+            "embarked on this mission to measure it all, side-by-side."
+        )
+        
+        if os.path.exists("global_index_13+.png"):
+            st.image("global_index_13+.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13+ (DEC 2025 - MAY 2026)", use_container_width=True)
+        else:
+            st.warning("⚠️ `global_index_13+.png` asset missing from repository folder.")
         st.markdown("Look at this chart.")
         st.markdown(
             "You can see the share of consumer attention, spread across all eight regions in The Index, for all "
@@ -318,79 +372,6 @@ if df_matrix is not None:
             st.image("us_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - US MONTHLY TIME: P13-54 (SOURCE: NIELSEN, COMSCORE, GWI, FCC)", use_container_width=True)
         else:
             st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder. Verify file location boundaries.")
-        st.markdown(
-            "While Trad Media continues to cling to an aging audience, **in ALL EIGHT MAJOR REGIONS**, even "
-            "where Legacy Media is deeply entrenched in the free Media culture, and protected by local "
-            "regulations, among the 13-54 majority YouTube is the most used platform, by a sizable margin. "
-            "Netflix plays well across all eight regions, but among 13-54 and all the younger demos, especially "
-            "with Millennials, Gen Z, and Gen A, in most of these areas, TikTok outpaces Netflix, and all other comers."
-        )
-        st.markdown(
-            "##### **In fact, as this new data shows for the first time, in many regions — particularly in the US — while YouTube is tops in total attention, TikTok actually beats YouTube among Gen Z and Gen A (consumers 13-34).**"
-        )
-        
-        # Dual Column Layout for Side-by-Side Generation Profiles
-        c1, c2 = st.columns(2)
-        with c1:
-            if os.path.exists("us_index_13-34.png"): 
-                st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
-            else: 
-                st.warning("⚠️ `us_index_13-34.png` missing.")
-        with c2:
-            if os.path.exists("us_index_13-24.png"): 
-                st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
-            else: 
-                st.warning("⚠️ `us_index_13-24.png` missing.")
-        st.markdown(
-            "And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring "
-            "all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid "
-            "signposts that tells us “YouTube is #1 on TV!” (with P2+ and without counting phones, laptops, "
-            "or tablets)."
-        )
-        st.markdown(
-            "Traditional currencies track the device canvas; they do not track the human. They count a "
-            "television playing to a room as an absolute, while treating a high-intensity mobile session that "
-            "requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective "
-            "industry blindness. Legacy tracking systems want you to look at media through isolated reach "
-            "silos — treating an open screen in an empty room as equal to an active, single-screen consumer "
-            "focus."
-        )
-        st.markdown(
-            "So much of our Media measurement investment is spent measuring television "
-            "viewing — even when that TV is not being watched. As a result, the Media "
-            "Industrial complex spends a disproportionate amount of time, energy and "
-            "resources fighting over control of a screen that *only captures 40% of video "
-            "consumption*. That's not just bad business; it's a suicide mission."
-        )
-        st.markdown(
-            "The Index is designed to prevent that — designed to show, specifically, where the entirety of "
-            "consumer attention is actually being paid, so that Media professionals can invest in content, "
-            "advertising, overhead, and infrastructure, accordingly."
-        )
-        st.markdown(
-            "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
-            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://substack.com), "
-            "with deep analysis of the data and the trends, right here on Substack."
-        )
-        st.markdown(
-            "This is different from other measurement offerings, which provide small, irrelevant glimpses of "
-            "data for free, then charge clients millions to fund it, while keeping the vast majority of us who "
-            "work in Media in the dark. This incentivizes the measurement industrial complex to keep our "
-            "data in silos, dividing and double-counting consumer attention."
-        )
-        st.markdown(
-            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
-            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
-            "endeavor yet. It's a mountain of data and it tells a remarkable story about the future of Media "
-            "based on the actual needs of real consumers. We will keep following the data where it leads us."
-        )
-        st.markdown(
-            "<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
-            "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
-            "font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!"
-            "<br><br>ESHAP</p>", 
-            unsafe_allow_html=True
-        )
     else:
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
@@ -404,7 +385,6 @@ if df_matrix is not None:
         chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
-            
         st.write("---")
         st.markdown("#### Cross Screen Attention Ledger")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
