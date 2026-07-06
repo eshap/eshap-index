@@ -540,13 +540,154 @@ with tab2:
     st.markdown("**ESHAP**")
 with tab3:
     st.subheader("ECSAI Frequently Asked Questions (FAQs)")
-    st.markdown("#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
+    
+    st.markdown(
+        "#### Q: HOW DID WE CHOOSE THE VARIOUS COMBINATION OF SOURCES FOR THE INDEX ACROSS THE REGIONS?"
+    )
+    st.markdown(
+        "To establish an unassailable cross-border baseline, data sources for each country were selected based "
+        "on three strict criteria: sovereign regulatory authority, parent corporate transparency, and audited "
+        "single-screen telemetry. Rather than relying on soft consumer opinion surveys, the index exclusively "
+        "ingests data from official state census registries (such as INSEE, Destatis, and the ONS) for macro "
+        "population controls, alongside published annual disclosures from public service broadcasters and quarterly "
+        "investor relations filings from publicly traded tech titans. To bridge the traditional glass and mobile "
+        "screen gap, these baselines are matched against the hardware-level device telemetry of globally "
+        "recognized digital tracking firms and local regulatory media white papers. This ensures that every "
+        "source component sits legitimately in the open public domain, provides absolute consistency in tracking "
+        "parent corporate holding structures, and natively supports the normalization of disparate metrics "
+        "into absolute hours of focused human attention."
+    )
+    
+    st.markdown(
+        "#### Q: THE INDEX LISTS ENTERPRISE SUBSCRIPTION SYSTEMS LIKE SENSOR TOWER AND COMSCORE MOBILE METRIX—HOW IS THIS DATA LEGITIMATELY ACCESSED AND DEPLOYED WITHOUT A PAYWALL SUBSCRIPTION?"
+    )
+    st.markdown(
+        "To be entirely clear: ESHAP does not maintain an enterprise terminal contract with Comscore or Sensor "
+        "Tower, and our open-source methodology explicitly rejects data hidden behind corporate paywalls. Instead, "
+        "we utilize a reverse-engineering loop built on public-domain telemetry disclosures. Sensor Tower, "
+        "data.ai, and Comscore Mobile Metrix frequently release exhaustive public data sets, white papers, market "
+        "intelligence briefs, regulatory antitrust filings, and quarterly macroeconomic charts. Furthermore, "
+        "public regulatory audits from sovereign media bodies natively ingest and list these exact hardware-level "
+        "application session counts and time-spent parameters within their free, open-source documentation. "
+        "ECSAI intercepts these distributed public reports, extracts the specific country-level application session "
+        "lengths and active monthly user metrics, and applies a localized territory footprint weight. We are "
+        "not paying for proprietary access to their systems; we are systematically doing the architectural "
+        "work of gathering, normalizing, and blending their publicly disclosed secondary datasets into a "
+        "unified human daily clock."
+    )
+    st.markdown(
+        "#### Q: HOW DO YOU BLEND THE VARIOUS INPUTS - GLASS DATA, CENSUS, DIARIES - INTO ONE SMOOTH INDEX FOR EACH COUNTRY, CUTTING ACROSS DEMOS BASED ONLY ON PUBLICLY AVAILABLE DATA?"
+    )
+    st.markdown(
+        "To blend these completely disparate public inputs into a single, seamless cross-screen index for each "
+        "territory, our model runs a three-step mathematical normalization loop that forces apples-and-oranges "
+        "data into a strict, logic-enforced daily time budget. Because we use free, un-siloed data scattered "
+        "across corporate and government reports, our system treats each country as a closed market sponge where "
+        "total population and total available hours are hard constants."
+    )
+    st.markdown(
+        "Here is the exact step-by-step math mechanics of how the index blends glass data, census records, "
+        "and consumer diaries into a single smooth number for each demographic cohort:"
+    )
+    st.markdown(
+        "**• Census Denominator Lock (The Total Volume Ceiling)**<br>"
+        "The entire model is anchored on the local state census registry (such as INSEE, Destatis, ISTAT, or the "
+        "U.S. Census Bureau). The index takes the total population headcount for the territory, filters for "
+        "the P13+ universe. It then establishes a Total Available Awake Hours Budget per month (assuming a "
+        "standardized 16-hour active day). This number is our absolute ceiling. It represents the total size "
+        "of the market sponge. No matter how many apps or TV channels claim massive usage, the combined monthly "
+        "hours in our index can never exceed this hard, census-backed population budget.", 
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "**• Normalizing Metrics into 'Absolute Attention Hours'**<br>"
+        "Next, our model takes the fragmented public data points and converts them into a singular currency: "
+        "Millions of Absolute Attention Hours per Month. Blending the Glass and Feed Data: Traditional linear "
+        "TV currencies (like Médiamétrie or BARB) publish reach and 'Time Spent Viewing' (TSV) per day. "
+        "The model takes the average daily TSV for a specific cohort, multiplies it by the demographic population "
+        "weight from the census, and scales it to 30 days to find total linear hours. Big Tech investor filings "
+        "and regulatory white papers present usage in 'Daily Active Users' (DAUs) or 'Monthly Active Users' "
+        "(MAUs) paired with global or regional average session lengths. The model intercepts these ratios, "
+        "applies the local territory footprint weight, and multiplies active users by daily active minutes to "
+        "extract total digital hours. We take the stated number of users per digital platforms, apportion "
+        "them by region/populations, then using diaries, surveys, public reports, and other regional research "
+        "data, the model assigns pro rata usage hours per day in those regions.", 
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION"
+    )
     if os.path.exists("ecsai_flow.png"): 
         st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
-    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
+    else:
+        st.info("💡 *[Placeholder for ecsai_flow.png: Baseline Ingestion, Squeeze Dynamics, and Closed Capacity Ceiling Workflow Layout]*")
+        
+    st.markdown(
+        "This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added "
+        "the television hours to the digital hours, the market sponge would explode past the census ceiling "
+        "due to concurrent multi-screening—a consumer scrolling on TikTok while the television plays a broadcast "
+        "in the background. Our index model applies localized duplication coefficients derived from GWI "
+        "Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort "
+        "that multi-screens daily (e.g., 77% of Gen Z in France)."
+    )
+    st.markdown(
+        "The model uses this percentage to calculate a duplication discount factor. It treats human attention "
+        "as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time "
+        "is physically subtracted from the traditional television glass volume. The digital hours (which require "
+        "active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The "
+        "background television glass hours are programmatically squeezed down until the entire multi-screen "
+        "overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary "
+        "reason background audio is not covered in this index."
+    )
+    st.markdown(
+        "#### Q: DOESN'T BLENDING 'SOFT' SURVEY RECALL WITH 'HARD' DEVICE TELEMETRY CORRUPT THE DATA FOUNDATION?"
+    )
+    st.markdown(
+        "The index operates on a strict Separation of Powers. We use a Sovereign Boundary Model where the hard "
+        "quantitative ceilings are locked down entirely by currency-grade, hard telemetry logs (Nielsen, "
+        "BARB, Médiamétrie, Comscore). The index does not ask consumers how many hours they watched; it uses "
+        "hard regulatory telemetry to establish total volume. Behavioral data from GWI Consumer Diaries is "
+        "introduced strictly as a coefficient matrix to calculate the mathematical overlap when two devices "
+        "are running in the same room. We use behavioral data solely to map the friction points where those "
+        "macro volumes intersect. Legacy currencies rely on passive boxes in empty rooms, counting a television "
+        "playing to an empty sofa as a hit. We use behavioral data to verify human presence and device "
+        "co-activity, injecting human reality back into blind hardware metrics."
+    )
+    st.markdown(
+        "#### Q: ISN'T IT AN 'EQUIVALENCY FALLACY' TO TREAT A SMALL MOBILE SCREEN THE SAME AS A 75-INCH LIVING ROOM TV?"
+    )
+    st.markdown(
+        "The legacy definition of \"premium attention\" is a self-serving myth designed to protect high television "
+        "CPMs. Screen size does not equal cognitive impact. A living room television screen frequently functions "
+        "as ambient, household background noise. Conversely, a smartphone screen requires active physical "
+        "interaction-holding, scrolling, unmuting-to maintain the media stream. This index does not flatten "
+        "attention; it democratizes conscious eye-hours. Our Attention Index (ECSAI, pronounced EE-say) strips "
+        "away the unearned premium of the living room glass, exposing how mobile feeds capture high-intensity, "
+        "active physical engagement while traditional TVs increasingly serve as expensive domestic wallpaper. "
+        "If the eye is on the phone screen, that fraction of time is physically subtracted from the television "
+        "volume, regardless of how large the TV glass is."
+    )
+    st.markdown(
+        "#### Q: IF A MEDIA BUYER CANNOT USE THIS HIGH-LEVEL DASHBOARD TO EXECUTE AN AD PLACEMENT ON A DSP, ISN'T THE DATA TOO COARSE FOR REAL-WORLD BUYING?"
+    )
+    st.markdown(
+        "To criticize ECSAI for not executing programmatic ad trades is to mistake a compass for a shovel. This "
+        "app is a macroeconomic strategy engine, not a trading desk. It is built specifically for the C-suite "
+        "and Chief Marketing Officers to audit structural enterprise asset risk. Media buyers measure individual "
+        "twigs; CEOs use this index to see that their entire forest is on fire. If your enterprise allocates "
+        "60% of its budget to a legacy channel that commands only 15% of your target workforce demographic's "
+        "finite daily time budget, that is an enterprise failure. This scale is built to align "
+        "multi-million-dollar corporate capital allocations with human reality, not to execute a local "
+        "programmatic trade."
+    )
     st.write("---")
-    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>ESHAP</p>", unsafe_allow_html=True)
-
+    st.markdown(
+        "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
+        "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
+        "font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!"
+        "<br><br>ESHAP</p>", 
+        unsafe_allow_html=True
+    )
 with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     is_global_view = (market_choice == "Global Overview")
