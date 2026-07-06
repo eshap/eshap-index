@@ -403,6 +403,20 @@ with tab1:
             "industry blindness. Legacy tracking systems want you to look at media through isolated reach "
             "silos — treating an open screen in an empty room as equal to an active, single-screen consumer "
             "focus."
+        )        # Indentation-Fixed Narrative Canvas Tail: Shifted inward by 8 spaces to lock it inside the Global Index loop
+        st.markdown(
+            "And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring "
+            "all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid "
+            "signposts that tells us “YouTube is #1 on TV!” (with P2+ and without counting phones, laptops, "
+            "or tablets)."
+        )
+        st.markdown(
+            "Traditional currencies track the device canvas; they do not track the human. They count a "
+            "television playing to a room as an absolute, while treating a high-intensity mobile session that "
+            "requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective "
+            "industry blindness. Legacy tracking systems want you to look at media through isolated reach "
+            "silos — treating an open screen in an empty room as equal to an active, single-screen consumer "
+            "focus."
         )
         st.markdown(
             "So much of our Media measurement investment is spent measuring television "
@@ -418,7 +432,7 @@ with tab1:
         )
         st.markdown(
             "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
-            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://eshap.substack.com/), "
+            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://substack.com), "
             "with deep analysis of the data and the trends, right here on Substack."
         )
         st.markdown(
@@ -427,6 +441,20 @@ with tab1:
             "work in Media in the dark. This incentivizes the measurement industrial complex to keep our "
             "data in silos, dividing and double-counting consumer attention."
         )
+        st.markdown(
+            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
+            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
+            "痕跡 yet. It's a mountain of data and it tells a remarkable story about the future of Media "
+            "based on the actual needs of real consumers. We will keep following the data where it leads us."
+        )
+        st.markdown(
+            "<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
+            "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
+            "font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!"
+            "<br><br>Cheers!<br><br>ESHAP</p>", 
+            unsafe_allow_html=True
+        )
+
     else:
         # ----------------================================================================================
         # STANDARD LOCAL TERRITORY ENGINE INTERFACE: Renders charts and slider grids natively
