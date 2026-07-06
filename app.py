@@ -196,6 +196,18 @@ st.html("""
     section[data-testid="stSidebar"] div, div[data-testid="stWidgetLabel"] > label p { color: #ffffff !important; }
     g[class*="role-axis"] text { font-weight: bold !important; font-size: 11px !important; }
     .eshap-subhead-text { color: #FF0000 !important; }
+    
+    /* Universal Button Text Shield: Forces reset labels to remain bold and legible in light/dark transitions */
+    button[data-testid="stBaseButton-secondary"] {
+        color: #111111 !important;
+        background-color: #ffffff !important;
+        border: 1px solid #cccccc !important;
+        font-weight: bold !important;
+    }
+    button[data-testid="stBaseButton-secondary"]:hover {
+        background-color: #eeeeee !important;
+        border-color: #999999 !important;
+    }
     </style>
     """)
 
@@ -208,7 +220,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("For full analysis: **[ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION](https://eshap.substack.com)**")
+st.markdown("For full analysis: **[ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION](https://substack.com)**")
+st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
+
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
