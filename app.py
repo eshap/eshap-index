@@ -215,7 +215,7 @@ def handle_market_switch_callback():
 
 market_choice = st.sidebar.radio(
     "Territory", 
-    ["Global Index Overview", "United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], 
+    ["Global Overview", "United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], 
     key="market_choice_sync",
     on_change=handle_market_switch_callback
 )
@@ -223,7 +223,7 @@ market_choice = st.sidebar.radio(
 cols = ["Platform/Publisher", "P13+", "55+ GenX+", "13-54 Majority", "13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]
 
 # Direct Data Router Matrix
-if market_choice == "Global Index Overview": df_matrix = None
+if market_choice == "Global Overview": df_matrix = None
 elif market_choice == "United States": df_matrix = pd.DataFrame(US_BASE, columns=cols)
 elif market_choice == "France": df_matrix = pd.DataFrame(FR_BASE, columns=cols)
 elif market_choice == "United Kingdom": df_matrix = pd.DataFrame(UK_BASE, columns=cols)
@@ -292,12 +292,12 @@ if df_matrix is not None:
     if abs(df_matrix["P13+"].sum() - df_static_base["P13+"].sum()) > 0.1: st.sidebar.warning("Simulated Shift Imbalance Detected")
     else: st.sidebar.success("Zero-Sum Balance Maintained")
 
-f_map = {"Global Index Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
+f_map = {"Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"}
 active_flag = f_map.get(market_choice, "🇺🇸")
 
 tab1, tab2, tab3, tab4 = st.tabs(["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"])
 with tab1:
-    if market_choice == "Global Index Overview":
+    if market_choice == "Global Overview":
         # ----------------================================================================================
         # HIGH-LEVEL GLOBAL INDEX CANVAS MODE: Continuous Narrative Sequence Architecture
         # --------------------------------================================================================
@@ -516,7 +516,7 @@ with tab3:
 
 with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
-    is_global_view = (market_choice == "Global Index Overview")
+    is_global_view = (market_choice == "Global Overview")
     # Certified Dictionary Mapper Shield: Wipes out the broken dot-explainers syntax error permanently
     token_dict = {
         "United States": "us", "France": "fr", "United Kingdom": "uk", 
