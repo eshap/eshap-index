@@ -183,7 +183,7 @@ if logo_base64:
         div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
+        <div class="sidebar-logo-container"><a href="https://eshap.substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
@@ -208,7 +208,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("For full analysis: **[ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION](https://substack.com)**")
+st.markdown("For full analysis: **[ESHAP MEDIA WAR & PEACE: REPORTING ON THE WAR FOR ATTENTION](https://eshap.substack.com)**")
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
