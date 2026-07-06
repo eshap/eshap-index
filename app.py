@@ -240,23 +240,6 @@ elif market_choice == "Spain": df_matrix = pd.DataFrame(ES_BASE, columns=cols)
 elif market_choice == "Brazil": df_matrix = pd.DataFrame(BR_BASE, columns=cols)
 else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
 if df_matrix is not None:
-    if merge_meta:
-        meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
-        non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
-        if not meta_rows.empty:
-            summed_vals = meta_rows[cols[1:]].sum().tolist()
-            df_matrix = pd.concat([non_meta_df, pd.DataFrame([["META"] + summed_vals], columns=cols)], ignore_index=True).sort_values(by="P13+", ascending=False).reset_index(drop=True)
-
-    df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
-    df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
-        "TELEVISAUNIVISION": "TVSA/UNI", "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
-        "MEDIASET ESPANA": "MEDIASET ES", "MFE (MEDIASET)": "MFE", "GROUPO RECORD": "GROUPO RECORD"
-    })
-    df_static_base = df_matrix.copy()
-
-    st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
-    st.sidebar.markdown("<h2 style='color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.5rem;'>MILLIONS OF HOURS</h2>", unsafe_allow_html=True)
-    
     user_shifts = {}
     for entity in df_matrix["Platform/Publisher"].unique():
         user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", -200.0, 200.0, 0.0, 5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
@@ -267,8 +250,9 @@ if df_matrix is not None:
 
     st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
 else:
-    st.sidebar.info("💡 *Global Overview mode active. Reallocation sliders are hidden for high-level macro baseline analysis.*")
+    # Safely instantiates the empty variable dictionary on the Global page with no sidebar notice container
     user_shifts = {}
+
 if df_matrix is not None:
     active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
     if active_shifts:
@@ -481,64 +465,51 @@ with tab1:
             
         st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 with tab2:
-    st.markdown("<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold; color: #FF0000;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2></div>", unsafe_allow_html=True)
-    st.markdown("And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid signposts that tells us \"YouTube is #1 on TV!\" (with P2+ and without counting phones, laptops, or tablets).")
-    st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos — treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
-    st.markdown("So much of our Media measurement investment is spent measuring television viewing — even when that TV is not being watched. As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that **only captures 40% of video consumption**. That's not just bad business; it's a suicide mission.")
-    st.markdown("The Index is designed to prevent that — designed to show, specifically, where the entirety of consumer attention is actually being paid, so that Media professionals can invest in content, advertising, overhead, and infrastructure, accordingly.")
-    st.markdown("Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six months basis. Simultaneously, we will drop an Index Report, on **[Media War & Peace](https://eshap.substack.com/)**, with deep analysis of the data and the trends, right here on Substack.", unsafe_allow_html=True)
-    st.markdown("This is different from other measurement offerings, which provide small, irrelevant glimpses of data for free, then charge clients millions to fund it, while keeping the vast majority of us who work in Media in the dark. This incentivizes the measurement industrial complex to keep our data in silos, dividing and double-counting consumer attention.")
-    st.markdown("### HERE ARE THE RED HOT TAKES FROM THE FIRST ESCAI REPORT:")
-    st.markdown("* While Local & Global Traditional Media in all eight regions continues to draw attention from local consumers, their businesses have become senior living societies — disproportionately dependent on the minority of their populations over the age of 55.")
-    st.markdown("* For the *majority* of audiences in all eight countries, people 54 and younger, YouTube now dominates our collective attention.")
-    st.markdown("* *However, TikTok is coming on, fast.* In the US and many other regions, TikTok is now #2 with consumers under 55 for total attention paid each month, #1 with consumers under 35, and actively threatening YouTube's attention title with consumers under 45.")
-    st.markdown("* Netflix is strong in many of these regions. Yet, they appear vulnerable to phone set around the world.")
-    st.markdown("* Netflix loses to YouTube in every region. More urgently, they are now behind TikTok for total cross-screen attention with consumers 13-54 in the US, the UK, Brazil, Mexico, Germany, France, Italy, and Spain.")
-    st.markdown("* For audiences 13-44 Netflix loses the battle for attention to Instagram in five of the eight regions: Brazil, Mexico, Spain, Italy, and the United States.")
-    st.markdown("* When we collapse Facebook and Instagram into a de-duplicated META metric, Meta sweeps Netflix in all eight regions for users 54 and younger.")
-    st.markdown("* YouTube still beats Meta in all these regions among consumers 13-54, but not by much.")
-    st.markdown("* On the interactive Cross-Screen Index, we allow you to toggle the data to combine or separate Meta into IG and FB. However, we look at Instagram and Facebook separately in this report, as they have dramatically different user-bases. 53% of Facebook's user-base in these eight countries is over 55, whereas 90% of Instagram's audience is 54 or younger.")
-    st.markdown("* Global Trad Media in The Index — Disney, Fox, Disco Bros, Paramount, NBCU — play differently in various regions, but their total lack of cross-screen strategy has them losing badly to Global Big Tech platforms in *all eight territories*. All the Trad US Media giants fail to secure even one #1 or #2 spot in among people 13-54 in any of the eight regions covered.")
-    st.markdown("When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data endeavor yet. It's a mountain of data and it tells a remarkable story about the future of Media based on the actual needs of real consumers. We will keep following the data where it leads us.")
-with tab3:
-    st.subheader("ECSAI Frequently Asked Questions (FAQs)")
-    st.markdown("#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
-    if os.path.exists("ecsai_flow.png"): 
-        st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
-    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
-    st.write("---")
-    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>ESHAP</p>", unsafe_allow_html=True)
-
-with tab4:
-    sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
-    is_global_view = (market_choice == "Global Overview")
-    token_dict = {
-        "United States": "us", "France": "fr", "United Kingdom": "uk", 
-        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
-    }
-    f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
+    st.markdown(
+        "<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'>\n"
+        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>\n"
+        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold; color: #FF0000;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2>\n"
+        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2>\n"
+        "</div>",
+        unsafe_allow_html=True
+    )
     
-    with sub_method:
-        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({flag_icon} {market_choice.upper()})")
-        if not is_global_view:
-            w_dict = {
-                "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
-                "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
-                "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
-            }
-            w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
-            st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
-        
-        if os.path.exists(f"methodology_{f_token}.txt"):
-            with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: 
-                st.write(m_f.read())
-        else: 
-            st.info(f"{market_choice} methodology text loading...")
-            
-    with sub_source:
-        st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
-        if os.path.exists(f"sources_{f_token}.txt"):
-            with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: 
-                st.write(s_f.read())
-        else: 
-            st.info(f"{market_choice} sourcing data loading...")
+    st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
+    st.markdown("For years, the measurement establishment has relied on a self-serving mythology called \"premium attention quality\" to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
+    st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"low-tier digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
+    st.markdown("When other industry signposts try to offer insight into this cross-screen crisis, they show up with a mallet rather than a magnifying glass. They aggregate soft consumer diaries, build clunky additive charts where the human daily clock magically stretches past 24 hours, or offer micro-level campaign widgets that count how many seconds an ad was technically \"on screen.\" They are handing you a shovel to look at individual twigs while your entire forest is burning to the ground.")
+    st.markdown(
+        "<div style='text-align: center; line-height: 1.1; margin-top: 1rem; margin-bottom: 1.5rem;'>\n"
+        "<p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>TO BE CLEAR:</p>\n"
+        "<p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>THIS IS NOT A MEDIA BUYING MECHANISM.</p>\n"
+        "<p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>IT'S A STRATEGIC AND FISCAL PLANNING COMPASS.</p>\n"
+        "</div>",
+        unsafe_allow_html=True
+    )
+    
+    st.markdown("The data is also clear: Since COVID and the arrival of TikTok, the phone has replaced the television as the center of video gravity. 60% of the world's video attention is now on mobile phones. If you are a media company and you are investing 100% of your budget on tv sets, you are mapping your course to irrelevancy and/or bankruptcy.")
+    st.markdown("So much of our measurement investment is spent on measuring television viewing - even when the TV is not being watched!")
+    st.markdown("As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that ONLY captures 40% of video consumption. That's not just bad business; it's a suicide mission.")
+    if os.path.exists("eshap_us_devices.png"): 
+        st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem", use_container_width=True)
+    else: 
+        st.info("💡 *[Placeholder for eshap_us_devices.png: Video Consumption Share By Device Ecosystem]*")
+
+    st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Two thirds of the video consumption by consumers under 55 is on smartphones, not TVs.")
+    st.markdown("The ESHAP Cross-Screen Attention Index (ESCAI) introduces a completely new analytical paradigm to capture this shift. We didn't build a local programmatic tool to place an individual ad spot next Tuesday. To look at this index and ask how to execute a DSP trade is to confuse a compass with a shovel.")
+    st.markdown("This scale is a macroeconomic strategy engine engineered for the C-suite to audit structural enterprise risk and investment. If your brand is allocating 60% of its capital to traditional glass viewing while our closed census time budget proves your active workforce demographic has permanently migrated its conscious time to a personal screen, that is an organizational asset failure.")
+    st.markdown("ESCAI enforces the absolute laws of human physics. Human time is a non-elastic, zero-sum commodity—a closed market sponge. Every single hour gained by an algorithm is an hour permanently destroyed for a broadcast tower.")
+    st.markdown("### THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
+    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening—a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France).")
+    st.markdown("The model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
+    st.markdown("### THE SEPARATION OF POWERS")
+    st.markdown("To achieve this, the index operates on a strict Separation of Powers. We use a Sovereign Boundary Model where the hard quantitative ceilings are locked down entirely by currency-grade, telemetry logs (Nielsen, BARB, Médiamétrie, Comscore). The index does not ask consumers how many hours they watched; it uses codified telemetry to establish total volume.")
+    st.markdown("Behavioral data from GWI Consumer Diaries is introduced strictly as a coefficient matrix to calculate the mathematical overlap when two devices are running in the same room. We use behavioral data solely to map the friction points where those macro volumes intersect. Legacy currencies rely on passive boxes in empty rooms, counting a television playing to an empty sofa as a hit. We use behavioral data to verify human presence and device co-activity, injecting human reality back into blind hardware metrics.")
+    st.markdown("### PLEASE LOOK AT THE METHODOLOGY BLUEPRINTS AND SOURCE MATRICES FOR MORE DETAILS ON HOW WE BUILT THIS MODEL.")
+    st.markdown("Perhaps the most important point for our industry: We didn't invent new numbers, and we didn't hide our math inside a proprietary black box. Every data point used to build this scale sits legitimately out in the open public domain, scattered across public broadcaster annual disclosures, investor relations filings, and sovereign regulatory white papers. Anyone could theoretically download these records and combine them to see the true division of human time for which they are competing. Until now, however, no one has.")
+    st.markdown("Why? Because our industry incentivizes legacy silos. Because, among the most traditional of media and measurement experts, there is widespread fear of finding out how our consumers are actually spending their time and which half of their budgets are being wasted. The current system of content distribution and measurement is built by and for those who profit directly from it, whether or not it actually works.")
+    st.markdown("We have built what we believe is the ultimate \"Attention Model,\" the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
+    st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://substack.com)**.")
+    st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
+    st.markdown("Thanks for your attention!")
+    st.markdown("**ESHAP**")
