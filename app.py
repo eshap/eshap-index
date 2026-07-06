@@ -288,20 +288,35 @@ if df_matrix is not None:
         st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
         st.rerun()
 
-    st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
-else:
-    st.sidebar.info("💡 *Global Overview mode active. Reallocation sliders are hidden for high-level macro baseline analysis.*")
-    user_shifts = {}
+    df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 
-if df_matrix is not None:
+# Unconditional Map Dictionary Shield: Placed completely outside indented loops to prevent NameErrors
+f_map = {
+    "Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", 
+    "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", 
+    "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"
+}
+active_flag = f_map.get(market_choice, "🇺🇸")
+# Master Dashboard Container Tab Initializer
+tab1, tab2, tab3, tab4 = st.tabs([
+    "CSAI Interactive Index Matrix", 
+    "Why ECSAI?", 
+    "ECSAI FAQs", 
+    "Index Architecture & Methodology"
+])
+with tab1:
+    if market_choice == "Global Overview":
+        # ----------------================================================================================
+        # HIGH-LEVEL GLOBAL INDEX CANVAS MODE: Continuous Narrative Sequence Architecture
+        # --------------------------------================================================================
+        st.subheader("THE GLOBAL INDEX")
+        st.markdown(
+            "What happens when we drop the pretense that TV is premium and social video is not? "
+            "What becomes of the mainstream mindset when we take down the silo walls and measure Media "
+            "consumption not BY device, but rather ACROSS devices? Turns out, a lot. Which is why we "
+            "embarked on this mission to measure it all, side-by-side."
+        )
 
-    active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
-    if active_shifts:
-        for entity, shift_val in active_shifts.items():
-            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            if len(idx) > 0:
-                p13_orig = float(df_static_base.loc[idx, "P13+"].iloc[0])
-                adj_p13 = max(0.0, p13_orig + shift_val)
                 ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
                 df_matrix.loc[idx, "P13+"] = adj_p13
                 df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
