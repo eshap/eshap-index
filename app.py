@@ -373,7 +373,7 @@ with tab1:
         )
         st.markdown(
             "The ESHAP Cross-Screen Attention Index is hard-wired with data for total cross-device "
-            "attention, for France, Brazil, Mexico, UK, France, Italy, Spain, and the US, from December 2025 "
+            "attention, for France, Germany, Brazil, Mexico, UK, France, Italy, Spain, and the US, from December 2025 "
             "through May 2026."
         )
         st.markdown("**The ECSAI is the first zero-sum, wholly deduplicated map of human attention in history.**")
