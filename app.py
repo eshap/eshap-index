@@ -707,18 +707,7 @@ with tab4:
     f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
     
     with sub_method:
-        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({flag_icon} {market_choice.upper()})")
         if not is_global_view:
-            w_dict = {
-                "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
-                "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
-                "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%"), "Canada": ("64.2%", "35.8%"), 
-                "India": ("78.4%", "21.6%"), "Japan": ("51.2%", "48.8%"), "South Korea": ("61.0%", "39.0%"), 
-                "Denmark": ("62.4%", "37.6%"), "Sweden": ("61.8%", "38.2%"), "Norway": ("63.0%", "37.0%"), 
-                "Finland": ("60.5%", "39.5%"), "Slovakia": ("64.0%", "36.0%"), "Slovenia": ("61.2%", "38.8%"), 
-                "Croatia": ("58.5%", "41.5%"), "Bulgaria": ("57.2%", "42.8%"), "Romania": ("59.1%", "40.9%"), 
-                "Moldova": ("65.4%", "34.6%"), "Czech Republic": ("62.8%", "37.2%")
-            }        if not is_global_view:
             w_dict = {
                 "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
                 "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
@@ -731,24 +720,6 @@ with tab4:
             }
             w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
             st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
-        
-        if os.path.exists(f"methodology_{f_token}.txt"):
-            with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: 
-                st.write(m_f.read())
-        else: 
-            st.info(f"{market_choice} methodology blueprint text loading natively...")
-            
-    with sub_source:
-        st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
-        if os.path.exists(f"sources_{f_token}.txt"):
-            with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: 
-                st.write(s_f.read())
-        else: 
-            st.info(f"{market_choice} data sourcing index loading natively...")
-
-            w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
-            st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
-        
         if os.path.exists(f"methodology_{f_token}.txt"):
             with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: 
                 st.write(m_f.read())
