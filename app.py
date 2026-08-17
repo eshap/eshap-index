@@ -636,12 +636,7 @@ if df_matrix is not None:
         chart_df_fixed = chart_df.set_index("Platform/Publisher")
         st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
             
-        st.write("---")
-        st.markdown("#### Cross Screen Attention Ledger")
-        st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
-        st.dataframe(df_matrix, use_container_width=True, hide_index=True)
-        st.write("")
-        if market_choice == "Brazil":
+                if market_choice == "Brazil":
             st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
         elif market_choice == "Mexico":
             st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
@@ -653,6 +648,9 @@ if df_matrix is not None:
             st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: INDIA</strong><br>Platform totals represent unified corporate parent holdings. JioStar integrates Star TV, Viacom18, and JioCinema streaming telemetry parameters. Doordarshan tracks all linear configurations managed under Prasar Bharati public distribution frameworks.</p>", unsafe_allow_html=True)
             
         st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
+# Flat Single-Line Initializer: Enforces zero leading spaces to make indentation crashes physically impossible
+tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
+tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
 
 with tab2:
     st.markdown("<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold; color: #FF0000;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2></div>", unsafe_allow_html=True)
@@ -663,7 +661,6 @@ with tab2:
     st.markdown("<div style='text-align: center; line-height: 1.1; margin-top: 1rem; margin-bottom: 1.5rem;'><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>TO BE CLEAR:</p><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>THIS IS NOT A MEDIA BUYING MECHANISM.</p><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>IT'S A STRATEGIC AND FISCAL PLANNING COMPASS.</p></div>", unsafe_allow_html=True)
     st.markdown("The data is also clear: Since COVID and the arrival of TikTok, the phone has replaced the television as the center of video gravity. 60% of the world's video attention is now on mobile phones. If you are a media company and you are investing 100% of your budget on tv sets, you are mapping your course to irrelevancy and/or bankruptcy.")
     st.markdown("So much of our measurement investment is spent on measuring television viewing - even when the TV is not being watched! As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that ONLY captures 40% of video consumption. That's not just bad business; it's a suicide mission.")
-    
     if os.path.exists("eshap_us_devices.png"): 
         st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem", use_container_width=True)
     else: 
@@ -677,7 +674,7 @@ with tab2:
     st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening—a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France).")
     st.markdown("The model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
     st.markdown("### THE SEPARATION OF POWERS")
-    st.markdown("To achieve this, the index operates on a strict Separation of Powers. We use a Sovereign Boundary Model where the hard quantitative ceilings are locked down entirely by currency-grade, telemetry logs (Nielsen, BARB, Médiamétrie, Comscore). The index does not ask consumers how many hours they watched; it uses codified telemetry to establish total volume.")
+    st.markdown("To achieve this, the index operates on a strict Separation of Powers. We use a Sovereign Boundary Model where the hard quantitative ceilings are locked down entirely by currency-grade, hard telemetry logs (Nielsen, BARB, Médiamétrie, Comscore). The index does not ask consumers how many hours they watched; it uses codified telemetry to establish total volume.")
     st.markdown("Behavioral data from GWI Consumer Diaries is introduced strictly as a coefficient matrix to calculate the mathematical overlap when two devices are running in the same room. We use behavioral data solely to map the friction points where those macro volumes intersect. Legacy currencies rely on passive boxes in empty rooms, counting a television playing to an empty sofa as a hit. We use behavioral data to verify human presence and device co-activity, injecting human reality back into blind hardware metrics.")
     st.markdown("### PLEASE LOOK AT THE METHODOLOGY BLUEPRINTS AND SOURCE MATRICES FOR MORE DETAILS ON HOW WE BUILT THIS MODEL.")
     st.markdown("Perhaps the most important point for our industry: We didn't invent new numbers, and we didn't hide our math inside a proprietary black box. Every data point used to build this scale sits legitimately out in the open public domain, scattered across public broadcaster annual disclosures, investor relations filings, and sovereign regulatory white papers. Anyone could theoretically download these records and combine them to see the true division of human time for which they are competing. Until now, however, no one has.")
@@ -685,17 +682,16 @@ with tab2:
     st.markdown("We have built what we believe is the ultimate \"Attention Model,\" the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
     st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://substack.com)**.")
     st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
-    st.markdown("Thanks for your attention!")
-    st.markdown("**ESHAP**")
+    st.markdown("Thanks for your attention!\n\n**ESHAP**")
+
 with tab3:
     st.subheader("ECSAI Frequently Asked Questions (FAQs)")
     st.markdown("#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
     if os.path.exists("ecsai_flow.png"): 
         st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
-    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
+    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok reply window while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
     st.write("---")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>ESHAP</p>", unsafe_allow_html=True)
-
 with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     is_global_view = (market_choice == "Global Overview")
@@ -722,7 +718,34 @@ with tab4:
                 "Finland": ("60.5%", "39.5%"), "Slovakia": ("64.0%", "36.0%"), "Slovenia": ("61.2%", "38.8%"), 
                 "Croatia": ("58.5%", "41.5%"), "Bulgaria": ("57.2%", "42.8%"), "Romania": ("59.1%", "40.9%"), 
                 "Moldova": ("65.4%", "34.6%"), "Czech Republic": ("62.8%", "37.2%")
+            }        if not is_global_view:
+            w_dict = {
+                "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
+                "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
+                "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%"), "Canada": ("64.2%", "35.8%"), 
+                "India": ("78.4%", "21.6%"), "Japan": ("51.2%", "48.8%"), "South Korea": ("61.0%", "39.0%"), 
+                "Denmark": ("62.4%", "37.6%"), "Sweden": ("61.8%", "38.2%"), "Norway": ("63.0%", "37.0%"), 
+                "Finland": ("60.5%", "39.5%"), "Slovakia": ("64.0%", "36.0%"), "Slovenia": ("61.2%", "38.8%"), 
+                "Croatia": ("58.5%", "41.5%"), "Bulgaria": ("57.2%", "42.8%"), "Romania": ("59.1%", "40.9%"), 
+                "Moldova": ("65.4%", "34.6%"), "Czech Republic": ("62.8%", "37.2%")
             }
+            w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
+            st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
+        
+        if os.path.exists(f"methodology_{f_token}.txt"):
+            with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: 
+                st.write(m_f.read())
+        else: 
+            st.info(f"{market_choice} methodology blueprint text loading natively...")
+            
+    with sub_source:
+        st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
+        if os.path.exists(f"sources_{f_token}.txt"):
+            with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: 
+                st.write(s_f.read())
+        else: 
+            st.info(f"{market_choice} data sourcing index loading natively...")
+
             w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
             st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
         
