@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import base64, os, io
 
-CORE_TOKENS = ["us", "fr", "uk", "it", "de", "sp", "br", "mx"]
+CORE_TOKENS = ["us", "fr", "uk", "it", "de", "sp", "br", "mx", "ca", "in", "jp", "kr", "denmark", "se", "no", "fi", "sk", "si", "hr", "bg", "ro", "md", "cz"]
 
 # Instant Memory Cache Bootstrapper: Reads the filesystem once and retains data permanently in RAM
 if "text_memory_cache" not in st.session_state:
@@ -37,6 +37,7 @@ US_BASE = [
     ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
     ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
 ]
+
 FR_BASE = [
     ["FRANCE TV", 510.0, 385.0, 125.0, 102.5, 82.0, 54.2],
     ["YOUTUBE", 485.0, 95.0, 390.0, 273.0, 212.9, 129.9],
@@ -70,6 +71,7 @@ DE_BASE = [
     ["WBD", 145.0, 78.0, 67.0, 48.9, 30.8, 12.7],
     ["FACEBOOK", 140.0, 82.0, 58.0, 31.9, 11.8, 2.2]
 ]
+
 UK_BASE = [
     ["BBC", 640.0, 460.0, 180.0, 122.4, 85.7, 45.4],
     ["OTHER", 640.0, 480.0, 160.0, 95.0, 50.0, 15.0],
@@ -145,6 +147,231 @@ BR_BASE = [
     ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
     ["BAND (GRUPO)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
 ]
+CA_BASE = [
+    ["YOUTUBE", 1285.0, 145.0, 1140.0, 825.0, 665.0, 395.0],
+    ["OTHER", 880.0, 15.0, 865.0, 710.0, 580.0, 420.0],
+    ["NETFLIX", 1008.0, 98.0, 910.0, 780.0, 515.0, 235.0],
+    ["INSTAGRAM", 683.0, 38.0, 645.0, 515.0, 435.0, 210.0],
+    ["CBC", 585.0, 245.0, 340.0, 210.0, 125.0, 48.0],
+    ["ROGERS", 525.0, 215.0, 310.0, 195.0, 110.0, 42.0],
+    ["BELL MEDIA", 480.0, 195.0, 285.0, 175.0, 98.0, 35.0],
+    ["CRAVE", 217.0, 42.0, 175.0, 130.0, 82.0, 31.0],
+    ["AMAZON", 550.0, 65.0, 485.0, 380.0, 240.0, 115.0],
+    ["CORUS", 255.0, 115.0, 140.0, 95.0, 55.0, 18.0],
+    ["DISNEY", 347.0, 32.0, 315.0, 245.0, 160.0, 72.0],
+    ["WBD (MAX)", 263.0, 28.0, 235.0, 180.0, 115.0, 50.0],
+    ["FACEBOOK", 185.0, 75.0, 110.0, 72.0, 24.0, 4.0],
+    ["TIKTOK", 645.0, 25.0, 620.0, 485.0, 395.0, 265.0]
+]
+
+IN_BASE = [
+    ["YOUTUBE", 4275.0, 65.0, 4210.0, 3680.0, 3120.0, 2150.0],
+    ["OTHER", 3425.0, 5.0, 3420.0, 3040.0, 2650.0, 1910.0],
+    ["JIOSTAR", 2810.0, 465.0, 2345.0, 1890.0, 1340.0, 615.0],
+    ["INSTAGRAM", 2032.0, 52.0, 1980.0, 1670.0, 1410.0, 925.0],
+    ["NETFLIX", 1033.0, 48.0, 985.0, 810.0, 595.0, 260.0],
+    ["ZEE ENTERTAINMENT", 730.0, 315.0, 415.0, 235.0, 125.0, 45.0],
+    ["SONY PICTURES NETWORKS", 575.0, 245.0, 330.0, 195.0, 105.0, 38.0],
+    ["DOORDARSHAN", 550.0, 385.0, 165.0, 95.0, 48.0, 14.0],
+    ["SUN TV NETWORK", 450.0, 210.0, 240.0, 145.0, 78.0, 24.0],
+    ["AMAZON", 677.0, 32.0, 645.0, 525.0, 390.0, 175.0],
+    ["FACEBOOK", 435.0, 125.0, 310.0, 190.0, 95.0, 22.0],
+    ["TIKTOK", 120.0, 2.0, 118.0, 95.0, 78.0, 45.0]
+]
+JP_BASE = [
+    ["YOUTUBE", 1605.0, 485.0, 1120.0, 745.0, 525.0, 295.0],
+    ["NHK", 1100.0, 585.0, 515.0, 315.0, 165.0, 68.0],
+    ["TVER", 790.0, 145.0, 645.0, 490.0, 365.0, 195.0],
+    ["NETFLIX", 635.0, 115.0, 520.0, 385.0, 240.0, 110.0],
+    ["TIKTOK", 510.0, 25.0, 485.0, 340.0, 275.0, 185.0],
+    ["NIPPON TV", 760.0, 395.0, 365.0, 225.0, 115.0, 42.0],
+    ["FUJI MEDIA", 675.0, 365.0, 310.0, 195.0, 102.0, 35.0],
+    ["TBS HOLDINGS", 625.0, 340.0, 285.0, 170.0, 88.0, 28.0],
+    ["TV ASAHI", 555.0, 310.0, 245.0, 140.0, 72.0, 22.0],
+    ["ABEMA", 427.0, 42.0, 385.0, 295.0, 210.0, 115.0],
+    ["U-NEXT", 267.0, 52.0, 215.0, 155.0, 105.0, 48.0],
+    ["AMAZON", 540.0, 95.0, 445.0, 340.0, 220.0, 98.0],
+    ["DISNEY", 197.0, 32.0, 165.0, 125.0, 82.0, 35.0],
+    ["WBD", 160.0, 25.0, 135.0, 105.0, 68.0, 24.0],
+    ["FACEBOOK", 200.0, 115.0, 85.0, 52.0, 18.0, 2.0],
+    ["OTHER", 415.0, 185.0, 230.0, 165.0, 110.0, 48.0]
+]
+
+KR_BASE = [
+    ["YOUTUBE", 1395.0, 215.0, 1180.0, 815.0, 615.0, 385.0],
+    ["NETFLIX", 710.0, 65.0, 645.0, 510.0, 340.0, 165.0],
+    ["TIKTOK", 477.0, 12.0, 465.0, 340.0, 285.0, 195.0],
+    ["KBS", 800.0, 385.0, 415.0, 245.0, 135.0, 52.0],
+    ["MBC", 605.0, 295.0, 310.0, 185.0, 98.0, 35.0],
+    ["SBS", 555.0, 260.0, 295.0, 170.0, 92.0, 31.0],
+    ["CJENM", 430.0, 145.0, 285.0, 175.0, 110.0, 42.0],
+    ["TVING", 387.0, 42.0, 345.0, 265.0, 195.0, 115.0],
+    ["WAWVE", 325.0, 55.0, 270.0, 195.0, 130.0, 62.0],
+    ["JTBC", 280.0, 115.0, 165.0, 105.0, 55.0, 18.0],
+    ["AMAZON", 392.0, 32.0, 360.0, 280.0, 195.0, 85.0],
+    ["DISNEY", 217.0, 22.0, 195.0, 150.0, 110.0, 48.0],
+    ["WBD", 160.0, 15.0, 145.0, 115.0, 82.0, 32.0],
+    ["FACEBOOK", 157.0, 92.0, 65.0, 40.0, 14.0, 1.0],
+    ["OTHER", 310.0, 125.0, 185.0, 130.0, 95.0, 38.0]
+]
+DK_BASE = [
+    ["YOUTUBE", 203.0, 38.0, 165.0, 115.0, 85.0, 52.0],
+    ["DR", 220.0, 95.0, 125.0, 75.0, 42.0, 15.0],
+    ["TV2 DANMARK", 150.0, 65.0, 85.0, 50.0, 28.0, 9.0],
+    ["NETFLIX", 167.0, 22.0, 145.0, 115.0, 75.0, 35.0],
+    ["TIKTOK", 129.0, 4.0, 125.0, 95.0, 78.0, 55.0],
+    ["TV2 PLAY", 72.0, 12.0, 60.0, 45.0, 32.0, 14.0],
+    ["VIAPLAY GROUP", 69.0, 15.0, 54.0, 40.0, 24.0, 10.0],
+    ["AMAZON", 113.0, 18.0, 95.0, 75.0, 48.0, 18.0],
+    ["DISNEY", 65.0, 10.0, 55.0, 40.0, 28.0, 12.0],
+    ["WBD", 50.0, 8.0, 42.0, 32.0, 20.0, 8.0],
+    ["FACEBOOK", 50.0, 28.0, 22.0, 14.0, 5.0, 0.5],
+    ["OTHER", 88.0, 42.0, 46.0, 32.0, 22.0, 8.0]
+]
+
+SE_BASE = [
+    ["YOUTUBE", 380.0, 65.0, 315.0, 225.0, 165.0, 98.0],
+    ["SVT", 380.0, 165.0, 215.0, 135.0, 78.0, 28.0],
+    ["TV4 MEDIA", 260.0, 115.0, 145.0, 90.0, 52.0, 18.0],
+    ["NETFLIX", 323.0, 38.0, 285.0, 220.0, 145.0, 68.0],
+    ["TIKTOK", 250.0, 5.0, 245.0, 185.0, 152.0, 110.0],
+    ["VIAPLAY GROUP", 147.0, 22.0, 125.0, 95.0, 58.0, 22.0],
+    ["AMAZON", 203.0, 28.0, 175.0, 135.0, 92.0, 38.0],
+    ["DISNEY", 110.0, 15.0, 95.0, 75.0, 52.0, 22.0],
+    ["WBD", 88.0, 12.0, 76.0, 58.0, 38.0, 15.0],
+    ["FACEBOOK", 77.0, 42.0, 35.0, 22.0, 8.0, 1.0],
+    ["OTHER", 145.0, 68.0, 77.0, 55.0, 38.0, 14.0]
+]
+
+NO_BASE = [
+    ["YOUTUBE", 187.0, 42.0, 145.0, 105.0, 78.0, 48.0],
+    ["NRK", 260.0, 125.0, 135.0, 85.0, 48.0, 18.0],
+    ["TV2 NORGE", 177.0, 82.0, 95.0, 60.0, 35.0, 12.0],
+    ["NETFLIX", 165.0, 25.0, 140.0, 110.0, 72.0, 32.0],
+    ["TIKTOK", 139.0, 4.0, 135.0, 105.0, 88.0, 62.0],
+    ["TV2 PLAY", 91.0, 15.0, 76.0, 58.0, 38.0, 15.0],
+    ["VIAPLAY GROUP", 58.0, 10.0, 48.0, 36.0, 22.0, 8.0],
+    ["AMAZON", 108.0, 18.0, 90.0, 70.0, 48.0, 18.0],
+    ["DISNEY", 62.0, 10.0, 52.0, 40.0, 28.0, 12.0],
+    ["WBD", 48.0, 8.0, 40.0, 31.0, 20.0, 8.0],
+    ["FACEBOOK", 43.0, 25.0, 18.0, 11.0, 4.0, 0.2],
+    ["OTHER", 78.0, 35.0, 43.0, 28.0, 18.0, 6.0]
+]
+FI_BASE = [
+    ["YOUTUBE", 175.0, 40.0, 135.0, 98.0, 72.0, 44.0],
+    ["YLE", 240.0, 118.0, 122.0, 78.0, 42.0, 14.0],
+    ["MTV3", 145.0, 72.0, 63.0, 40.0, 22.0, 8.0],
+    ["SANOMA", 115.0, 55.0, 60.0, 38.0, 20.0, 6.0],
+    ["NETFLIX", 152.0, 22.0, 130.0, 102.0, 68.0, 30.0],
+    ["TIKTOK", 124.0, 4.0, 120.0, 92.0, 76.0, 54.0],
+    ["AMAZON", 98.0, 15.0, 80.0, 62.0, 42.0, 15.0],
+    ["DISNEY", 58.0, 8.0, 50.0, 38.0, 25.0, 10.0],
+    ["WBD", 44.0, 6.0, 38.0, 28.0, 18.0, 6.0],
+    ["FACEBOOK", 40.0, 24.0, 16.0, 10.0, 3.0, 0.1],
+    ["OTHER", 72.0, 32.0, 40.0, 25.0, 15.0, 5.0]
+]
+
+SK_BASE = [
+    ["MARKIZA GROUP", 325.0, 145.0, 180.0, 115.0, 68.0, 24.0],
+    ["YOUTUBE", 245.0, 48.0, 197.0, 142.0, 110.0, 68.0],
+    ["JOJ GROUP", 215.0, 110.0, 105.0, 65.0, 38.0, 12.0],
+    ["STVR", 195.0, 105.0, 90.0, 55.0, 28.0, 8.0],
+    ["NETFLIX", 175.0, 25.0, 150.0, 118.0, 78.0, 35.0],
+    ["TIKTOK", 168.0, 3.0, 165.0, 128.0, 110.0, 78.0],
+    ["VOYO", 98.0, 18.0, 80.0, 58.0, 42.0, 18.0],
+    ["AMAZON", 124.0, 15.0, 109.0, 85.0, 58.0, 22.0],
+    ["DISNEY", 68.0, 8.0, 60.0, 45.0, 32.0, 12.0],
+    ["WBD", 52.0, 6.0, 46.0, 35.0, 24.0, 8.0],
+    ["FACEBOOK", 48.0, 26.0, 22.0, 14.0, 4.0, 0.2],
+    ["OTHER", 82.0, 38.0, 44.0, 28.0, 18.0, 6.0]
+]
+
+SI_BASE = [
+    ["PRO PLUS", 165.0, 72.0, 93.0, 58.0, 34.0, 12.0],
+    ["YOUTUBE", 124.0, 22.0, 102.0, 74.0, 58.0, 35.0],
+    ["RTVSLO", 115.0, 64.0, 51.0, 32.0, 15.0, 4.0],
+    ["NETFLIX", 88.0, 12.0, 76.0, 60.0, 40.0, 18.0],
+    ["TIKTOK", 86.0, 1.0, 85.0, 65.0, 55.0, 38.0],
+    ["VOYO", 48.0, 8.0, 40.0, 28.0, 20.0, 8.0],
+    ["AMAZON", 62.0, 8.0, 54.0, 42.0, 28.0, 10.0],
+    ["DISNEY", 34.0, 4.0, 30.0, 22.0, 15.0, 6.0],
+    ["WBD", 26.0, 3.0, 23.0, 18.0, 12.0, 4.0],
+    ["FACEBOOK", 24.0, 14.0, 10.0, 6.0, 2.0, 0.1],
+    ["OTHER", 42.0, 18.0, 24.0, 15.0, 10.0, 3.0]
+]
+HR_BASE = [
+    ["NOVA TV CROATIA", 245.0, 112.0, 133.0, 85.0, 48.0, 15.0],
+    ["YOUTUBE", 198.0, 35.0, 163.0, 118.0, 92.0, 55.0],
+    ["RTL HRVATSKA", 175.0, 88.0, 87.0, 54.0, 30.0, 10.0],
+    ["HRT", 168.0, 92.0, 76.0, 46.0, 24.0, 6.0],
+    ["NETFLIX", 138.0, 18.0, 120.0, 95.0, 62.0, 26.0],
+    ["TIKTOK", 136.0, 3.0, 133.0, 102.0, 88.0, 62.0],
+    ["VOYO", 68.0, 10.0, 58.0, 42.0, 28.0, 12.0],
+    ["AMAZON", 98.0, 12.0, 86.0, 68.0, 45.0, 15.0],
+    ["DISNEY", 54.0, 6.0, 48.0, 35.0, 24.0, 9.0],
+    ["WBD", 42.0, 5.0, 37.0, 28.0, 18.0, 6.0],
+    ["FACEBOOK", 38.0, 22.0, 16.0, 10.0, 3.0, 0.1],
+    ["OTHER", 64.0, 28.0, 36.0, 22.0, 14.0, 5.0]
+]
+
+BG_BASE = [
+    ["BTV MEDIA GROUP", 415.0, 210.0, 205.0, 128.0, 72.0, 24.0],
+    ["NOVA BROADCASTING", 385.0, 195.0, 190.0, 118.0, 65.0, 20.0],
+    ["YOUTUBE", 310.0, 62.0, 248.0, 182.0, 142.0, 88.0],
+    ["BNT", 230.0, 135.0, 95.0, 58.0, 28.0, 8.0],
+    ["NETFLIX", 215.0, 28.0, 187.0, 146.0, 98.0, 42.0],
+    ["TIKTOK", 212.0, 4.0, 208.0, 162.0, 138.0, 98.0],
+    ["VOYO", 112.0, 18.0, 94.0, 68.0, 46.0, 18.0],
+    ["AMAZON", 154.0, 18.0, 136.0, 106.0, 72.0, 25.0],
+    ["DISNEY", 84.0, 10.0, 74.0, 55.0, 38.0, 14.0],
+    ["WBD", 65.0, 8.0, 57.0, 44.0, 30.0, 10.0],
+    ["FACEBOOK", 60.0, 34.0, 26.0, 16.0, 5.0, 0.2],
+    ["OTHER", 98.0, 45.0, 53.0, 34.0, 22.0, 7.0]
+]
+
+RO_BASE = [
+    ["PROTV", 1150.0, 520.0, 630.0, 395.0, 224.0, 74.0],
+    ["ANTENA TV GROUP", 980.0, 465.0, 515.0, 320.0, 182.0, 58.0],
+    ["YOUTUBE", 865.0, 145.0, 720.0, 524.0, 412.0, 254.0],
+    ["TVR", 480.0, 265.0, 215.0, 130.0, 64.0, 18.0],
+    ["NETFLIX", 610.0, 75.0, 535.0, 418.0, 278.0, 118.0],
+    ["TIKTOK", 595.0, 12.0, 583.0, 452.0, 385.0, 274.0],
+    ["ANTENAPLAY", 310.0, 48.0, 262.0, 192.0, 134.0, 52.0],
+    ["AMAZON", 435.0, 52.0, 383.0, 298.0, 204.0, 72.0],
+    ["DISNEY", 240.0, 28.0, 212.0, 158.0, 110.0, 42.0],
+    ["WBD", 185.0, 22.0, 163.0, 124.0, 84.0, 28.0],
+    ["FACEBOOK", 170.0, 95.0, 75.0, 46.0, 14.0, 0.8],
+    ["OTHER", 280.0, 124.0, 156.0, 98.0, 62.0, 20.0]
+]
+MD_BASE = [
+    ["PRIME TV MOLDOVA", 145.0, 68.0, 77.0, 48.0, 26.0, 8.0],
+    ["YOUTUBE", 112.0, 15.0, 97.0, 72.0, 58.0, 36.0],
+    ["JURNAL TV", 98.0, 46.0, 52.0, 31.0, 16.0, 4.0],
+    ["M1", 85.0, 48.0, 37.0, 22.0, 10.0, 2.0],
+    ["NETFLIX", 78.0, 8.0, 70.0, 55.0, 36.0, 15.0],
+    ["TIKTOK", 76.0, 1.0, 75.0, 58.0, 48.0, 34.0],
+    ["VOYO", 40.0, 5.0, 35.0, 25.0, 18.0, 6.0],
+    ["AMAZON", 56.0, 6.0, 50.0, 38.0, 26.0, 9.0],
+    ["DISNEY", 31.0, 3.0, 28.0, 20.0, 14.0, 5.0],
+    ["WBD", 24.0, 2.0, 22.0, 16.0, 10.0, 3.0],
+    ["FACEBOOK", 22.0, 12.0, 10.0, 6.0, 1.0, 0.0],
+    ["OTHER", 36.0, 16.0, 20.0, 12.0, 8.0, 2.0]
+]
+
+CZ_BASE = [
+    ["TV NOVA", 645.0, 295.0, 350.0, 222.0, 130.0, 46.0],
+    ["YOUTUBE", 495.0, 98.0, 397.0, 286.0, 222.0, 138.0],
+    ["PRIMA GROUP", 435.0, 220.0, 215.0, 134.0, 78.0, 24.0],
+    ["CT", 395.0, 215.0, 180.0, 110.0, 56.0, 16.0],
+    ["NETFLIX", 354.0, 52.0, 302.0, 238.0, 158.0, 72.0],
+    ["TIKTOK", 340.0, 8.0, 332.0, 258.0, 222.0, 158.0],
+    ["VOYO", 198.0, 35.0, 163.0, 118.0, 85.0, 36.0],
+    ["AMAZON", 252.0, 32.0, 220.0, 172.0, 118.0, 45.0],
+    ["DISNEY", 138.0, 15.0, 123.0, 92.0, 65.0, 24.0],
+    ["WBD", 105.0, 12.0, 93.0, 70.0, 48.0, 16.0],
+    ["FACEBOOK", 98.0, 54.0, 44.0, 28.0, 8.0, 0.4],
+    ["OTHER", 165.0, 78.0, 87.0, 55.0, 36.0, 12.0]
+]
 
 bullet_base64 = ""
 if os.path.exists("planet_bullet.png"):
@@ -183,11 +410,12 @@ if logo_base64:
         div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
         div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><a href="https://eshap.substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
+        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
 st.sidebar.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
+
 st.html("""
     <style>
     section[data-testid="stSidebar"] { background-color: #4A4A4A !important; }
@@ -223,14 +451,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("For full analysis: **[Media War & Peace](https://eshap.substack.com)**")
+st.markdown("For full analysis: **[Media War & Peace](https://substack.com)**")
 st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'] > div { gap: 0.25rem !important; padding: 0 !important; } div[data-testid='stRadio'] label p { font-size: 0.88rem !important; margin: 0 !important; }</style>")
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
 
 market_choice = st.sidebar.radio(
     "Territory", 
-    ["Global Overview", "United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain"], 
+    ["Global Overview", "United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain", "Canada", "India", "Japan", "South Korea", "Denmark", "Sweden", "Norway", "Finland", "Slovakia", "Slovenia", "Croatia", "Bulgaria", "Romania", "Moldova", "Czech Republic"], 
     key="market_choice_sync",
     on_change=handle_market_switch_callback
 )
@@ -245,94 +473,29 @@ elif market_choice == "Italy": df_matrix = pd.DataFrame(IT_BASE, columns=cols)
 elif market_choice == "Germany": df_matrix = pd.DataFrame(DE_BASE, columns=cols)
 elif market_choice == "Spain": df_matrix = pd.DataFrame(ES_BASE, columns=cols)
 elif market_choice == "Brazil": df_matrix = pd.DataFrame(BR_BASE, columns=cols)
-else: df_matrix = pd.DataFrame(MX_BASE, columns=cols)
+elif market_choice == "Mexico": df_matrix = pd.DataFrame(MX_BASE, columns=cols)
+elif market_choice == "Canada": df_matrix = pd.DataFrame(CA_BASE, columns=cols)
+elif market_choice == "India": df_matrix = pd.DataFrame(IN_BASE, columns=cols)
+elif market_choice == "Japan": df_matrix = pd.DataFrame(JP_BASE, columns=cols)
+elif market_choice == "South Korea": df_matrix = pd.DataFrame(KR_BASE, columns=cols)
+elif market_choice == "Denmark": df_matrix = pd.DataFrame(DK_BASE, columns=cols)
+elif market_choice == "Sweden": df_matrix = pd.DataFrame(SE_BASE, columns=cols)
+elif market_choice == "Norway": df_matrix = pd.DataFrame(NO_BASE, columns=cols)
+elif market_choice == "Finland": df_matrix = pd.DataFrame(FI_BASE, columns=cols)
+elif market_choice == "Slovakia": df_matrix = pd.DataFrame(SK_BASE, columns=cols)
+elif market_choice == "Slovenia": df_matrix = pd.DataFrame(SI_BASE, columns=cols)
+elif market_choice == "Croatia": df_matrix = pd.DataFrame(HR_BASE, columns=cols)
+elif market_choice == "Bulgaria": df_matrix = pd.DataFrame(BG_BASE, columns=cols)
+elif market_choice == "Romania": df_matrix = pd.DataFrame(RO_BASE, columns=cols)
+elif market_choice == "Moldova": df_matrix = pd.DataFrame(MD_BASE, columns=cols)
+else: df_matrix = pd.DataFrame(CZ_BASE, columns=cols)
 if df_matrix is not None:
     if merge_meta:
         meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
         non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
         if not meta_rows.empty:
             summed_vals = meta_rows[cols[1:]].sum().tolist()
-            df_matrix = pd.concat([non_meta_df, pd.DataFrame([["META"] + summed_vals], columns=cols)], ignore_index=True).sort_values(by="P13+", ascending=False).reset_index(drop=True)
-
-    df_matrix[cols[1:]] = df_matrix[cols[1:]].astype(float)
-    df_matrix["Platform/Publisher"] = df_matrix["Platform/Publisher"].replace({
-        "TELEVISAUNIVISION": "TVSA/UNI", "SBT (SISTEMA BRASILEIRO DE TELEVISAO)": "SBT (BRAZIL)",
-        "MEDIASET ESPANA": "MEDIASET ES", "MFE (MEDIASET)": "MFE", "GROUPO RECORD": "GROUPO RECORD"
-    })
-    df_static_base = df_matrix.copy()
-
-    st.sidebar.markdown("### Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated")
-    st.sidebar.markdown("<h2 style='color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.5rem;'>MILLIONS OF HOURS</h2>", unsafe_allow_html=True)
-if df_matrix is not None:
-    user_shifts = {}
-    for entity in df_matrix["Platform/Publisher"].unique():
-        user_shifts[entity] = st.sidebar.slider(f"{entity} Shift Impact", -200.0, 200.0, 0.0, 5.0, key=f"{entity}_{st.session_state.get('reset_id', 0)}")
-
-    if st.sidebar.button("Reset Defaults"):
-        st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
-        st.rerun()
-
-    st.sidebar.markdown("<p style='font-size: 0.8rem; font-style: italic; color: #dddddd; margin-top: 1.5rem; line-height: 1.45;'>Time is not infinite. In a snapshot -- this index -- where population and time are constants, when attention shifts to one platform, it must come from somewhere else. These sliders adjust the whole based on adjustments made to any one.</p>", unsafe_allow_html=True)
-else:
-    user_shifts = {}
-if df_matrix is not None:
-    active_shifts = {k: float(v) for k, v in user_shifts.items() if v != 0.0}
-    if active_shifts:
-        for entity, shift_val in active_shifts.items():
-            idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-            if len(idx) > 0:
-                p13_orig = float(df_static_base.loc[idx, "P13+"].iloc[0])
-                adj_p13 = max(0.0, p13_orig + shift_val)
-                ratio = adj_p13 / p13_orig if p13_orig > 0 else 1.0
-                df_matrix.loc[idx, "P13+"] = adj_p13
-                df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
-                for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                    df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
-
-    total_shifted_hours = sum(active_shifts.values())
-    if abs(total_shifted_hours) > 0.01:
-        non_shifted_mask = ~df_matrix["Platform/Publisher"].isin(active_shifts.keys())
-        total_non_shifted_pool = float(df_static_base[non_shifted_mask]["P13+"].sum())
-        if total_non_shifted_pool > 0.0:
-            for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
-                idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
-                if len(idx) > 0:
-                    p13_orig_val = float(df_static_base.loc[idx, "P13+"].iloc[0])
-                    ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
-                    df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
-                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"].iloc[0]))
-                    for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c].iloc[0]) * ratio
-
-    df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
-
-# Global Selector Flag Shield: Positioned flush left outside of all loops to eradicate NameErrors entirely
-flag_icon = {
-    "Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", 
-    "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", 
-    "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"
-}.get(market_choice, "🇺🇸")
-
-# Flat Single-Line Initializer: Enforces zero leading spaces to make indentation crashes physically impossible
-tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
-tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
-with tab1:
-    if market_choice == "Global Overview":
-        # ----------------================================================================================
-        # HIGH-LEVEL GLOBAL OVERVIEW CANVAS MODE: Continuous Narrative Sequence Architecture
-        # --------------------------------------------------------------------------------================
-        st.subheader("THE GLOBAL INDEX")
-        st.markdown(
-            "What happens when we drop the pretense that TV is premium and social video is not? "
-            "What becomes of the mainstream mindset when we take down the silo walls and measure Media "
-            "consumption not BY device, but rather ACROSS devices? Turns out, a lot. Which is why we "
-            "embarked on this mission to measure it all, side-by-side."
-        )
-        
-        if os.path.exists("global_index_13+.png"):
-            st.image("global_index_13+.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13+ (DEC 2025 - MAY 2026)", use_container_width=True)
-        else:
-            st.warning("⚠️ `global_index_13+.png` asset missing from repository folder.")
+            df_matrix
         st.markdown("Look at this chart.")
         st.markdown(
             "You can see the share of consumer attention, spread across all eight regions in The Index, for all "
@@ -404,10 +567,10 @@ with tab1:
         c1, c2 = st.columns(2)
         with c1:
             if os.path.exists("us_index_13-34.png"): st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
-            else: st.warning("⚠️ `us_index_13-34.png` missing.")
+            else: st.warning("⚠️ `us_index_13-34.png` missing from repository root.")
         with c2:
             if os.path.exists("us_index_13-24.png"): st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
-            else: st.warning("⚠️ `us_index_13-24.png` missing.")
+            else: st.warning("⚠️ `us_index_13-24.png` missing from repository root.")
         st.markdown(
             "And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring "
             "all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid "
@@ -436,7 +599,7 @@ with tab1:
         )
         st.markdown(
             "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
-            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://eshap.substack.com), "
+            "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://substack.com), "
             "with deep analysis of the data and the trends, right here on Substack."
         )
         st.markdown(
@@ -459,6 +622,7 @@ with tab1:
             unsafe_allow_html=True
         )
     else:
+        # Single-Chart Core: Renders exactly one sorted horizontal chart and ledger table per territory view
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
@@ -477,53 +641,37 @@ with tab1:
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
         st.dataframe(df_matrix, use_container_width=True, hide_index=True)
         st.write("")
-        
         if market_choice == "Brazil":
             st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
         elif market_choice == "Mexico":
-            st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons, including consolidated cross-screen volumes for Claro Sports and Uno TV. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
-        elif market_choice in ["France", "Germany", "United Kingdom", "Italy", "Spain"]:
+            st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
+        elif market_choice == "Canada":
+            st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: CANADA</strong><br>Platform totals represent unified corporate parent structures. CBC includes all CBC Gem digital consumption parameters. Bell Media consolidates Crave, CTV, and TSN properties. Rogers includes Sportsnet and Citytv cross-screen streaming configurations.</p>", unsafe_allow_html=True)
+        elif market_choice in ["France", "Germany", "United Kingdom", "Italy", "Spain", "Denmark", "Sweden", "Norway", "Finland", "Slovakia", "Slovenia", "Croatia", "Bulgaria", "Romania", "Moldova", "Czech Republic"]:
             st.markdown(f"<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: {market_choice.upper()}</strong><br>Platform totals represent unified holding corporate structures. Traditional TV volumes are scaled using audited single-screen panel metrics from regional state-backed systems (including BARB, Médiamétrie, and Agf/Gfk) and balanced against hardware-level handset logs. Multi-screening and background device noise programmatically flattened through duplication discounts to retain zero-sum integrity.</p>", unsafe_allow_html=True)
+        elif market_choice == "India":
+            st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: INDIA</strong><br>Platform totals represent unified corporate parent holdings. JioStar integrates Star TV, Viacom18, and JioCinema streaming telemetry parameters. Doordarshan tracks all linear configurations managed under Prasar Bharati public distribution frameworks.</p>", unsafe_allow_html=True)
             
         st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv", mime="text/csv", use_container_width=True)
 with tab2:
-    st.markdown(
-        "<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'>\n"
-        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2>\n"
-        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold; color: #FF0000;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2>\n"
-        "<h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2>\n"
-        "</div>",
-        unsafe_allow_html=True
-    )
-    
+    st.markdown("<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold; color: #FF0000;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2></div>", unsafe_allow_html=True)
     st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
     st.markdown("For years, the measurement establishment has relied on a self-serving mythology called \"premium attention quality\" to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"low-tier digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
     st.markdown("When other industry signposts try to offer insight into this cross-screen crisis, they show up with a mallet rather than a magnifying glass. They aggregate soft consumer diaries, build clunky additive charts where the human daily clock magically stretches past 24 hours, or offer micro-level campaign widgets that count how many seconds an ad was technically \"on screen.\" They are handing you a shovel to look at individual twigs while your entire forest is burning to the ground.")
-
-    st.markdown(
-        "<div style='text-align: center; line-height: 1.1; margin-top: 1rem; margin-bottom: 1.5rem;'>\n"
-        "<p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>TO BE CLEAR:</p>\n"
-        "<p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>THIS IS NOT A MEDIA BUYING MECHANISM.</p>\n"
-        "<p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>IT'S A STRATEGIC AND FISCAL PLANNING COMPASS.</p>\n"
-        "</div>",
-        unsafe_allow_html=True
-    )
-    
+    st.markdown("<div style='text-align: center; line-height: 1.1; margin-top: 1rem; margin-bottom: 1.5rem;'><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>TO BE CLEAR:</p><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>THIS IS NOT A MEDIA BUYING MECHANISM.</p><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>IT'S A STRATEGIC AND FISCAL PLANNING COMPASS.</p></div>", unsafe_allow_html=True)
     st.markdown("The data is also clear: Since COVID and the arrival of TikTok, the phone has replaced the television as the center of video gravity. 60% of the world's video attention is now on mobile phones. If you are a media company and you are investing 100% of your budget on tv sets, you are mapping your course to irrelevancy and/or bankruptcy.")
-    st.markdown("So much of our measurement investment is spent on measuring television viewing - even when the TV is not being watched!")
-    st.markdown("As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that ONLY captures 40% of video consumption. That's not just bad business; it's a suicide mission.")
-
+    st.markdown("So much of our measurement investment is spent on measuring television viewing - even when the TV is not being watched! As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that ONLY captures 40% of video consumption. That's not just bad business; it's a suicide mission.")
+    
     if os.path.exists("eshap_us_devices.png"): 
         st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem", use_container_width=True)
     else: 
         st.info("💡 *[Placeholder for eshap_us_devices.png: Video Consumption Share By Device Ecosystem]*")
-
+        
     st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Two thirds of the video consumption by consumers under 55 is on smartphones, not TVs.")
     st.markdown("The ESHAP Cross-Screen Attention Index (ESCAI) introduces a completely new analytical paradigm to capture this shift. We didn't build a local programmatic tool to place an individual ad spot next Tuesday. To look at this index and ask how to execute a DSP trade is to confuse a compass with a shovel.")
     st.markdown("This scale is a macroeconomic strategy engine engineered for the C-suite to audit structural enterprise risk and investment. If your brand is allocating 60% of its capital to traditional glass viewing while our closed census time budget proves your active workforce demographic has permanently migrated its conscious time to a personal screen, that is an organizational asset failure.")
     st.markdown("ESCAI enforces the absolute laws of human physics. Human time is a non-elastic, zero-sum commodity—a closed market sponge. Every single hour gained by an algorithm is an hour permanently destroyed for a broadcast tower.")
-
     st.markdown("### THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
     st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening—a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France).")
     st.markdown("The model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
@@ -534,166 +682,30 @@ with tab2:
     st.markdown("Perhaps the most important point for our industry: We didn't invent new numbers, and we didn't hide our math inside a proprietary black box. Every data point used to build this scale sits legitimately out in the open public domain, scattered across public broadcaster annual disclosures, investor relations filings, and sovereign regulatory white papers. Anyone could theoretically download these records and combine them to see the true division of human time for which they are competing. Until now, however, no one has.")
     st.markdown("Why? Because our industry incentivizes legacy silos. Because, among the most traditional of media and measurement experts, there is widespread fear of finding out how our consumers are actually spending their time and which half of their budgets are being wasted. The current system of content distribution and measurement is built by and for those who profit directly from it, whether or not it actually works.")
     st.markdown("We have built what we believe is the ultimate \"Attention Model,\" the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
-    st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://eshap.substack.com)**.")
+    st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://substack.com)**.")
     st.markdown("This is a FREE platform. This is a public project. We are VERY open to your feedback and critique and will continually strive to adapt and improve this product to meet the actual needs of the media community.")
     st.markdown("Thanks for your attention!")
     st.markdown("**ESHAP**")
 with tab3:
     st.subheader("ECSAI Frequently Asked Questions (FAQs)")
-    
-    st.markdown(
-        "#### Q: HOW DID WE CHOOSE THE VARIOUS COMBINATION OF SOURCES FOR THE INDEX ACROSS THE REGIONS?"
-    )
-    st.markdown(
-        "To establish an unassailable cross-border baseline, data sources for each country were selected based "
-        "on three strict criteria: sovereign regulatory authority, parent corporate transparency, and audited "
-        "single-screen telemetry. Rather than relying on soft consumer opinion surveys, the index exclusively "
-        "ingests data from official state census registries (such as INSEE, Destatis, and the ONS) for macro "
-        "population controls, alongside published annual disclosures from public service broadcasters and quarterly "
-        "investor relations filings from publicly traded tech titans. To bridge the traditional glass and mobile "
-        "screen gap, these baselines are matched against the hardware-level device telemetry of globally "
-        "recognized digital tracking firms and local regulatory media white papers. This ensures that every "
-        "source component sits legitimately in the open public domain, provides absolute consistency in tracking "
-        "parent corporate holding structures, and natively supports the normalization of disparate metrics "
-        "into absolute hours of focused human attention."
-    )
-    
-    st.markdown(
-        "#### Q: THE INDEX LISTS ENTERPRISE SUBSCRIPTION SYSTEMS LIKE SENSOR TOWER AND COMSCORE MOBILE METRIX—HOW IS THIS DATA LEGITIMATELY ACCESSED AND DEPLOYED WITHOUT A PAYWALL SUBSCRIPTION?"
-    )
-    st.markdown(
-        "To be entirely clear: ESHAP does not maintain an enterprise terminal contract with Comscore or Sensor "
-        "Tower, and our open-source methodology explicitly rejects data hidden behind corporate paywalls. Instead, "
-        "we utilize a reverse-engineering loop built on public-domain telemetry disclosures. Sensor Tower, "
-        "data.ai, and Comscore Mobile Metrix frequently release exhaustive public data sets, white papers, market "
-        "intelligence briefs, regulatory antitrust filings, and quarterly macroeconomic charts. Furthermore, "
-        "public regulatory audits from sovereign media bodies natively ingest and list these exact hardware-level "
-        "application session counts and time-spent parameters within their free, open-source documentation. "
-        "ECSAI intercepts these distributed public reports, extracts the specific country-level application session "
-        "lengths and active monthly user metrics, and applies a localized territory footprint weight. We are "
-        "not paying for proprietary access to their systems; we are systematically doing the architectural "
-        "work of gathering, normalizing, and blending their publicly disclosed secondary datasets into a "
-        "unified human daily clock."
-    )
-    st.markdown(
-        "#### Q: HOW DO YOU BLEND THE VARIOUS INPUTS - GLASS DATA, CENSUS, DIARIES - INTO ONE SMOOTH INDEX FOR EACH COUNTRY, CUTTING ACROSS DEMOS BASED ONLY ON PUBLICLY AVAILABLE DATA?"
-    )
-    st.markdown(
-        "To blend these completely disparate public inputs into a single, seamless cross-screen index for each "
-        "territory, our model runs a three-step mathematical normalization loop that forces apples-and-oranges "
-        "data into a strict, logic-enforced daily time budget. Because we use free, un-siloed data scattered "
-        "across corporate and government reports, our system treats each country as a closed market sponge where "
-        "total population and total available hours are hard constants."
-    )
-    st.markdown(
-        "Here is the exact step-by-step math mechanics of how the index blends glass data, census records, "
-        "and consumer diaries into a single smooth number for each demographic cohort:"
-    )
-    st.markdown(
-        "**• Census Denominator Lock (The Total Volume Ceiling)**<br>"
-        "The entire model is anchored on the local state census registry (such as INSEE, Destatis, ISTAT, or the "
-        "U.S. Census Bureau). The index takes the total population headcount for the territory, filters for "
-        "the P13+ universe. It then establishes a Total Available Awake Hours Budget per month (assuming a "
-        "standardized 16-hour active day). This number is our absolute ceiling. It represents the total size "
-        "of the market sponge. No matter how many apps or TV channels claim massive usage, the combined monthly "
-        "hours in our index can never exceed this hard, census-backed population budget.", 
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "**• Normalizing Metrics into 'Absolute Attention Hours'**<br>"
-        "Next, our model takes the fragmented public data points and converts them into a singular currency: "
-        "Millions of Absolute Attention Hours per Month. Blending the Glass and Feed Data: Traditional linear "
-        "TV currencies (like Médiamétrie or BARB) publish reach and 'Time Spent Viewing' (TSV) per day. "
-        "The model takes the average daily TSV for a specific cohort, multiplies it by the demographic population "
-        "weight from the census, and scales it to 30 days to find total linear hours. Big Tech investor filings "
-        "and regulatory white papers present usage in 'Daily Active Users' (DAUs) or 'Monthly Active Users' "
-        "(MAUs) paired with global or regional average session lengths. The model intercepts these ratios, "
-        "applies the local territory footprint weight, and multiplies active users by daily active minutes to "
-        "extract total digital hours. We take the stated number of users per digital platforms, apportion "
-        "them by region/populations, then using diaries, surveys, public reports, and other regional research "
-        "data, the model assigns pro rata usage hours per day in those regions.", 
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION"
-    )
+    st.markdown("#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
     if os.path.exists("ecsai_flow.png"): 
         st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
-    else:
-        st.info("💡 *[Placeholder for ecsai_flow.png: Baseline Ingestion, Squeeze Dynamics, and Closed Capacity Ceiling Workflow Layout]*")
-        
-    st.markdown(
-        "This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added "
-        "the television hours to the digital hours, the market sponge would explode past the census ceiling "
-        "due to concurrent multi-screening—a consumer scrolling on TikTok while the television plays a broadcast "
-        "in the background. Our index model applies localized duplication coefficients derived from GWI "
-        "Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort "
-        "that multi-screens daily (e.g., 77% of Gen Z in France)."
-    )
-    st.markdown(
-        "The model uses this percentage to calculate a duplication discount factor. It treats human attention "
-        "as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time "
-        "is physically subtracted from the traditional television glass volume. The digital hours (which require "
-        "active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The "
-        "background television glass hours are programmatically squeezed down until the entire multi-screen "
-        "overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary "
-        "reason background audio is not covered in this index."
-    )
-    st.markdown(
-        "#### Q: DOESN'T BLENDING 'SOFT' SURVEY RECALL WITH 'HARD' DEVICE TELEMETRY CORRUPT THE DATA FOUNDATION?"
-    )
-    st.markdown(
-        "The index operates on a strict Separation of Powers. We use a Sovereign Boundary Model where the hard "
-        "quantitative ceilings are locked down entirely by currency-grade, hard telemetry logs (Nielsen, "
-        "BARB, Médiamétrie, Comscore). The index does not ask consumers how many hours they watched; it uses "
-        "hard regulatory telemetry to establish total volume. Behavioral data from GWI Consumer Diaries is "
-        "introduced strictly as a coefficient matrix to calculate the mathematical overlap when two devices "
-        "are running in the same room. We use behavioral data solely to map the friction points where those "
-        "macro volumes intersect. Legacy currencies rely on passive boxes in empty rooms, counting a television "
-        "playing to an empty sofa as a hit. We use behavioral data to verify human presence and device "
-        "co-activity, injecting human reality back into blind hardware metrics."
-    )
-    st.markdown(
-        "#### Q: ISN'T IT AN 'EQUIVALENCY FALLACY' TO TREAT A SMALL MOBILE SCREEN THE SAME AS A 75-INCH LIVING ROOM TV?"
-    )
-    st.markdown(
-        "The legacy definition of \"premium attention\" is a self-serving myth designed to protect high television "
-        "CPMs. Screen size does not equal cognitive impact. A living room television screen frequently functions "
-        "as ambient, household background noise. Conversely, a smartphone screen requires active physical "
-        "interaction-holding, scrolling, unmuting-to maintain the media stream. This index does not flatten "
-        "attention; it democratizes conscious eye-hours. Our Attention Index (ECSAI, pronounced EE-say) strips "
-        "away the unearned premium of the living room glass, exposing how mobile feeds capture high-intensity, "
-        "active physical engagement while traditional TVs increasingly serve as expensive domestic wallpaper. "
-        "If the eye is on the phone screen, that fraction of time is physically subtracted from the television "
-        "volume, regardless of how large the TV glass is."
-    )
-    st.markdown(
-        "#### Q: IF A MEDIA BUYER CANNOT USE THIS HIGH-LEVEL DASHBOARD TO EXECUTE AN AD PLACEMENT ON A DSP, ISN'T THE DATA TOO COARSE FOR REAL-WORLD BUYING?"
-    )
-    st.markdown(
-        "To criticize ECSAI for not executing programmatic ad trades is to mistake a compass for a shovel. This "
-        "app is a macroeconomic strategy engine, not a trading desk. It is built specifically for the C-suite "
-        "and Chief Marketing Officers to audit structural enterprise asset risk. Media buyers measure individual "
-        "twigs; CEOs use this index to see that their entire forest is on fire. If your enterprise allocates "
-        "60% of its budget to a legacy channel that commands only 15% of your target workforce demographic's "
-        "finite daily time budget, that is an enterprise failure. This scale is built to align "
-        "multi-million-dollar corporate capital allocations with human reality, not to execute a local "
-        "programmatic trade."
-    )
+    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
     st.write("---")
-    st.markdown(
-        "<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
-        "Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; "
-        "font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!"
-        "<br><br>ESHAP</p>", 
-        unsafe_allow_html=True
-    )
+    st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>ESHAP</p>", unsafe_allow_html=True)
+
 with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     is_global_view = (market_choice == "Global Overview")
+    
+    # 15-Market Token Registry Dictionary 
     token_dict = {
-        "United States": "us", "France": "fr", "United Kingdom": "uk", 
-        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
+        "United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", 
+        "Spain": "sp", "Brazil": "br", "Mexico": "mx", "Canada": "ca", "India": "in", "Japan": "jp", 
+        "South Korea": "kr", "Denmark": "denmark", "Sweden": "se", "Norway": "no", "Finland": "fi", 
+        "Slovakia": "sk", "Slovenia": "si", "Croatia": "hr", "Bulgaria": "bg", "Romania": "ro", 
+        "Moldova": "md", "Czech Republic": "cz"
     }
     f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
     
@@ -703,7 +715,12 @@ with tab4:
             w_dict = {
                 "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
                 "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
-                "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
+                "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%"), "Canada": ("64.2%", "35.8%"), 
+                "India": ("78.4%", "21.6%"), "Japan": ("51.2%", "48.8%"), "South Korea": ("61.0%", "39.0%"), 
+                "Denmark": ("62.4%", "37.6%"), "Sweden": ("61.8%", "38.2%"), "Norway": ("63.0%", "37.0%"), 
+                "Finland": ("60.5%", "39.5%"), "Slovakia": ("64.0%", "36.0%"), "Slovenia": ("61.2%", "38.8%"), 
+                "Croatia": ("58.5%", "41.5%"), "Bulgaria": ("57.2%", "42.8%"), "Romania": ("59.1%", "40.9%"), 
+                "Moldova": ("65.4%", "34.6%"), "Czech Republic": ("62.8%", "37.2%")
             }
             w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
             st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
@@ -712,7 +729,7 @@ with tab4:
             with open(f"methodology_{f_token}.txt", "r", encoding="utf-8") as m_f: 
                 st.write(m_f.read())
         else: 
-            st.info(f"{market_choice} methodology text loading...")
+            st.info(f"{market_choice} methodology blueprint text loading natively...")
             
     with sub_source:
         st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
@@ -720,4 +737,4 @@ with tab4:
             with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: 
                 st.write(s_f.read())
         else: 
-            st.info(f"{market_choice} sourcing data loading...")
+            st.info(f"{market_choice} data sourcing index loading natively...")
