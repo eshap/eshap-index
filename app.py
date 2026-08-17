@@ -622,7 +622,17 @@ if df_matrix is not None:
             unsafe_allow_html=True
         )
     else:
-        # Single-Chart Core: Renders exactly one sorted horizontal chart and ledger table per territory view
+        # Universal Global Flag Dictionary Map: Placed here to explicitly resolve any missing variable dropouts
+        flag_icon = {
+            "Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", 
+            "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", 
+            "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽", "Canada": "🇨🇦",
+            "India": "🇮🇳", "Japan": "🇯🇵", "South Korea": "🇰🇷", "Denmark": "🇩🇰",
+            "Sweden": "🇸🇪", "Norway": "🇳🇴", "Finland": "🇫🇮", "Slovakia": "🇸🇰",
+            "Slovenia": "🇸🇮", "Croatia": "🇭🇷", "Bulgaria": "🇧🇬", "Romania": "🇷🇴",
+            "Moldova": "🇲🇩", "Czech Republic": "🇨🇿"
+        }.get(market_choice, "🇺🇸")
+
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
