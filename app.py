@@ -705,8 +705,20 @@ with tab4:
         "Moldova": "md", "Czech Republic": "cz"
     }
     f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
-    
+    # Dynamic Map Override: Instantiates a fallback mapping list flush-left to resolve variable exceptions
+    local_flag_map = {
+        "Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", 
+        "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", 
+        "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽", "Canada": "🇨🇦",
+        "India": "🇮🇳", "Japan": "🇯🇵", "South Korea": "🇰🇷", "Denmark": "🇩🇰",
+        "Sweden": "🇸🇪", "Norway": "🇳🇴", "Finland": "🇫🇮", "Slovakia": "🇸🇰",
+        "Slovenia": "🇸🇮", "Croatia": "🇭🇷", "Bulgaria": "🇧🇬", "Romania": "🇷🇴",
+        "Moldova": "🇲🇩", "Czech Republic": "🇨🇿"
+    }
+    current_flag = local_flag_map.get(market_choice, "🇺🇸")
+
     with sub_method:
+        st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({current_flag} {market_choice.upper()})")
         if not is_global_view:
             w_dict = {
                 "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
@@ -727,7 +739,7 @@ with tab4:
             st.info(f"{market_choice} methodology blueprint text loading natively...")
             
     with sub_source:
-        st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
+        st.markdown(f"### DATA SOURCES ({current_flag} {market_choice.upper()})")
         if os.path.exists(f"sources_{f_token}.txt"):
             with open(f"sources_{f_token}.txt", "r", encoding="utf-8") as s_f: 
                 st.write(s_f.read())
