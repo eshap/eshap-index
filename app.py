@@ -54,32 +54,43 @@ st.html(
     "    color: #333333 !important;\n"
     "}\n"
     "</style>"
-)
-with st.sidebar:
-    st.markdown("<p style='color: #FFFFFF; font-weight: bold; margin-bottom: 0.2rem;'>ECSAI: pronounced EE-say</p>", unsafe_allow_html=True)
-    if os.path.exists("eshap_map.png"):
-        st.image("eshap_map.png", use_container_width=True)
-        
-    consolidate_meta = st.toggle("Consolidate Instagram/Facebook into Meta", value=False)
-    st.write("")
-    
-    market_options = [
-        "Global Overview", "United States", "Brazil", "Mexico", "Germany", 
-        "United Kingdom", "France", "Italy", "Spain", "Canada", "India", 
-        "Japan", "South Korea", "Denmark", "Sweden", "Norway", "Finland", 
-        "Slovakia", "Slovenia", "Croatia", "Bulgaria", "Romania", "Moldova", "Czech Republic"
-    ]
-    market_choice = st.radio("Territory", options=market_options, index=0)
-with st.sidebar:
+)with st.sidebar:
     st.write("---")
+    
+    # Custom state trigger to clear variables on click
+    if st.button("🔄 Reset Defaults", use_container_width=True):
+        st.session_state["shift_yt_val"] = 0.0
+        st.session_state["shift_oth_val"] = 0.0
+        st.session_state["shift_dis_val"] = 0.0
+        st.session_state["shift_net_val"] = 0.0
+        st.session_state["shift_tik_val"] = 0.0
+        st.rerun()
+
+    st.markdown(
+        "<p style='color: #FFFFFF; font-style: italic; font-size: 0.95rem; line-height: 1.4; margin-top: 0.5rem;'>"
+        "Time is not infinite. In a snapshot -- this index -- where population and time are constants, "
+        "when attention shifts to one platform, it must come from somewhere else. "
+        "These sliders adjust the whole based on adjustments made to any one."
+        "</p>", 
+        unsafe_allow_html=True
+    )
+    
     st.markdown("### **Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated**")
     st.markdown("<p style='color: #E0E0E0; font-weight: bold; font-style: italic; font-size: 0.95rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
-    
-    shift_yt = st.slider("YOUTUBE Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
-    shift_other = st.slider("OTHER Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
-    shift_disney = st.slider("DISNEY Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
-    shift_netflix = st.slider("NETFLIX Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
-    shift_tailwind = st.slider("TIKTOK Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
+with st.sidebar:
+    # Initializing memory hooks to lock state values to the button override
+    if "shift_yt_val" not in st.session_state: st.session_state["shift_yt_val"] = 0.0
+    if "shift_oth_val" not in st.session_state: st.session_state["shift_oth_val"] = 0.0
+    if "shift_dis_val" not in st.session_state: st.session_state["shift_dis_val"] = 0.0
+    if "shift_net_val" not in st.session_state: st.session_state["shift_net_val"] = 0.0
+    if "shift_tik_val" not in st.session_state: st.session_state["shift_tik_val"] = 0.0
+
+    shift_yt = st.slider("YOUTUBE Shift Impact", min_value=-500.0, max_value=500.0, step=10.0, key="shift_yt_val")
+    shift_other = st.slider("OTHER Shift Impact", min_value=-500.0, max_value=500.0, step=10.0, key="shift_oth_val")
+    shift_disney = st.slider("DISNEY Shift Impact", min_value=-500.0, max_value=500.0, step=10.0, key="shift_dis_val")
+    shift_netflix = st.slider("NETFLIX Shift Impact", min_value=-500.0, max_value=500.0, step=10.0, key="shift_net_val")
+    shift_tailwind = st.slider("TIKTOK Shift Impact", min_value=-500.0, max_value=500.0, step=10.0, key="shift_tik_val")
+
 st.header("ESHAP Cross Screen Attention Index (ECSAI)")
 st.subheader("The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer")
 st.markdown("For full analysis: [Media War & Peace](https://substack.com)")
@@ -88,10 +99,17 @@ st.write("---")
 cols = ["Platform/Publisher", "All P13+", "55+ Layer", "13-54 Workforce", "13-44 Youth", "13-34 Core", "13-24 Gen Z"]
 
 US_BASE = [
-    ["YOUTUBE", 2455.0, 345.0, 2110.0, 1680.0, 1250.0, 715.0],
-    ["DISNEY (Corp Portfolio)", 2410.0, 465.0, 1945.0, 1420.0, 985.0, 520.0],
-    ["TIKTOK", 1862.0, 22.0, 1840.0, 1510.0, 1220.0, 895.0],
-    ["NETFLIX", 1705.0, 165.0, 1540.0, 1190.0, 840.0, 410.0]
+    ["YOUTUBE", 2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5],
+    ["DISNEY", 1945.0, 1080.0, 865.0, 657.4, 447.0, 228.0],
+    ["NETFLIX", 1540.0, 380.0, 1160.0, 846.8, 533.5, 272.1],
+    ["TIKTOK", 1480.0, 65.0, 1415.0, 1103.7, 905.0, 660.7],
+    ["PARAMOUNT", 1290.0, 810.0, 480.0, 331.2, 195.4, 86.0],
+    ["NBCU", 1265.0, 795.0, 470.0, 319.6, 185.4, 76.0],
+    ["INSTAGRAM", 1120.0, 110.0, 1010.0, 878.7, 711.7, 391.4],
+    ["WBD", 1040.0, 685.0, 355.0, 241.4, 120.7, 50.7],
+    ["FACEBOOK", 995.0, 520.0, 475.0, 261.3, 96.7, 18.4],
+    ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
+    ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
 ]
 
 GLOBAL_BASE = [
@@ -102,18 +120,32 @@ GLOBAL_BASE = [
 ]
 
 BR_BASE = [
-    ["YOUTUBE", 3120.0, 95.0, 3025.0, 2540.0, 1985.0, 1150.0],
-    ["TIKTOK", 2455.0, 5.0, 2450.0, 2110.0, 1680.0, 1045.0],
-    ["NETFLIX", 1465.0, 85.0, 1380.0, 1120.0, 815.0, 215.0],
-    ["GLOBO TRADITIONAL TV", 4150.0, 3265.0, 885.0, 515.0, 245.0, 135.0]
-]
-MX_BASE = [
-    ["YOUTUBE", 1985.0, 65.0, 1920.0, 1645.0, 1250.0, 785.0],
-    ["TIKTOK", 1652.0, 2.0, 1650.0, 1420.0, 1115.0, 710.0],
-    ["NETFLIX", 985.0, 45.0, 940.0, 785.0, 550.0, 145.0],
-    ["TELEVISAUNIVISION LINEAR", 2950.0, 2215.0, 735.0, 415.0, 210.0, 105.0]
+    ["GRUPO GLOBO", 2210.0, 1015.0, 1195.0, 920.2, 680.9, 354.1],
+    ["YOUTUBE", 1980.0, 260.0, 1720.0, 1221.2, 976.9, 625.2],
+    ["TIKTOK", 1150.0, 28.0, 1122.0, 908.8, 763.4, 587.8],
+    ["INSTAGRAM", 1040.0, 52.0, 988.0, 879.3, 747.4, 433.5],
+    ["NETFLIX", 915.0, 120.0, 795.0, 604.2, 398.7, 211.3],
+    ["RECORD GROUP", 620.0, 365.0, 255.0, 186.1, 122.8, 54.8],
+    ["SBT (Sist. Brasileiro de Televisão)", 515.0, 290.0, 225.0, 168.7, 115.8, 53.2],
+    ["AMAZON", 390.0, 65.0, 325.0, 266.5, 173.2, 77.9],
+    ["DISNEY", 325.0, 48.0, 277.0, 213.3, 139.3, 64.0],
+    ["WBD (MAX)", 290.0, 82.0, 208.0, 151.8, 95.6, 43.0],
+    ["FACEBOOK", 285.0, 135.0, 150.0, 85.5, 32.4, 6.3],
+    ["BAND (Grupo Bandeirantes)", 210.0, 122.0, 88.0, 61.6, 38.7, 15.4]
 ]
 
+MX_BASE = [
+    ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
+    ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
+    ["TIKTOK", 860.0, 12.0, 848.0, 695.3, 591.0, 461.0],
+    ["INSTAGRAM", 695.0, 18.0, 677.0, 602.5, 518.1, 305.7],
+    ["NETFLIX", 635.0, 54.0, 581.0, 447.4, 295.3, 156.4],
+    ["TV AZTECA", 485.0, 245.0, 240.0, 180.0, 122.4, 52.8],
+    ["AMAZON", 245.0, 32.0, 213.0, 176.8, 116.7, 52.5],
+    ["DISNEY", 220.0, 25.0, 195.0, 152.1, 100.4, 46.2],
+    ["WBD (MAX)", 195.0, 42.0, 153.0, 113.2, 72.4, 33.3],
+    ["FACEBOOK", 180.0, 78.0, 102.0, 59.2, 23.1, 4.6]
+]
 CA_BASE = [
     ["YOUTUBE", 1285.0, 145.0, 1140.0, 825.0, 610.0, 315.0],
     ["TIKTOK", 880.0, 15.0, 865.0, 710.0, 565.0, 420.0],
@@ -129,6 +161,7 @@ CA_BASE = [
     ["WBD (MAX)", 263.0, 28.0, 235.0, 180.0, 125.0, 70.0],
     ["FACEBOOK", 185.0, 75.0, 110.0, 72.0, 45.0, 18.0]
 ]
+
 BG_BASE = [
     ["YOUTUBE", 460.0, 65.0, 395.0, 315.0, 245.0, 155.0],
     ["TIKTOK", 330.0, 5.0, 325.0, 265.0, 215.0, 150.0],
@@ -156,6 +189,7 @@ CRO_BASE = [
     ["WBD", 38.0, 3.0, 35.0, 28.0, 19.0, 10.0],
     ["FACEBOOK", 35.0, 21.0, 14.0, 8.0, 4.0, 1.0]
 ]
+
 CR_BASE = [
     ["ČT (Česká televize)", 550.0, 285.0, 265.0, 165.0, 100.0, 48.0],
     ["YOUTUBE", 410.0, 95.0, 315.0, 220.0, 160.0, 82.0],
@@ -183,6 +217,7 @@ DEN_BASE = [
     ["WBD", 50.0, 8.0, 42.0, 32.0, 22.0, 12.0],
     ["FACEBOOK", 50.0, 28.0, 22.0, 14.0, 8.0, 3.0]
 ]
+
 FIN_BASE = [
     ["YOUTUBE", 180.0, 45.0, 135.0, 95.0, 70.0, 36.0],
     ["YLE (Yleisradio)", 260.0, 135.0, 125.0, 76.0, 46.0, 22.0],
@@ -196,18 +231,37 @@ FIN_BASE = [
     ["WBD", 42.0, 7.0, 35.0, 27.0, 19.0, 10.0],
     ["FACEBOOK", 37.0, 22.0, 15.0, 9.0, 5.0, 1.0]
 ]
-
 FR_BASE = [
-    ["YOUTUBE", 1045.0, 215.0, 830.0, 615.0, 440.0, 210.0],
-    ["NETFLIX", 895.0, 95.0, 800.0, 640.0, 445.0, 105.0],
-    ["TIKTOK", 622.0, 12.0, 610.0, 515.0, 390.0, 215.0],
-    ["TRADITIONAL TV (MEDIAMAT)", 2450.0, 2065.0, 385.0, 265.0, 135.0, 55.0]
+    ["YOUTUBE", 485.0, 95.0, 390.0, 273.0, 212.9, 129.9],
+    ["TIKTOK", 335.0, 12.0, 323.0, 251.9, 206.6, 150.8],
+    ["NETFLIX", 390.0, 85.0, 305.0, 222.7, 140.3, 71.6],
+    ["INSTAGRAM", 215.0, 20.0, 195.0, 169.7, 137.5, 75.6],
+    ["TF1", 440.0, 270.0, 170.0, 136.0, 102.0, 51.8],
+    ["DISNEY", 180.0, 42.0, 138.0, 104.9, 66.1, 27.3],
+    ["FRANCE TV", 510.0, 385.0, 125.0, 102.5, 82.0, 54.2],
+    ["ARTE", 120.0, 57.6, 62.4, 48.0, 33.6, 10.1],
+    ["GROUP M6", 265.0, 145.0, 120.0, 93.6, 65.5, 29.5],
+    ["AMAZON", 155.0, 48.0, 107.0, 87.7, 54.4, 22.8],
+    ["WBD", 170.0, 95.0, 75.0, 54.8, 34.5, 14.3],
+    ["L'ÉQUIPE", 65.0, 19.5, 45.5, 33.7, 21.6, 8.9],
+    ["CANAL+ GROUP", 195.0, 115.0, 80.0, 58.4, 40.9, 13.9],
+    ["FACEBOOK", 165.0, 92.0, 73.0, 40.2, 14.9, 2.8],
+    ["DAZN", 20.0, 2.0, 18.0, 16.2, 12.8, 7.7]
 ]
+
 DE_BASE = [
-    ["YOUTUBE", 985.0, 285.0, 700.0, 510.0, 360.0, 185.0],
-    ["NETFLIX", 815.0, 115.0, 700.0, 560.0, 390.0, 95.0],
-    ["TIKTOK", 542.0, 12.0, 530.0, 445.0, 340.0, 175.0],
-    ["TRADITIONAL TV (AGF)", 2850.0, 2425.0, 425.0, 295.0, 155.0, 65.0]
+    ["ARD", 710.0, 560.0, 150.0, 115.5, 90.1, 57.6],
+    ["YOUTUBE", 625.0, 135.0, 490.0, 343.0, 267.5, 163.2],
+    ["ZDF", 615.0, 505.0, 110.0, 84.7, 66.1, 42.2],
+    ["RTL GROUP", 510.0, 310.0, 200.0, 150.0, 108.0, 49.0],
+    ["NETFLIX", 445.0, 95.0, 350.0, 255.5, 160.9, 82.1],
+    ["TIKTOK", 385.0, 14.0, 371.0, 289.4, 237.3, 173.2],
+    ["PROSIEBENSAT.1", 340.0, 195.0, 145.0, 107.3, 73.0, 31.2],
+    ["INSTAGRAM", 295.0, 28.0, 267.0, 232.3, 188.2, 103.5],
+    ["AMAZON", 230.0, 68.0, 162.0, 132.8, 82.3, 34.6],
+    ["DISNEY", 195.0, 42.0, 153.0, 116.3, 73.3, 30.3],
+    ["WBD", 145.0, 78.0, 67.0, 48.9, 30.8, 12.7],
+    ["FACEBOOK", 140.0, 82.0, 58.0, 31.9, 11.8, 2.2]
 ]
 
 IN_BASE = [
@@ -223,11 +277,19 @@ IN_BASE = [
     ["AMAZON", 677.0, 32.0, 645.0, 525.0, 375.0, 165.0],
     ["FACEBOOK", 435.0, 125.0, 310.0, 190.0, 110.0, 45.0]
 ]
+
 IT_BASE = [
-    ["YOUTUBE", 815.0, 295.0, 520.0, 380.0, 265.0, 125.0],
-    ["NETFLIX", 695.0, 125.0, 570.0, 455.0, 315.0, 70.0],
-    ["TIKTOK", 422.0, 12.0, 410.0, 345.0, 260.0, 135.0],
-    ["TRADITIONAL TV (AUDITEL)", 2950.0, 2545.0, 405.0, 280.0, 140.0, 60.0]
+    ["Rai", 520.0, 415.0, 105.0, 80.9, 58.2, 37.2],
+    ["YOUTUBE", 440.0, 110.0, 330.0, 231.0, 180.2, 109.9],
+    ["MFE (Mediaset)", 415.0, 265.0, 150.0, 112.5, 81.0, 40.8],
+    ["TIKTOK", 295.0, 12.0, 283.0, 220.7, 181.0, 132.1],
+    ["NETFLIX", 310.0, 70.0, 240.0, 175.2, 110.4, 56.3],
+    ["INSTAGRAM", 250.0, 25.0, 225.0, 195.8, 158.6, 87.2],
+    ["SKY ITALIA", 175.0, 102.0, 73.0, 50.4, 29.7, 12.2],
+    ["DISNEY", 170.0, 38.0, 132.0, 100.3, 63.2, 26.1],
+    ["WBD", 165.0, 92.0, 73.0, 51.1, 31.7, 12.9],
+    ["FACEBOOK", 160.0, 101.0, 59.0, 32.5, 12.0, 2.3],
+    ["AMAZON", 140.0, 42.0, 98.0, 80.4, 49.8, 20.9]
 ]
 
 JP_BASE = [
@@ -247,6 +309,7 @@ JP_BASE = [
     ["WBD", 160.0, 25.0, 135.0, 105.0, 70.0, 35.0],
     ["FACEBOOK", 200.0, 115.0, 85.0, 52.0, 30.0, 12.0]
 ]
+
 MOL_BASE = [
     ["YOUTUBE", 151.0, 16.0, 135.0, 110.0, 88.0, 56.0],
     ["TIKTOK", 116.0, 1.0, 115.0, 95.0, 78.0, 58.0],
@@ -259,6 +322,20 @@ MOL_BASE = [
     ["DISNEY", 30.0, 2.0, 28.0, 22.0, 16.0, 8.0],
     ["WBD", 22.0, 1.0, 21.0, 16.0, 12.0, 6.0],
     ["FACEBOOK", 20.0, 12.0, 8.0, 4.0, 2.0, 0.5]
+]
+
+NOR_BASE = [
+    ["YOUTUBE", 187.0, 42.0, 145.0, 105.0, 76.0, 38.0],
+    ["NRK (Norsk Riksk.)", 260.0, 125.0, 135.0, 85.0, 50.0, 24.0],
+    ["TV2 NORGE", 177.0, 82.0, 95.0, 60.0, 36.0, 18.0],
+    ["NETFLIX", 165.0, 25.0, 140.0, 110.0, 76.0, 38.0],
+    ["TIKTOK", 139.0, 4.0, 135.0, 105.0, 82.0, 56.0],
+    ["TV2 PLAY", 91.0, 15.0, 76.0, 58.0, 40.0, 20.0],
+    ["VIAPLAY GROUP", 58.0, 10.0, 48.0, 36.0, 24.0, 11.0],
+    ["AMAZON", 108.0, 18.0, 90.0, 70.0, 52.0, 28.0],
+    ["DISNEY", 62.0, 10.0, 52.0, 40.0, 28.0, 15.0],
+    ["WBD", 48.0, 8.0, 40.0, 31.0, 21.0, 12.0],
+    ["FACEBOOK", 43.0, 25.0, 18.0, 11.0, 6.0, 2.0]
 ]
 
 RO_BASE = [
@@ -300,6 +377,7 @@ SLE_BASE = [
     ["WBD", 20.0, 2.0, 18.0, 14.0, 10.0, 5.0],
     ["FACEBOOK", 18.0, 11.0, 7.0, 4.0, 2.0, 0.5]
 ]
+
 SK_BASE = [
     ["YOUTUBE", 1395.0, 215.0, 1180.0, 815.0, 585.0, 315.0],
     ["NETFLIX", 710.0, 65.0, 645.0, 510.0, 340.0, 145.0],
@@ -318,11 +396,20 @@ SK_BASE = [
 ]
 
 SP_BASE = [
-    ["YOUTUBE", 785.0, 195.0, 590.0, 435.0, 310.0, 15.0],
-    ["NETFLIX", 645.0, 85.0, 560.0, 450.0, 315.0, 75.0],
-    ["TIKTOK", 492.0, 12.0, 480.0, 405.0, 310.0, 165.0],
-    ["TRADITIONAL TV (KANTAR)", 1980.0, 1615.0, 365.0, 255.0, 130.0, 55.0]
+    ["RTVE (Radiotelevisión Española)", 395.0, 295.0, 100.0, 77.0, 55.4, 35.5],
+    ["ATRESMEDIA", 380.0, 235.0, 145.0, 108.8, 78.3, 39.5],
+    ["YOUTUBE", 365.0, 85.0, 280.0, 196.0, 152.9, 93.3],
+    ["MEDIASET ESPAÑA", 320.0, 198.0, 122.0, 91.5, 65.9, 33.3],
+    ["TIKTOK", 255.0, 10.0, 245.0, 191.1, 156.7, 114.4],
+    ["NETFLIX", 240.0, 52.0, 188.0, 137.2, 86.5, 44.1],
+    ["INSTAGRAM", 215.0, 20.0, 195.0, 169.7, 137.5, 75.6],
+    ["MOVISTAR+ (Telefónica)", 145.0, 82.0, 63.0, 44.1, 26.5, 11.1],
+    ["DISNEY", 115.0, 24.0, 91.0, 69.2, 43.6, 18.0],
+    ["WBD (MAX)", 105.0, 55.0, 50.0, 36.5, 23.0, 9.6],
+    ["AMAZON", 95.0, 28.0, 67.0, 54.9, 34.0, 14.3],
+    ["FACEBOOK", 90.0, 55.0, 35.0, 19.3, 7.1, 1.3]
 ]
+
 SWE_BASE = [
     ["YOUTUBE", 380.0, 65.0, 315.0, 225.0, 165.0, 85.0],
     ["SVT (Sveriges Tel.)", 380.0, 165.0, 215.0, 135.0, 85.0, 40.0],
@@ -337,25 +424,20 @@ SWE_BASE = [
 ]
 
 UK_BASE = [
-    ["YOUTUBE", 1120.0, 145.0, 975.0, 710.0, 520.0, 265.0],
-    ["TIKTOK", 812.0, 12.0, 800.0, 665.0, 515.0, 270.0],
-    ["NETFLIX", 945.0, 95.0, 850.0, 680.0, 480.0, 125.0],
-    ["TRADITIONAL TV (BARB)", 2150.0, 1655.0, 495.0, 340.0, 180.0, 110.0]
+    ["BBC", 640.0, 460.0, 180.0, 122.4, 85.7, 45.4],
+    ["YOUTUBE", 590.0, 110.0, 480.0, 336.0, 262.1, 159.9],
+    ["ITV", 510.0, 335.0, 175.0, 113.8, 75.1, 36.8],
+    ["NETFLIX", 495.0, 105.0, 390.0, 284.7, 179.4, 91.5],
+    ["TIKTOK", 410.0, 18.0, 392.0, 305.8, 250.7, 183.0],
+    ["SKY GROUP", 385.0, 210.0, 175.0, 119.0, 70.2, 28.8],
+    ["INSTAGRAM", 275.0, 28.0, 247.0, 214.9, 174.1, 95.8],
+    ["PARAMOUNT", 245.0, 155.0, 90.0, 61.2, 36.1, 14.8],
+    ["DISNEY", 235.0, 52.0, 183.0, 139.1, 87.6, 36.2],
+    ["WBD", 220.0, 128.0, 92.0, 62.6, 31.3, 13.1],
+    ["FACEBOOK", 210.0, 115.0, 95.0, 52.3, 19.3, 3.7],
+    ["AMAZON", 195.0, 62.0, 133.0, 109.1, 67.6, 28.4]
 ]
 
-NOR_BASE = [
-    ["YOUTUBE", 187.0, 42.0, 145.0, 105.0, 76.0, 38.0],
-    ["NRK (Norsk Riksk.)", 260.0, 125.0, 135.0, 85.0, 50.0, 24.0],
-    ["TV2 NORGE", 177.0, 82.0, 95.0, 60.0, 36.0, 18.0],
-    ["NETFLIX", 165.0, 25.0, 140.0, 110.0, 76.0, 38.0],
-    ["TIKTOK", 139.0, 4.0, 135.0, 105.0, 82.0, 56.0],
-    ["TV2 PLAY", 91.0, 15.0, 76.0, 58.0, 40.0, 20.0],
-    ["VIAPLAY GROUP", 58.0, 10.0, 48.0, 36.0, 24.0, 11.0],
-    ["AMAZON", 108.0, 18.0, 90.0, 70.0, 52.0, 28.0],
-    ["DISNEY", 62.0, 10.0, 52.0, 40.0, 28.0, 15.0],
-    ["WBD", 48.0, 8.0, 40.0, 31.0, 21.0, 12.0],
-    ["FACEBOOK", 43.0, 25.0, 18.0, 11.0, 6.0, 2.0]
-]
 matrix_assignment_map = {
     "Global Overview": GLOBAL_BASE, "United States": US_BASE, "Brazil": BR_BASE, 
     "Mexico": MX_BASE, "Germany": DE_BASE, "United Kingdom": UK_BASE, 
@@ -365,7 +447,7 @@ matrix_assignment_map = {
     "Slovenia": SLE_BASE, "Croatia": CRO_BASE, "Bulgaria": BG_BASE, "Romania": RO_BASE, 
     "Moldova": MOL_BASE, "Czech Republic": CR_BASE
 }
-df_matrix = pd.DataFrame(matrix_assignment_map.get(market_choice), columns=cols)
+df_matrix = pd.DataFrame(matrix_assignment_map.gewith st.sidebar:t(market_choice), columns=cols)
 
 if consolidate_meta:
     meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
