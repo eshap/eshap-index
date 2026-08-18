@@ -5,6 +5,10 @@ import os
 import io
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
+
+# ------------------------------------------------------------------------------------------------
+# COMPREHENSIVE REPOSITORY REGIONAL FILE MAPPING (ALL 23 EXPLICIT TERRITORIES)
+# ------------------------------------------------------------------------------------------------
 EXPLICIT_METHODOLOGIES = [
     "methodology_us.txt", "methodology_fr.txt", "methodology_uk.txt",
     "methodology_it.txt", "methodology_de.txt", "methodology_sp.txt",
@@ -25,37 +29,22 @@ EXPLICIT_SOURCES = [
     "sources_cro.txt", "sources_bg.txt", "sources_ro.txt",
     "sources_mol.txt", "sources_cr.txt"
 ]
-# SYSTEM STATE CACHE BOOTSTRAPPER: Overrides old state cache locks instantly
-st.session_state.text_memory_cache = {}
-all_target_files = EXPLICIT_METHODOLOGIES + EXPLICIT_SOURCES
 
-for filename in all_target_files:
-    content = ""
-    if os.path.exists(filename):
-        try:
-            with open(filename, "r", encoding="utf-8") as f:
-                content = str(f.read().strip())
-        except Exception:
-            content = ""
-    st.session_state.text_memory_cache[filename] = content
+if "text_memory_cache" not in st.session_state:
+    st.session_state.text_memory_cache = {}
+    for filename in (EXPLICIT_METHODOLOGIES + EXPLICIT_SOURCES):
+        content = ""
+        if os.path.exists(filename):
+            try:
+                with open(filename, "r", encoding="utf-8") as f:
+                    content = str(f.read().strip())
+            except Exception:
+                content = ""
+        st.session_state.text_memory_cache[filename] = content
+
 def load_text_asset(filename):
-    """Safely extracts decoupled plaintext methodology and sources data from RAM cache arrays."""
-    if "text_memory_cache" in st.session_state:
-        return st.session_state.text_memory_cache.get(filename, "")
-    return ""
-# HARDWIRED SCRIPT STYLING: Enforces deep sidebar charcoal canvas variables and uniform page shields
-st.html(
-    "<style>\n"
-    "[data-testid='stSidebar'] { background-color: #4A4A4A !important; }\n"
-    "[data-testid='stSidebar'] label p { color: #FFFFFF !important; font-weight: bold !important; }\n"
-    "div.stButton > button { background-color: #FFFFFF !important; border: 2px solid #FF0000 !important; }\n"
-    "div.stButton > button p { color: #FF0000 !important; font-weight: bold !important; }\n"
-    "div[data-testid='stMarkdownContainer'] h1, div[data-testid='stMarkdownContainer'] h2 {\n"
-    "    color: #333333 !important;\n"
-    "}\n"
-    "</style>"
+    return st.session_state.text_memory_cache.get(filename, "") if "text_memory_cache" in st.session_state else ""
 
-# HARDWIRED SCRIPT STYLING: Enforces deep sidebar charcoal canvas variables and uniform page shields
 st.html(
     "<style>\n"
     "[data-testid='stSidebar'] { background-color: #4A4A4A !important; }\n"
@@ -82,7 +71,6 @@ with st.sidebar:
         "Slovakia", "Slovenia", "Croatia", "Bulgaria", "Romania", "Moldova", "Czech Republic"
     ]
     market_choice = st.radio("Territory", options=market_options, index=0)
-    
     st.write("---")
     
     if st.button("🔄 Reset Defaults", use_container_width=True):
