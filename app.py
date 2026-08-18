@@ -335,6 +335,9 @@ UK_BASE = [
     ["NETFLIX", 945.0, 95.0, 850.0, 680.0, 480.0, 125.0],
     ["TRADITIONAL TV (BARB)", 2150.0, 1655.0, 495.0, 340.0, 180.0, 110.0]
 ]
+# ------------------------------------------------------------------------------------------------
+# COMPREHENSIVE TERRITORIAL MATRIX INFRASTRUCTURE (ALL 23 EXPANSION MARKETS)
+# ------------------------------------------------------------------------------------------------
 matrix_assignment_map = {
     "Global Overview": GLOBAL_BASE, "United States": US_BASE, "Brazil": BR_BASE, 
     "Mexico": MX_BASE, "Germany": DE_BASE, "United Kingdom": UK_BASE, 
@@ -392,6 +395,7 @@ flag_icon = {
 
 tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
 tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
+
 with tab1:
     if market_choice == "Global Overview":
         st.subheader("THE GLOBAL INDEX")
