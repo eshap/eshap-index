@@ -436,21 +436,6 @@ SWE_BASE = [
     ["FACEBOOK", 77.0, 42.0, 35.0, 22.0, 12.0, 4.0]
 ]
 
-UK_BASE = [
-    ["BBC", 640.0, 460.0, 180.0, 122.4, 85.7, 45.4],
-    ["YOUTUBE", 590.0, 110.0, 480.0, 336.0, 262.1, 159.9],
-    ["ITV", 510.0, 335.0, 175.0, 113.8, 75.1, 36.8],
-    ["NETFLIX", 495.0, 105.0, 390.0, 284.7, 179.4, 91.5],
-    ["TIKTOK", 410.0, 18.0, 392.0, 305.8, 250.7, 183.0],
-    ["SKY GROUP", 385.0, 210.0, 175.0, 119.0, 70.2, 28.8],
-    ["INSTAGRAM", 275.0, 28.0, 247.0, 214.9, 174.1, 95.8],
-    ["PARAMOUNT", 245.0, 155.0, 90.0, 61.2, 36.1, 14.8],
-    ["DISNEY", 235.0, 52.0, 183.0, 139.1, 87.6, 36.2],
-    ["WBD", 220.0, 128.0, 92.0, 62.6, 31.3, 13.1],
-    ["FACEBOOK", 210.0, 115.0, 95.0, 52.3, 19.3, 3.7],
-    ["AMAZON", 195.0, 62.0, 133.0, 109.1, 67.6, 28.4]
-]
-
 matrix_assignment_map = {
     "Global Overview": GLOBAL_BASE, "United States": US_BASE, "Brazil": BR_BASE, 
     "Mexico": MX_BASE, "Germany": DE_BASE, "United Kingdom": UK_BASE, 
@@ -460,7 +445,7 @@ matrix_assignment_map = {
     "Slovenia": SLE_BASE, "Croatia": CRO_BASE, "Bulgaria": BG_BASE, "Romania": RO_BASE, 
     "Moldova": MOL_BASE, "Czech Republic": CR_BASE
 }
-df_matrix = pd.DataFrame(matrix_assignment_map.gewith st.sidebar:t(market_choice), columns=cols)
+df_matrix = pd.DataFrame(matrix_assignment_map.get(market_choice), columns=cols)
 
 if consolidate_meta:
     meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
@@ -485,6 +470,7 @@ for idx, row in df_matrix.iterrows():
 
 for i in range(1, 7):
     df_matrix.iloc[:, i] = df_matrix.iloc[:, i].clip(lower=0.0)
+
 token_dict = {
     "Global Overview": "us", "United States": "us", "France": "fr",
     "United Kingdom": "uk", "Italy": "it", "Germany": "de",
@@ -507,6 +493,8 @@ flag_icon = {
 }.get(market_choice, "🇺🇸")
 
 tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
+tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
+
 tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
 with tab1:
     if market_choice == "Global Overview":
