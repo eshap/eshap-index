@@ -55,9 +55,24 @@ st.html(
     "}\n"
     "</style>"
 with st.sidebar:
+    st.markdown("<p style='color: #FFFFFF; font-weight: bold; margin-bottom: 0.2rem;'>ECSAI: pronounced EE-say</p>", unsafe_allow_html=True)
+    if os.path.exists("eshap_map.png"):
+        st.image("eshap_map.png", use_container_width=True)
+        
+    consolidate_meta = st.toggle("Consolidate Instagram/Facebook into Meta", value=False)
+    st.write("")
+    
+    market_options = [
+        "Global Overview", "United States", "Brazil", "Mexico", "Germany", 
+        "United Kingdom", "France", "Italy", "Spain", "Canada", "India", 
+        "Japan", "South Korea", "Denmark", "Sweden", "Norway", "Finland", 
+        "Slovakia", "Slovenia", "Croatia", "Bulgaria", "Romania", "Moldova", "Czech Republic"
+    ]
+    market_choice = st.radio("Territory", options=market_options, index=0)
+    
     st.write("---")
     
-    # Custom state trigger to clear variables on click
+    # Live default reset triggers
     if st.button("🔄 Reset Defaults", use_container_width=True):
         st.session_state["shift_yt_val"] = 0.0
         st.session_state["shift_oth_val"] = 0.0
@@ -74,11 +89,9 @@ with st.sidebar:
         "</p>", 
         unsafe_allow_html=True
     )
-    
     st.markdown("### **Test Market Share Shifts - Add/Subtract Attention And See Where It Would Be Reallocated**")
     st.markdown("<p style='color: #E0E0E0; font-weight: bold; font-style: italic; font-size: 0.95rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
-with st.sidebar:
-    # Initializing memory hooks to lock state values to the button override
+
     if "shift_yt_val" not in st.session_state: st.session_state["shift_yt_val"] = 0.0
     if "shift_oth_val" not in st.session_state: st.session_state["shift_oth_val"] = 0.0
     if "shift_dis_val" not in st.session_state: st.session_state["shift_dis_val"] = 0.0
