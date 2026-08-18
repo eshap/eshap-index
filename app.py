@@ -54,6 +54,19 @@ st.html(
     "    color: #333333 !important;\n"
     "}\n"
     "</style>"
+
+# HARDWIRED SCRIPT STYLING: Enforces deep sidebar charcoal canvas variables and uniform page shields
+st.html(
+    "<style>\n"
+    "[data-testid='stSidebar'] { background-color: #4A4A4A !important; }\n"
+    "[data-testid='stSidebar'] label p { color: #FFFFFF !important; font-weight: bold !important; }\n"
+    "div.stButton > button { background-color: #FFFFFF !important; border: 2px solid #FF0000 !important; }\n"
+    "div.stButton > button p { color: #FF0000 !important; font-weight: bold !important; }\n"
+    "div[data-testid='stMarkdownContainer'] h1, div[data-testid='stMarkdownContainer'] h2 {\n"
+    "    color: #333333 !important;\n"
+    "}\n"
+    "</style>"
+)
 with st.sidebar:
     st.markdown("<p style='color: #FFFFFF; font-weight: bold; margin-bottom: 0.2rem;'>ECSAI: pronounced EE-say</p>", unsafe_allow_html=True)
     if os.path.exists("eshap_map.png"):
@@ -72,7 +85,6 @@ with st.sidebar:
     
     st.write("---")
     
-    # Live default reset triggers
     if st.button("🔄 Reset Defaults", use_container_width=True):
         st.session_state["shift_yt_val"] = 0.0
         st.session_state["shift_oth_val"] = 0.0
