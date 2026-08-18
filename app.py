@@ -4,25 +4,43 @@ import base64
 import os
 import io
 
-CORE_TOKENS = [
-    "us", "fr", "uk", "it", "de", "sp", "br", "mx", "ca", "in", "jp", "kr", 
-    "denmark", "se", "no", "fi", "sk", "si", "hr", "bg", "ro", "md", "cz"
+# Explicit Master File List matching your physical repository assets exactly
+EXPLICIT_METHODOLOGIES = [
+    "methodology_us.txt", "methodology_fr.txt", "methodology_uk.txt",
+    "methodology_it.txt", "methodology_de.txt", "methodology_sp.txt",
+    "methodology_br.txt", "methodology_mx.txt", "Canada Methodology.txt",
+    "India Methodology.txt", "methodology_jp.txt", "South Korea Methodology.txt",
+    "DENMARK Methodology.txt", "SWEDEN Methodology.txt", "NORWAY Methodology.txt",
+    "FINLAND Methodology.txt", "SLOVAKIA Methodology.txt", "SLOVENIA Methodology.txt",
+    "CROATIA Methodology.txt", "BULGARIA Methodology.txt", "ROMANIA Methodology.txt",
+    "MOLDOVA Methodology.txt", "CZECH REPUBLIC Methodology.txt"
 ]
 
-# Memory Cache Bootstrapper: Reads filesystem once and holds text data in system RAM
+EXPLICIT_SOURCES = [
+    "sources_us.txt", "sources_fr.txt", "sources_uk.txt",
+    "sources_it.txt", "sources_de.txt", "sources_sp.txt",
+    "sources_br.txt", "sources_orig_mx.txt", "Canada Sources.txt",
+    "India Sources.txt", "sources_jp.txt", "South Korea Sources.txt",
+    "DENMARK Sources.txt", "SWEDEN Sources.txt", "NORWAY Sources.txt",
+    "FINLAND Sources.txt", "SLOVAKIA Sources.txt", "SLOVENIA Sources.txt",
+    "CROATIA Sources.txt", "BULGARIA Sources.txt", "ROMANIA Sources.txt",
+    "MOLDOVA Sources.txt", "CZECH REPUBLIC Sources.txt"
+]
+
+# Memory Cache Bootstrapper: Pre-loads your exact filenames into server RAM once at startup
 if "text_memory_cache" not in st.session_state:
     st.session_state.text_memory_cache = {}
-    for token in CORE_TOKENS:
-        for prefix in ["methodology", "sources"]:
-            filename = f"{prefix}_{token}.txt"
-            content = ""
-            if os.path.exists(filename):
-                try:
-                    with open(filename, "r", encoding="utf-8") as f:
-                        content = str(f.read().strip())
-                except Exception:
-                    content = ""
-            st.session_state.text_memory_cache[filename] = content
+    all_target_files = EXPLICIT_METHODOLOGIES + EXPLICIT_SOURCES
+    for filename in all_target_files:
+        content = ""
+        if os.path.exists(filename):
+            try:
+                with open(filename, "r", encoding="utf-8") as f:
+                    content = str(f.read().strip())
+            except Exception:
+                content = ""
+        st.session_state.text_memory_cache[filename] = content
+
 def load_text_asset(filename, default_text=""):
     return st.session_state.text_memory_cache.get(filename, default_text)
 
@@ -674,14 +692,34 @@ with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     is_global_view = (market_choice == "Global Overview")
     
-    token_dict = {
-        "United States": "us", "France": "fr", "United Kingdom": "uk", "Italy": "it", "Germany": "de", 
-        "Spain": "sp", "Brazil": "br", "Mexico": "mx", "Canada": "ca", "India": "in", "Japan": "jp", 
-        "South Korea": "kr", "Denmark": "denmark", "Sweden": "se", "Norway": "no", "Finland": "fi", 
-        "Slovakia": "sk", "Slovenia": "si", "Croatia": "hr", "Bulgaria": "bg", "Romania": "ro", 
-        "Moldova": "md", "Czech Republic": "cz"
+    # Explicit File Registry: Maps your exact uploaded filenames directly to the interface views
+    method_file_map = {
+        "United States": "methodology_us.txt", "France": "methodology_fr.txt", "United Kingdom": "methodology_uk.txt",
+        "Italy": "methodology_it.txt", "Germany": "methodology_de.txt", "Spain": "methodology_sp.txt",
+        "Brazil": "methodology_br.txt", "Mexico": "methodology_mx.txt", "Canada": "Canada Methodology.txt",
+        "India": "India Methodology.txt", "Japan": "methodology_jp.txt", "South Korea": "South Korea Methodology.txt",
+        "Denmark": "DENMARK Methodology.txt", "Sweden": "SWEDEN Methodology.txt", "Norway": "NORWAY Methodology.txt",
+        "Finland": "FINLAND Methodology.txt", "Slovakia": "SLOVAKIA Methodology.txt", "Slovenia": "SLOVENIA Methodology.txt",
+        "Croatia": "CROATIA Methodology.txt", "Bulgaria": "BULGARIA Methodology.txt", "Romania": "ROMANIA Methodology.txt",
+        "Moldova": "MOLDOVA Methodology.txt", "Czech Republic": "CZECH REPUBLIC Methodology.txt"
     }
-    f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
+    
+    sources_file_map = {
+        "United States": "sources_us.txt", "France": "sources_fr.txt", "United Kingdom": "sources_uk.txt",
+        "Italy": "sources_it.txt", "Germany": "sources_de.txt", "Spain": "sources_sp.txt",
+        "Brazil": "sources_br.txt", "Mexico": "sources_orig_mx.txt", "Canada": "Canada Sources.txt",
+        "India": "India Sources.txt", "Japan": "sources_jp.txt", "South Korea": "South Korea Sources.txt",
+        "Denmark": "DENMARK Sources.txt", "Sweden": "SWEDEN Sources.txt", "Norway": "NORWAY Sources.txt",
+        "Finland": "FINLAND Sources.txt", "Slovakia": "SLOVAKIA Sources.txt", "Slovenia": "SLOVENIA Sources.txt",
+        "Croatia": "CROATIA Sources.txt", "Bulgaria": "BULGARIA Sources.txt", "Romania": "ROMANIA Sources.txt",
+        "Moldova": "MOLDOVA Sources.txt", "Czech Republic": "CZECH REPUBLIC Sources.txt"
+    }
+    
+    f_method = method_file_map.get(market_choice, "methodology_us.txt")
+    f_source = sources_file_map.get(market_choice, "sources_us.txt")
+    if is_global_view:
+        f_method = "methodology_us.txt"
+        f_source = "sources_us.txt"
     
     with sub_method:
         st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({flag_icon} {market_choice.upper()})")
@@ -699,16 +737,22 @@ with tab4:
             w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
             st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
         
-        methodology_text = load_text_asset(f"methodology_{f_token}.txt")
+        # Pull text safely from the server RAM memory cache using the exact file names
+        methodology_text = load_text_asset(f_method)
         if methodology_text:
-            st.write(methodology_text)
+            if "rtf1" in methodology_text or "ansicpg" in methodology_text:
+                # Strip out rich text format headers if they contaminate your plain text window
+                clean_lines = [line for line in methodology_text.split("\n") if "{" not in line and "}" not in line and "\\" not in line]
+                st.write("\n".join(clean_lines).strip())
+            else:
+                st.write(methodology_text)
         else:
-            st.info(f"{market_choice} methodology blueprint text loading from system memory cache...")
+            st.info(f"Methodology text asset `{f_method}` not found in memory cache.")
             
     with sub_source:
         st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
-        sources_text = load_text_asset(f"sources_{f_token}.txt")
+        sources_text = load_text_asset(f_source)
         if sources_text:
             st.write(sources_text)
         else:
-            st.info(f"{market_choice} data sourcing index loading from system memory cache...")
+            st.info(f"Sources text asset `{f_source}` not found in memory cache.")
