@@ -79,7 +79,14 @@ with st.sidebar:
     shift_other = st.slider("OTHER Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
     shift_disney = st.slider("DISNEY Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
     shift_netflix = st.slider("NETFLIX Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
-    shift_tiktok = st.slider("TIKTOK Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
+    shift_tailwind = st.slider("TIKTOK Shift Impact", min_value=-500.0, max_value=500.0, value=0.0, step=10.0)
+st.header("ESHAP Cross Screen Attention Index (ECSAI)")
+st.subheader("The Definitive Zero-Sum Scale For Total Attention From Media's Official Cartographer")
+st.markdown("For full analysis: [Media War & Peace](https://substack.com)")
+st.write("---")
+
+cols = ["Platform/Publisher", "All P13+", "55+ Layer", "13-54 Workforce", "13-44 Youth", "13-34 Core", "13-24 Gen Z"]
+
 US_BASE = [
     ["YOUTUBE", 2455.0, 345.0, 2110.0, 1680.0, 1250.0, 715.0],
     ["DISNEY (Corp Portfolio)", 2410.0, 465.0, 1945.0, 1420.0, 985.0, 520.0],
@@ -335,9 +342,20 @@ UK_BASE = [
     ["NETFLIX", 945.0, 95.0, 850.0, 680.0, 480.0, 125.0],
     ["TRADITIONAL TV (BARB)", 2150.0, 1655.0, 495.0, 340.0, 180.0, 110.0]
 ]
-# ------------------------------------------------------------------------------------------------
-# COMPREHENSIVE TERRITORIAL MATRIX INFRASTRUCTURE (ALL 23 EXPANSION MARKETS)
-# ------------------------------------------------------------------------------------------------
+
+NOR_BASE = [
+    ["YOUTUBE", 187.0, 42.0, 145.0, 105.0, 76.0, 38.0],
+    ["NRK (Norsk Riksk.)", 260.0, 125.0, 135.0, 85.0, 50.0, 24.0],
+    ["TV2 NORGE", 177.0, 82.0, 95.0, 60.0, 36.0, 18.0],
+    ["NETFLIX", 165.0, 25.0, 140.0, 110.0, 76.0, 38.0],
+    ["TIKTOK", 139.0, 4.0, 135.0, 105.0, 82.0, 56.0],
+    ["TV2 PLAY", 91.0, 15.0, 76.0, 58.0, 40.0, 20.0],
+    ["VIAPLAY GROUP", 58.0, 10.0, 48.0, 36.0, 24.0, 11.0],
+    ["AMAZON", 108.0, 18.0, 90.0, 70.0, 52.0, 28.0],
+    ["DISNEY", 62.0, 10.0, 52.0, 40.0, 28.0, 15.0],
+    ["WBD", 48.0, 8.0, 40.0, 31.0, 21.0, 12.0],
+    ["FACEBOOK", 43.0, 25.0, 18.0, 11.0, 6.0, 2.0]
+]
 matrix_assignment_map = {
     "Global Overview": GLOBAL_BASE, "United States": US_BASE, "Brazil": BR_BASE, 
     "Mexico": MX_BASE, "Germany": DE_BASE, "United Kingdom": UK_BASE, 
@@ -366,7 +384,7 @@ for idx, row in df_matrix.iterrows():
         "TELEVISAUNIVISION LINEAR", "LOCAL LEGACY TV"
     ]:
         df_matrix.iloc[idx, 1:] += shift_disney
-    elif p == "TIKTOK": df_matrix.iloc[idx, 1:] += shift_tiktok
+    elif p == "TIKTOK": df_matrix.iloc[idx, 1:] += shift_tailwind
     else:
         df_matrix.iloc[idx, 1:] += shift_other
 
@@ -395,7 +413,6 @@ flag_icon = {
 
 tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
 tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
-
 with tab1:
     if market_choice == "Global Overview":
         st.subheader("THE GLOBAL INDEX")
@@ -418,6 +435,18 @@ with tab1:
         st.markdown("##### **Of all the data in this report, the most crucial datapoint is this: 82% of the world population — 73% of the people in these eight regions — are now under 54.**")
         st.markdown("This new index reveals that Legacy TV relies, almost entirely, on the shrinking minority of our most senior citizens watching the same stuff, over and over and over, throwing off the balance of measured video consumption. When you remove that dying demographic, the combined fourteen Legacy outlets in this index are surpassed — handily — by YouTube, Netflix, and TikTok.")
         st.markdown("##### **Even more eye-opening: Across these countries, YouTube garners more attention among people 13-54 than Disney, Disco Bros, Paramount, NBCU, and FOX — combined.**")
+        st.markdown("##### **TikTok beats all other platforms except YouTube for attention paid, including Netflix, and Local Legacy Media.**")
+        st.markdown("The ECSAI is the first zero-sum, wholly deduplicated map of human attention in history.")
+        
+        if os.path.exists("us_index_13-54.png"):
+            st.image("us_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - US MONTHLY TIME: P13-54", use_container_width=True)
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            if os.path.exists("us_index_13-34.png"): st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
+        with c2:
+            if os.path.exists("us_index_13-24.png"): st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
+        st.markdown("<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at info@eshap.tv.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>ESHAP</p>", unsafe_allow_html=True)
     else:
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
@@ -495,9 +524,12 @@ with tab3:
     st.markdown("#### **Q: HOW DO YOU BLEND THE VARIOUS INPUTS - GLASS DATA, CENSUS, DIARIES - INTO ONE SMOOTH INDEX FOR EACH COUNTRY, CUTTING ACROSS DEMOS BASED ONLY ON PUBLICLY AVAILABLE DATA?**")
     st.markdown("To blend these completely disparate public inputs into a single, seamless cross-screen index for each territory, our model runs a three-step mathematical normalization loop that forces apples-and-oranges data into a strict, logic-enforced daily time budget. Because we use free, un-siloed data scattered across corporate and government reports, our system treats each country as a closed market sponge where total population and total available hours are hard constants. Here is the exact step-by-step math mechanics of how the index blends glass data, census records, and consumer diaries into a single smooth number for each demographic cohort:")
     
-    st.markdown("• **Census Denominator Lock (The Total Volume Ceiling)**: The entire model is anchored on the local state census registry (such as INSEE, Destatis, ISTAT, or the U.S. Census Bureau). The index takes the total population headcount for the territory, filters for the P13+ universe. It then establishes a Total Available Awake Hours Budget per month (assuming a standardized 16-hour active day). This number is our absolute ceiling. It represents the total size of the market sponge. No matter how many apps or TV channels claim massive usage, the combined monthly hours in our index can never exceed this hard, census-backed population budget.")
+    st.markdown("• **Census Denominator Lock (The Total Volume Ceiling)**:")
+    st.markdown("The entire model is anchored on the local state census registry (such as INSEE, Destatis, ISTAT, or the U.S. Census Bureau). The index takes the total population headcount for the territory, filters for the P13+ universe. It then establishes a Total Available Awake Hours Budget per month (assuming a standardized 16-hour active day). This number is our absolute ceiling. It represents the total size of the market sponge. No matter how many apps or TV channels claim massive usage, the combined monthly hours in our index can never exceed this hard, census-backed population budget.")
     
-    st.markdown("• **Normalizing Metrics into 'Absolute Attention Hours'**: Next, our model takes the fragmented public data points and converts them into a singular currency: Millions of Absolute Attention Hours per Month. Blending the Glass and Feed Data: Traditional linear TV currencies (like Médiamétrie or BARB) publish reach and 'Time Spent Viewing' (TSV) per day. The model takes the average daily TSV for a specific cohort, multiplies it by the demographic population weight from the census, and scales it to 30 days to find total linear hours. Big Tech investor filings and regulatory white papers present usage in 'Daily Active Users' (DAUs) or 'Monthly Active Users' (MAUs) paired with global or regional average session lengths. The model intercepts these ratios, applies the local territory footprint weight, and multiplies active users by daily active minutes to extract total digital hours. We take the stated number of users per digital platforms, apportion them by region/populations, then using diaries, surveys, public reports, and other regional research data, the model assigns pro rata usage hours per day in those regions.")
+    st.markdown("• **Normalizing Metrics into 'Absolute Attention Hours'**:")
+    st.markdown("Next, our model takes the fragmented public data points and converts them into a singular currency: Millions of Absolute Attention Hours per Month. Blending the Glass and Feed Data: Traditional linear TV currencies (like Médiamétrie or BARB) publish reach and 'Time Spent Viewing' (TSV) per day. The model takes the average daily TSV for a specific cohort, multiplies it by the demographic population weight from the census, and scales it to 30 days to find total linear hours. Big Tech investor filings and regulatory white papers present usage in 'Daily Active Users' (DAUs) or 'Monthly Active Users' (MAUs) paired with global or regional average session lengths. The model intercepts these ratios, applies the local territory footprint weight, and multiplies active users by daily active minutes to extract total digital hours. We take the stated number of users per digital platforms, apportion them by region/populations, then using diaries, surveys, public reports, and other regional research data, the model assigns pro rata usage hours per day in those regions.")
+    
     st.markdown("#### **Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION**")
     if os.path.exists("ecsai_flow.png"): 
         st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
@@ -543,4 +575,3 @@ with tab4:
         sources_text = load_text_asset(f_source)
         if sources_text and len(sources_text.strip()) > 0: st.markdown(sources_text)
         else: st.markdown(f"Sovereign metric telemetry logs for `{f_source}` are processing in database RAM queues. Unified structural analytics are securely referenced to parent holding allocations matching international regulatory data conventions.")
-
