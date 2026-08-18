@@ -4,30 +4,28 @@ import base64
 import os
 import io
 
-# Explicit Master File List matching your physical repository assets exactly
 EXPLICIT_METHODOLOGIES = [
     "methodology_us.txt", "methodology_fr.txt", "methodology_uk.txt",
     "methodology_it.txt", "methodology_de.txt", "methodology_sp.txt",
-    "methodology_br.txt", "methodology_mx.txt", "Canada Methodology.txt",
-    "India Methodology.txt", "methodology_jp.txt", "South Korea Methodology.txt",
-    "DENMARK Methodology.txt", "SWEDEN Methodology.txt", "NORWAY Methodology.txt",
-    "FINLAND Methodology.txt", "SLOVAKIA Methodology.txt", "SLOVENIA Methodology.txt",
-    "CROATIA Methodology.txt", "BULGARIA Methodology.txt", "ROMANIA Methodology.txt",
-    "MOLDOVA Methodology.txt", "CZECH REPUBLIC Methodology.txt"
+    "methodology_br.txt", "methodology_mx.txt", "canada methodology.txt",
+    "india methodology.txt", "methodology_jp.txt", "south korea methodology.txt",
+    "denmark methodology.txt", "sweden methodology.txt", "norway methodology.txt",
+    "finland methodology.txt", "slovakia methodology.txt", "slovenia methodology.txt",
+    "croatia methodology.txt", "bulgaria methodology.txt", "romania methodology.txt",
+    "moldova methodology.txt", "czech republic methodology.txt"
 ]
 
 EXPLICIT_SOURCES = [
     "sources_us.txt", "sources_fr.txt", "sources_uk.txt",
     "sources_it.txt", "sources_de.txt", "sources_sp.txt",
-    "sources_br.txt", "sources_orig_mx.txt", "Canada Sources.txt",
-    "India Sources.txt", "sources_jp.txt", "South Korea Sources.txt",
-    "DENMARK Sources.txt", "SWEDEN Sources.txt", "NORWAY Sources.txt",
-    "FINLAND Sources.txt", "SLOVAKIA Sources.txt", "SLOVENIA Sources.txt",
-    "CROATIA Sources.txt", "BULGARIA Sources.txt", "ROMANIA Sources.txt",
-    "MOLDOVA Sources.txt", "CZECH REPUBLIC Sources.txt"
+    "sources_br.txt", "sources_orig_mx.txt", "canada sources.txt",
+    "india sources.txt", "sources_jp.txt", "south korea sources.txt",
+    "denmark sources.txt", "sweden sources.txt", "norway sources.txt",
+    "finland sources.txt", "slovakia sources.txt", "slovenia sources.txt",
+    "croatia sources.txt", "bulgaria sources.txt", "romania sources.txt",
+    "moldova sources.txt", "czech republic sources.txt"
 ]
 
-# Memory Cache Bootstrapper: Pre-loads your exact filenames into server RAM once at startup
 if "text_memory_cache" not in st.session_state:
     st.session_state.text_memory_cache = {}
     all_target_files = EXPLICIT_METHODOLOGIES + EXPLICIT_SOURCES
@@ -40,39 +38,46 @@ if "text_memory_cache" not in st.session_state:
             except Exception:
                 content = ""
         st.session_state.text_memory_cache[filename] = content
+import streamlit as st
+import pandas as pd
+import base64
+import os
+import io
 
-def load_text_asset(filename, default_text=""):
-    return st.session_state.text_memory_cache.get(filename, default_text)
-
-st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
-
-US_BASE = [
-    ["YOUTUBE", 2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5],
-    ["DISNEY", 1945.0, 1080.0, 865.0, 657.4, 447.0, 228.0],
-    ["NETFLIX", 1540.0, 380.0, 1160.0, 846.8, 533.5, 272.1],
-    ["TIKTOK", 1480.0, 65.0, 1415.0, 1103.7, 905.0, 660.7],
-    ["PARAMOUNT", 1290.0, 810.0, 480.0, 331.2, 195.4, 86.0],
-    ["NBCU", 1265.0, 795.0, 470.0, 319.6, 185.4, 76.0],
-    ["INSTAGRAM", 1120.0, 110.0, 1010.0, 878.7, 711.7, 391.4],
-    ["WBD", 1040.0, 685.0, 355.0, 241.4, 120.7, 50.7],
-    ["FACEBOOK", 995.0, 520.0, 475.0, 261.3, 96.7, 18.4],
-    ["AMAZON", 635.0, 215.0, 420.0, 344.4, 213.5, 89.7],
-    ["FOX", 425.0, 315.0, 110.0, 55.0, 24.8, 5.0]
+EXPLICIT_METHODOLOGIES = [
+    "methodology_us.txt", "methodology_fr.txt", "methodology_uk.txt",
+    "methodology_it.txt", "methodology_de.txt", "methodology_sp.txt",
+    "methodology_br.txt", "methodology_mx.txt", "canada methodology.txt",
+    "india methodology.txt", "methodology_jp.txt", "south korea methodology.txt",
+    "denmark methodology.txt", "sweden methodology.txt", "norway methodology.txt",
+    "finland methodology.txt", "slovakia methodology.txt", "slovenia methodology.txt",
+    "croatia methodology.txt", "bulgaria methodology.txt", "romania methodology.txt",
+    "moldova methodology.txt", "czech republic methodology.txt"
 ]
 
-CA_BASE = [
-    ["YOUTUBE", 128.5, 34.2, 94.3, 73.1, 56.4, 38.1],
-    ["NETFLIX", 108.2, 28.5, 79.7, 52.4, 38.1, 22.4],
-    ["TIKTOK", 92.4, 3.8, 88.6, 68.1, 54.2, 40.5],
-    ["CBC", 88.4, 52.1, 36.3, 24.1, 16.5, 10.2],
-    ["BELL MEDIA", 82.5, 46.4, 36.1, 23.4, 14.2, 8.5],
-    ["ROGERS", 64.2, 38.5, 25.7, 16.2, 10.1, 5.4],
-    ["INSTAGRAM", 62.4, 6.1, 56.3, 44.2, 36.1, 22.4],
-    ["DISNEY", 54.1, 21.3, 32.8, 21.4, 15.2, 8.4],
-    ["WBD (MAX)", 48.2, 22.4, 25.8, 16.1, 10.4, 5.2],
-    ["FACEBOOK", 46.5, 24.2, 22.3, 12.1, 4.4, 1.1],
-    ["AMAZON", 38.4, 12.1, 26.3, 19.2, 12.4, 5.2]
+EXPLICIT_SOURCES = [
+    "sources_us.txt", "sources_fr.txt", "sources_uk.txt",
+    "sources_it.txt", "sources_de.txt", "sources_sp.txt",
+    "sources_br.txt", "sources_orig_mx.txt", "canada sources.txt",
+    "india sources.txt", "sources_jp.txt", "south korea sources.txt",
+    "denmark sources.txt", "sweden sources.txt", "norway sources.txt",
+    "finland sources.txt", "slovakia sources.txt", "slovenia sources.txt",
+    "croatia sources.txt", "bulgaria sources.txt", "romania sources.txt",
+    "moldova sources.txt", "czech republic sources.txt"
 ]
+
+if "text_memory_cache" not in st.session_state:
+    st.session_state.text_memory_cache = {}
+    all_target_files = EXPLICIT_METHODOLOGIES + EXPLICIT_SOURCES
+    for filename in all_target_files:
+        content = ""
+        if os.path.exists(filename):
+            try:
+                with open(filename, "r", encoding="utf-8") as f:
+                    content = str(f.read().strip())
+            except Exception:
+                content = ""
+        st.session_state.text_memory_cache[filename] = content
 MX_BASE = [
     ["TELEVISAUNIVISION", 1640.0, 685.0, 955.0, 744.9, 558.7, 284.9],
     ["YOUTUBE", 1390.0, 115.0, 1275.0, 905.2, 733.2, 476.6],
@@ -399,8 +404,11 @@ div[data-testid="stSidebarUserContent"] button[data-testid="baseButton-secondary
 """
 st.html(css_shield)
 st.sidebar.html(logo_html)
+st.sidebar.markdown(
+    "<h2 style='margin: 0; padding: 0; font-size: 1.35rem; font-weight: bold;'>ESHAP INDEX</h2>", 
+    unsafe_allow_html=True
+)
 
-# Strip whitespace lookup traps from the visual tracker universally
 market_options = [
     "Global Overview", "United States", "Germany", "United Kingdom", "France", 
     "Italy", "Spain", "Brazil", "Mexico", "Canada", "India", "Japan", 
@@ -469,14 +477,14 @@ if df_matrix is not None:
         for entity, shift_val in active_shifts.items():
             idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
             if len(idx) > 0:
-                p13_orig = float(df_static_base.loc[idx, "P13+"])
+                p13_orig = float(df_static_base.loc[idx[0], "P13+"])
                 if p13_orig > 0:
                     adj_p13 = max(0.0, p13_orig + shift_val)
                     ratio = adj_p13 / p13_orig
                     df_matrix.loc[idx, "P13+"] = adj_p13
-                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx, "55+ GenX+"]))
+                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, adj_p13 - float(df_static_base.loc[idx[0], "55+ GenX+"]))
                     for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c]) * ratio
+                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx[0], c]) * ratio
 
     total_shifted_hours = sum(active_shifts.values())
     if abs(total_shifted_hours) > 0.01:
@@ -486,12 +494,12 @@ if df_matrix is not None:
             for entity in df_static_base[non_shifted_mask]["Platform/Publisher"].unique():
                 idx = df_matrix[df_matrix["Platform/Publisher"] == entity].index
                 if len(idx) > 0:
-                    p13_orig_val = float(df_static_base.loc[idx, "P13+"])
+                    p13_orig_val = float(df_static_base.loc[idx[0], "P13+"])
                     ratio = max(0.0, p13_orig_val + (-total_shifted_hours * (p13_orig_val / total_non_shifted_pool))) / p13_orig_val if p13_orig_val > 0.0 else 1.0
                     df_matrix.loc[idx, "P13+"] = p13_orig_val * ratio
-                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx, "55+ GenX+"]))
+                    df_matrix.loc[idx, "13-54 Majority"] = max(0.0, (p13_orig_val * ratio) - float(df_static_base.loc[idx[0], "55+ GenX+"]))
                     for c in ["13-44 NextGen", "13-34 Youth", "13-24 GenA/Z"]:
-                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx, c]) * ratio
+                        df_matrix.loc[idx, c] = float(df_static_base.loc[idx[0], c]) * ratio
 
     df_matrix[cols[1:]] = df_matrix[cols[1:]].round(1)
 
@@ -511,7 +519,7 @@ with tab1:
     if market_choice == "Global Overview":
         # ----------------================================================================================
         # HIGH-LEVEL GLOBAL OVERVIEW CANVAS MODE: Continuous Narrative Sequence Architecture
-        # --------------------------------================================================================
+        # ------------------------------------------------------------------------------------------------
         st.subheader("THE GLOBAL INDEX")
         st.markdown(
             "What happens when we drop the pretense that TV is premium and social video is not? "
@@ -524,6 +532,25 @@ with tab1:
             st.image("global_index_13+.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13+ (DEC 2025 - MAY 2026)", use_container_width=True)
         else:
             st.warning("⚠️ `global_index_13+.png` asset missing from repository folder.")
+
+        st.markdown("Look at this chart.")
+        st.markdown(
+            "You can see the share of consumer attention, spread across all eight regions in The Index, for all "
+            "people 13+. Note that the Local Legacy Media index is ALL local traditional Media from these "
+            "eight regions, combined, and compared to the rest of the global players on the chart. Note also "
+            "that for total attention, for all fourteen of the legacy media platforms across all eight regions, lose "
+            "the battle for cross-screen attention to the global attention champ, YouTube."
+        )
+        st.markdown(
+            "More importantly, this is total attention paid (not total people watching), for all people 13+ in "
+            "these regions. When we ZOOM IN and look at how the majority of humans on earth, consumer media..."
+        )
+        
+        if os.path.exists("global_index_13-54.png"):
+            st.image("global_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13-54 (DEC 2025 - MAY 2026)", use_container_width=True)
+        else:
+            st.warning("⚠️ `global_index_13-54.png` asset missing from repository folder.")
+
         st.markdown(
             "##### **Of all the data in this report, the most crucial datapoint is this: 82% of the world population — 73% of the people in these eight regions — are now under 54.**"
         )
@@ -551,81 +578,9 @@ with tab1:
         )
         st.markdown("**The ECSAI is the first zero-sum, wholly deduplicated map of human attention in history.**")
         st.markdown(
-            "It shows the total hours of attention paid to each platform, side-by-side, accounting for daily "
-            "human attention as a finite resource, which cannot be divided between screens. If someone is "
-            "looking at TV, even if they have a phone in their hand, the time is allocated to the television. If "
-            "someone is scrolling TikTok, even if the TV is on in the room, that attention is apportioned to the "
-            "phone, while the TV not being watched is discounted."
-        )
-        
-        if os.path.exists("us_index_13-54.png"):
-            st.image("us_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - US MONTHLY TIME: P13-54 (SOURCE: NIELSEN, COMSCORE, GWI, FCC)", use_container_width=True)
-        else:
-            st.warning("⚠️ `us_index_13-54.png` asset missing from repository folder.")
-
-        st.markdown(
-            "While Trad Media continues to cling to an aging audience, **in ALL EIGHT MAJOR REGIONS**, even "
-            "where Legacy Media is deeply entrenched in the free Media culture, and protected by local "
-            "regulations, among the 13-54 majority YouTube is the most used platform, by a sizable margin. "
-            "Netflix plays well across all eight regions, but among 13-54 and all the younger demos, especially "
-            "with Millennials, Gen Z, and Gen A, in most of these areas, TikTok outpaces Netflix, and all other comers."
-        )
-        st.markdown(
-            "##### **In fact, as this new data shows for the first time, in many regions — particularly in the US — while YouTube is tops in total attention, TikTok actually beats YouTube among Gen Z and Gen A (consumers 13-34).**"
-        )
-        
-        # Dual Column Layout for Side-by-Side Generation Profiles
-        c1, c2 = st.columns(2)
-        with c1:
-            if os.path.exists("us_index_13-34.png"): st.image("us_index_13-34.png", caption="US TOTAL ATTENTION: P13-34", use_container_width=True)
-            else: st.warning("⚠️ `us_index_13-34.png` missing from repository.")
-        with c2:
-            if os.path.exists("us_index_13-24.png"): st.image("us_index_13-24.png", caption="US TOTAL ATTENTION: P13-24", use_container_width=True)
-            else: st.warning("⚠️ `us_index_13-24.png` missing from repository.")
-
-        st.markdown(
-            "And this, right here, is precisely why we need a Cross-Screen Index. No one else is measuring "
-            "all these platforms, side by side, on all devices. So, the industry get easily distracted by flaccid "
-            "signposts that tells us “YouTube is #1 on TV!” (with P2+ and without counting phones, laptops, "
-            "or tablets)."
-        )
-        st.markdown(
-            "Traditional currencies track the device canvas; they do not track the human. They count a "
-            "television playing to a room as an absolute hit, while treating a high-intensity mobile session that "
-            "requires active thumb-and-eye engagement to exist as \"digital noise.\" This is a collective "
-            "industry blindness. Legacy tracking systems want you to look at media through isolated reach "
-            "silos — treating an open screen in an empty room as equal to an active, single-screen consumer "
-            "focus."
-        )
-        st.markdown(
-            "So much of our Media measurement investment is spent measuring television "
-            "viewing — even when that TV is not being watched. As a result, the Media "
-            "Industrial complex spends a disproportionate amount of time, energy and "
-            "resources fighting over control of a screen that *only captures 40% of video "
-            "consumption*. That's not just bad business; it's a suicide mission."
-        )
-        st.markdown(
-            "The Index is designed to prevent that — designed to show, specifically, where the entirety of "
-            "consumer attention is actually being paid, so that Media professionals can invest in content, "
-            "advertising, overhead, and infrastructure, accordingly."
-        )
-        st.markdown(
             "Each quarter, we will update the ECSAI (pronounced EE-say) with new data, on a rolling six "
             "months basis. Simultaneously, we will drop an Index Report, on [Media War & Peace](https://substack.com), "
             "with deep analysis of the data and the trends, right here on Substack."
-        )
-        st.markdown(
-            "This is different from other measurement offerings, which provide small, irrelevant glimpses of "
-            "data for free, then charge clients millions to fund it, while keeping the vast majority of us who "
-            "work in Media in the dark. This incentivizes the measurement industrial complex to keep our "
-            "data in silos, dividing and double-counting consumer attention."
-        )
-
-        st.markdown(
-            "When we embark on projects like this, we start fresh. No preconceptions. No confirmation bias. "
-            "We let the data give us the plot, then we tell the story. This is, by far, our most ambitious data "
-            "endeavor yet. It's a mountain of data and it tells a remarkable story about the future of Media "
-            "based on the actual needs of real consumers. We will keep following the data where it leads us."
         )
         st.markdown(
             "<p style='font-size: 0.95rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! "
@@ -634,7 +589,6 @@ with tab1:
             "<br><br>ESHAP</p>", 
             unsafe_allow_html=True
         )
-
     else:
         st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
         st.markdown("#### Interactive Visual Share Map")
@@ -653,14 +607,12 @@ with tab1:
         st.markdown("<p style='font-size: 0.92rem; font-weight: bold; font-style: italic; color: #FF0000; margin-top: -0.5rem; margin-bottom: 0.75rem;'>MILLIONS OF HOURS</p>", unsafe_allow_html=True)
         st.dataframe(df_matrix, use_container_width=True, hide_index=True)
         st.write("")
-
         if market_choice == "Brazil":
             st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: BRAZIL</strong><br>Platform totals represent unified corporate parent structures. Grupo Globo incorporates all Globoplay streaming telemetry. WBD fully encapsulates Max sessions and TNT Sports premium footprints. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
         elif market_choice == "Mexico":
             st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: MEXICO</strong><br>Platform totals represent unified corporate parent structures. TelevisaUnivision incorporates all ViX streaming telemetry. YouTube and mobile digital baselines natively absorb all open-distribution and telco-bundled attention siphons. Concurrent multi-screening duplication and passive device use discounted.</p>", unsafe_allow_html=True)
         elif market_choice == "Canada":
             st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: CANADA</strong><br>Platform totals represent unified corporate parent structures. CBC includes all CBC Gem digital consumption parameters. Bell Media consolidates Crave, CTV, and TSN properties. Rogers includes Sportsnet and Citytv cross-screen streaming configurations.</p>", unsafe_allow_html=True)
-
         elif market_choice in ["France", "Germany", "United Kingdom", "Italy", "Spain", "Denmark", "Sweden", "Norway", "Finland", "Slovakia", "Slovenia", "Croatia", "Bulgaria", "Romania", "Moldova", "Czech Republic"]:
             st.markdown(f"<p style='font-size: 0.82rem; font-style: italic; color: #444444; margin-top: 0.5rem; line-height: 1.4;'><strong>Cross Screen Attention Ledger: {market_choice.upper()}</strong><br>Platform totals represent unified holding corporate structures. Traditional TV volumes are scaled using audited single-screen panel metrics from regional state-backed systems (including BARB, Médiamétrie, and Agf/Gfk) and balanced against hardware-level handset logs. Multi-screening and background device noise programmatically flattened through duplication discounts to retain zero-sum integrity.</p>", unsafe_allow_html=True)
         elif market_choice == "India":
@@ -668,51 +620,80 @@ with tab1:
             
         export_filename = f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv"
         st.download_button(label="Export Current Ledger to CSV", data=df_matrix.to_csv(index=False).encode('utf-8'), file_name=export_filename, mime="text/csv", use_container_width=True)
-
 with tab2:
     st.markdown("<div style='text-align: center; line-height: 0.95; margin-bottom: 1.5rem;'><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WHY THE ECSAI?</h2><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold; color: #FF0000;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2><h2 style='margin: 0; padding: 0; font-size: 1.8rem; font-weight: bold;'>WE REALLY NEED TO TRACK IT THAT WAY.</h2></div>", unsafe_allow_html=True)
     st.markdown("Let's face the raw reality of modern media consumption: our entire multi-billion-dollar industry is navigating by a map that does not match the earth.")
+    st.markdown("For years, the measurement establishment has relied on a self-serving mythology called \"premium attention quality\" to protect hyper-inflated television CPMs. They want you to believe that a 75-inch living room screen playing high-end drama possesses an inherent, elite cognitive impact. But look at what is actually happening under that roof. While the expensive television glass functions as background wallpaper to an empty sofa, the human being you are trying to reach is in the toilet, actively holding, scrolling, unmuting, and binging vertical video on a smartphone feed.")
     st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to a room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as \"low-tier digital noise.\" This is a collective industry blindness. Legacy tracking systems want you to look at media through isolated reach silos—treating an open screen in an empty room as equal to an active, single-screen consumer focus.")
+    st.markdown("When other industry signposts try to offer insight into this cross-screen crisis, they show up with a mallet rather than a magnifying glass. They aggregate soft consumer diaries, build clunky additive charts where the human daily clock magically stretches past 24 hours, or offer micro-level campaign widgets that count how many seconds an ad was technically \"on screen.\" They are handing you a shovel to look at individual twigs while your entire forest is burning to the ground.")
+    st.markdown("<div style='text-align: center; line-height: 1.1; margin-top: 1rem; margin-bottom: 1.5rem;'><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>TO BE CLEAR:</p><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>THIS IS NOT A MEDIA BUYING MECHANISM.</p><p style='color: #FF0000; font-weight: bold; margin: 0; font-size: 1.05rem;'>IT'S A STRATEGIC AND FISCAL PLANNING COMPASS.</p></div>", unsafe_allow_html=True)
+    st.markdown("The data is also clear: Since COVID and the arrival of TikTok, the phone has replaced the television as the center of video gravity. 60% of the world's video attention is now on mobile phones. If you are a media company and you are investing 100% of your budget on tv sets, you are mapping your course to irrelevancy and/or bankruptcy.")
+    st.markdown("So much of our measurement investment is spent on measuring television viewing - even when the TV is not being watched!")
+    st.markdown("As a result, the Media Industrial complex spends a disproportionate amount of time, energy and resources fighting over control of a screen that ONLY captures 40% of video consumption. That's not just bad business; it's a suicide mission.")
+    st.markdown("#### Video Consumption Share By Device Ecosystem")
+    if os.path.exists("eshap_us_devices.png"): 
+        st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem", use_container_width=True)
+    else: 
+        st.info("💡 *[Placeholder for eshap_us_devices.png: Video Consumption Share By Device Ecosystem]*")
+        
+    st.markdown("This real-world divergence isn't a theory; it is a measurable baseline. When tracking video share by device among US consumers, 59% of people point to their phone as the primary vehicle they use to watch video. Just 28% name the TV screen. When you pull back the demographic layers and look under the age of 55, this gap becomes a generational chasm. Two thirds of the video consumption by consumers under 55 is on smartphones, not TVs.")
     st.markdown("The ESHAP Cross-Screen Attention Index (ESCAI) introduces a completely new analytical paradigm to capture this shift. We didn't build a local programmatic tool to place an individual ad spot next Tuesday. To look at this index and ask how to execute a DSP trade is to confuse a compass with a shovel.")
+    st.markdown("This scale is a macroeconomic strategy engine engineered for the C-suite to audit structural enterprise risk and investment. If your brand is allocating 60% of its capital to traditional glass viewing while our closed census time budget proves your active workforce demographic has permanently migrated its conscious time to a personal screen, that is an organizational asset failure.")
     st.markdown("ESCAI enforces the absolute laws of human physics. Human time is a non-elastic, zero-sum commodity—a closed market sponge. Every single hour gained by an algorithm is an hour permanently destroyed for a broadcast tower.")
+    st.markdown("### THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
+    st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening—a consumer scrolling on TikTok while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
+    st.markdown("### THE SEPARATION OF POWERS")
+    st.markdown("To achieve this, the index operates on a strict Separation of Powers. We use a Sovereign Boundary Model where the hard quantitative ceilings are locked down entirely by currency-grade, hard telemetry logs (Nielsen, BARB, Médiamétrie, Comscore). The index does not ask consumers how many hours they watched; it uses codified telemetry to establish total volume.")
+    st.markdown("Behavioral data from GWI Consumer Diaries is introduced strictly as a coefficient matrix to calculate the mathematical overlap when two devices are running in the same room. We use behavioral data solely to map the friction points where those macro volumes intersect. Legacy currencies rely on passive boxes in empty rooms, counting a television playing to an empty sofa as a hit. We use behavioral data to verify human presence and device co-activity, injecting human reality back into blind hardware metrics.")
+    st.markdown("### PLEASE LOOK AT THE METHODOLOGY BLUEPRINTS AND SOURCE MATRICES FOR MORE DETAILS ON HOW WE BUILT THIS MODEL.")
+    st.markdown("Perhaps the most important point for our industry: We didn't invent new numbers, and we didn't hide our math inside a proprietary black box. Every data point used to build this scale sits legitimately out in the open public domain, scattered across public broadcaster annual disclosures, investor relations filings, and sovereign regulatory white papers. Anyone could theoretically download these records and combine them to see the true division of human time for which they are competing. Until now, however, no one has.")
+    st.markdown("Why? Because our industry incentivizes legacy silos. Because, among the most traditional of media and measurement experts, there is widespread fear of finding out how our consumers are actually spending their time and which half of their budgets are being wasted. The current system of content distribution and measurement is built by and for those who profit directly from it, whether or not it actually works.")
     st.markdown("We have built what we believe is the ultimate \"Attention Model,\" the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
     st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://substack.com)**.")
     st.markdown("Thanks for your attention!\n\n**ESHAP**")
-
 with tab3:
     st.subheader("ECSAI Frequently Asked Questions (FAQs)")
+    
+    st.markdown("#### Q: HOW DID WE CHOOSE THE VARIOUS COMBINATION OF SOURCES FOR THE INDEX ACROSS THE REGIONS?")
+    st.markdown("To establish an unassailable cross-border baseline, data sources for each country were selected based on three strict criteria: sovereign regulatory authority, parent corporate transparency, and audited single-screen telemetry. Rather than relying on soft consumer opinion surveys, the index exclusively ingests data from oXicial state census registries (such as INSEE, Destatis, and the ONS) for macro population controls, alongside published annual disclosures from public service broadcasters and quarterly investor relations filings from publicly traded tech titans. To bridge the traditional glass and mobile screen gap, these baselines are matched against the hardware-level device telemetry of globally recognized digital tracking firms and local regulatory media white papers. This ensures that every source component sits legitimately in the open public domain, provides absolute consistency in tracking parent corporate holding structures, and natively supports the normalization of disparate metrics into absolute hours of focused human attention.")
+    
+    st.markdown("#### Q: THE INDEX LISTS ENTERPRISE SUBSCRIPTION SYSTEMS LIKE SENSOR TOWER AND COMSCORE MOBILE METRIX—HOW IS THIS DATA LEGITIMATELY ACCESSED AND DEPLOYED WITHOUT A PAYWALL SUBSCRIPTION?")
+    st.markdown("To be entirely clear: ESHAP does not maintain an enterprise terminal contract with Comscore or Sensor Tower, and our open-source methodology explicitly rejects data hidden behind corporate paywalls. Instead, we utilize a reverse-engineering loop built on public-domain telemetry disclosures. Sensor Tower, data.ai, and Comscore Mobile Metrix frequently release exhaustive public data sets, white papers, market intelligence briefs, regulatory antitrust filings, and quarterly macroeconomic charts. Furthermore, public regulatory audits from sovereign media bodies natively ingest and list these exact hardware-level application session counts and time-spent parameters within their free, open-source documentation. ECSAI intercepts these distributed public reports, extracts the specific country-level application session lengths and active monthly user metrics, and applies a localized territory footprint weight. We are not paying for proprietary access to their systems; we are systematically doing the architectural work of gathering, normalizing, and blending their publicly disclosed secondary datasets into a unified human daily clock.")
+    st.markdown("#### Q: HOW DO YOU BLEND THE VARIOUS INPUTS - GLASS DATA, CENSUS, DIARIES - INTO ONE SMOOTH INDEX FOR EACH COUNTRY, CUTTING ACROSS DEMOS BASED ONLY ON PUBLICLY AVAILABLE DATA?")
+    st.markdown("To blend these completely disparate public inputs into a single, seamless cross-screen index for each territory, our model runs a three-step mathematical normalization loop that forces apples-and-oranges data into a strict, logic-enforced daily time budget. Because we use free, un-siloed data scattered across corporate and government reports, our system treats each country as a closed market sponge where total population and total available hours are hard constants.")
+    st.markdown("**• Census Denominator Lock (The Total Volume Ceiling)**\nThe entire model is anchored on the local state census registry (such as INSEE, Destatis, ISTAT, or the U.S. Census Bureau). The index takes the total population headcount for the territory, filters for the P13+ universe. It then establishes a Total Available Awake Hours Budget per month (assuming a standardized 16-hour active day). This number is our absolute ceiling. It represents the total size of the market sponge. No matter how many apps or TV channels claim massive usage, the combined monthly hours in our index can never exceed this hard, census-backed population budget.")
+    st.markdown("**• Normalizing Metrics into 'Absolute Attention Hours'**\nNext, our model takes the fragmented public data points and converts them into a singular currency: Millions of Absolute Attention Hours per Month. Blending the Glass and Feed Data: Traditional linear TV currencies (like Médiamétrie or BARB) publish reach and 'Time Spent Viewing' (TSV) per day. The model takes the average daily TSV for a specific cohort, multiplies it by the demographic population weight from the census, and scales it to 30 days to find total linear hours. Big Tech investor filings and regulatory white papers present usage in 'Daily Active Users' (DAUs) or 'Monthly Active Users' (MAUs) paired with global or regional average session lengths. The model intercepts these ratios, applies the local territory footprint weight, and multiplies active users by daily active minutes to extract total digital hours. We take the stated number of users per digital platforms, apportion them by region/populations, then using diaries, surveys, public reports, and other regional research data, the model assigns pro rata usage hours per day in those regions.")
+    
     st.markdown("#### Q: THE ZERO-SUM SQUEEZE AND DIARY DE-DUPLICATION")
     if os.path.exists("ecsai_flow.png"): 
         st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
     st.markdown("This zero-sum squeeze is where the smooth, cross-screen blending actually happens. If we simply added the television hours to the digital hours, the market sponge would explode past the census ceiling due to concurrent multi-screening — a consumer scrolling on TikTok reply window while the television plays a broadcast in the background. Our index model applies localized duplication coefficients derived from GWI Consumer Diaries and verified attention panels. These diaries track the exact percentage of a cohort that multi-screens daily (e.g., 77% of Gen Z in France). Our model uses this percentage to calculate a duplication discount factor. It treats human attention as a finite zero-sum resource: if the eye is looking at a smartphone screen, that fraction of time is physically subtracted from the traditional television glass volume. The digital hours (which require active, focused scrolling on a handheld device) are treated as hard, primary attention blocks. The background television glass hours are programmatically squeezed down until the entire multi-screen overlap is flattened and the duplication is erased. This prioritized single-screen eye focus is a primary reason background audio is not covered in this index.")
     st.write("---")
     st.markdown("<p style='font-size: 0.92rem; font-weight: bold; line-height: 1.5;'>Take The ECSAI for a test drive! Let us know what you think at <a href='mailto:info@eshap.tv' style='color: #007bff; text-decoration: underline; font-weight: bold;'>info@eshap.tv</a>.<br><br>And, please, don't forget to take some time to enjoy your day!<br><br>ESHAP</p>", unsafe_allow_html=True)
-
 with tab4:
     sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
     is_global_view = (market_choice == "Global Overview")
     
-    # Explicit File Registry: Maps your exact uploaded filenames directly to the interface views
     method_file_map = {
         "United States": "methodology_us.txt", "France": "methodology_fr.txt", "United Kingdom": "methodology_uk.txt",
         "Italy": "methodology_it.txt", "Germany": "methodology_de.txt", "Spain": "methodology_sp.txt",
-        "Brazil": "methodology_br.txt", "Mexico": "methodology_mx.txt", "Canada": "Canada Methodology.txt",
-        "India": "India Methodology.txt", "Japan": "methodology_jp.txt", "South Korea": "South Korea Methodology.txt",
-        "Denmark": "DENMARK Methodology.txt", "Sweden": "SWEDEN Methodology.txt", "Norway": "NORWAY Methodology.txt",
-        "Finland": "FINLAND Methodology.txt", "Slovakia": "SLOVAKIA Methodology.txt", "Slovenia": "SLOVENIA Methodology.txt",
-        "Croatia": "CROATIA Methodology.txt", "Bulgaria": "BULGARIA Methodology.txt", "Romania": "ROMANIA Methodology.txt",
-        "Moldova": "MOLDOVA Methodology.txt", "Czech Republic": "CZECH REPUBLIC Methodology.txt"
+        "Brazil": "methodology_br.txt", "Mexico": "methodology_mx.txt", "Canada": "canada methodology.txt",
+        "India": "india methodology.txt", "Japan": "methodology_jp.txt", "South Korea": "south korea methodology.txt",
+        "Denmark": "denmark methodology.txt", "Sweden": "sweden methodology.txt", "Norway": "norway methodology.txt",
+        "Finland": "finland methodology.txt", "Slovakia": "slovakia methodology.txt", "Slovenia": "slovenia methodology.txt",
+        "Croatia": "croatia methodology.txt", "Bulgaria": "bulgaria methodology.txt", "Romania": "romania methodology.txt",
+        "Moldova": "moldova methodology.txt", "Czech Republic": "czech republic methodology.txt"
     }
     
     sources_file_map = {
         "United States": "sources_us.txt", "France": "sources_fr.txt", "United Kingdom": "sources_uk.txt",
         "Italy": "sources_it.txt", "Germany": "sources_de.txt", "Spain": "sources_sp.txt",
-        "Brazil": "sources_br.txt", "Mexico": "sources_orig_mx.txt", "Canada": "Canada Sources.txt",
-        "India": "India Sources.txt", "Japan": "sources_jp.txt", "South Korea": "South Korea Sources.txt",
-        "Denmark": "DENMARK Sources.txt", "Sweden": "SWEDEN Sources.txt", "Norway": "NORWAY Sources.txt",
-        "Finland": "FINLAND Sources.txt", "Slovakia": "SLOVAKIA Sources.txt", "Slovenia": "SLOVENIA Sources.txt",
-        "Croatia": "CROATIA Sources.txt", "Bulgaria": "BULGARIA Sources.txt", "Romania": "ROMANIA Sources.txt",
-        "Moldova": "MOLDOVA Sources.txt", "Czech Republic": "CZECH REPUBLIC Sources.txt"
+        "Brazil": "sources_br.txt", "Mexico": "sources_orig_mx.txt", "Canada": "canada sources.txt",
+        "India": "india sources.txt", "Japan": "sources_jp.txt", "South Korea": "south korea sources.txt",
+        "Denmark": "denmark sources.txt", "Sweden": "sweden sources.txt", "Norway": "norway sources.txt",
+        "Finland": "finland sources.txt", "Slovakia": "slovakia sources.txt", "Slovenia": "slovenia sources.txt",
+        "Croatia": "croatia sources.txt", "Bulgaria": "bulgaria sources.txt", "Romania": "romania sources.txt",
+        "Moldova": "moldova sources.txt", "Czech Republic": "czech republic sources.txt"
     }
     
     f_method = method_file_map.get(market_choice, "methodology_us.txt")
@@ -723,7 +704,23 @@ with tab4:
     
     with sub_method:
         st.markdown(f"### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT ({flag_icon} {market_choice.upper()})")
-        if not is_global_view:
+        if is_global_view:
+            st.markdown("#### METHODOLOGY: CARTOGRAPHER'S BLUEPRINT (🌐 GLOBAL OVERVIEW)")
+            st.markdown("Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using U.S. Census Bureau headcounts and GWI daily consumer diaries, applying an empirical duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from Nielsen's Media Distributor Gauge and application session tracking from Comscore Mobile Metrix, Sensor Tower, and data.ai telemetry are collapsed back into their unified parent corporate holding structures. This includes all linear broadcast networks, basic and premium cable clusters, direct-to-consumer streaming players, and social media feeds. To isolate the commercially vital workforce pool and eliminate legacy reach distortions, the index applies an unyielding zero-sum filter that strips the heavy 55+ demographic retirement layer directly out of the gen-pop baseline. The narrower, nested generational cohorts (13-44, 13-34, and 13-24) are then programmatically processed through a proprietary mathematical curve. This curve uses established transitional benchmarks to calculate high-velocity market migration parameters—such as hyper-accelerated cord-cutting, advanced SVOD/AVOD ecosystem saturation, and dominant mobile video scrolling behaviors—while automatically enforcing a nested safety guard that guarantees strict downward monotonicity and exact demographic balance across all sub-tables. This data covers the December 2025 through May 2026 cycle, tracking absolute volume of attention across both total video and active social media usage.")
+            st.markdown("##### Platform Inclusions Addendum")
+            st.markdown("*   **OTHER:** Tracks unallocated P13+ focus hours capturing smaller fragments of workforce and youth attention outside the top-monetized ecosystem rows. This long-tail bucket captures independent AVOD platforms, niche streaming services, and standalone gaming video streams (such as Tubi, Pluto TV, Roku Channel, Apple TV+, and localized premium Twitch/Kick streams) when not explicitly rolled up into their corporate parent lines, alongside tail web-video fragments.")
+            st.markdown("*   **YOUTUBE:** Complete native mobile application, desktop, and Connected TV (CTV) session tracking and video platform attention volume under Alphabet corporate tracking.")
+            st.markdown("*   **DISNEY:** Consolidated corporate footprint encompassing all ABC broadcast networks, premium cable properties (ESPN, Disney Channels, FX, National Geographic), and the complete cross-screen streaming volumes of Disney+ and Hulu.")
+            st.markdown("*   **NETFLIX:** Total audited subscription video-on-demand attention footprint across mobile devices, computers, and Connected TVs (CTV) including ad-supported tiers.")
+            st.markdown("*   **TikTok:** Complete native mobile application session tracking and short-form video platform attention volume.")
+            st.markdown("*   **PARAMOUNT:** Complete structural consolidation of the CBS broadcast network, basic cable portfolios (MTV, Nickelodeon, Comedy Central, BET), and the unified cross-screen digital sessions of Paramount+ and Pluto TV.")
+            st.markdown("*   **NBCU:** Unified corporate footprint tracking the NBC broadcast network, premium sports and cable tiers (Bravo, USA Network, MSNBC, E!), and the complete digital footprint of the Peacock streaming engine.")
+            st.markdown("*   **INSTAGRAM:** Complete mobile application session tracking and video/social attention volume under Meta parent tracking.")
+            st.markdown("*   **WBD:** Unified corporate footprint tracking the combined weight of Warner Bros. Discovery cable networks (TNT, TBS, HGTV, Food Network, CNN), premium sports, and the Max digital streaming engine.")
+            st.markdown("*   **FACEBOOK:** Total mobile application, desktop, and video feed attention volume under Meta parent tracking.")
+            st.markdown("*   **AMAZON:** Total video attention footprint driven through Amazon Prime Video subscription and premium digital storefront viewing including ad-supported Prime Video tiers.")
+            st.markdown("*   **FOX:** Consolidated footprint of the core FOX broadcast network, Fox News, Fox Business, and Fox Sports linear portfolios natively unified with all active digital attention hours captured on Tubi.")
+        else:
             w_dict = {
                 "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
                 "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
@@ -736,18 +733,16 @@ with tab4:
             }
             w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
             st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
-        
-        # Pull text safely from the server RAM memory cache using the exact file names
-        methodology_text = load_text_asset(f_method)
-        if methodology_text:
-            if "rtf1" in methodology_text or "ansicpg" in methodology_text:
-                # Strip out rich text format headers if they contaminate your plain text window
-                clean_lines = [line for line in methodology_text.split("\n") if "{" not in line and "}" not in line and "\\" not in line]
-                st.write("\n".join(clean_lines).strip())
+            
+            methodology_text = load_text_asset(f_method)
+            if methodology_text:
+                if "rtf1" in methodology_text or "ansicpg" in methodology_text:
+                    clean_lines = [line for line in methodology_text.split("\n") if "{" not in line and "}" not in line and "\\" not in line]
+                    st.write("\n".join(clean_lines).strip())
+                else:
+                    st.write(methodology_text)
             else:
-                st.write(methodology_text)
-        else:
-            st.info(f"Methodology text asset `{f_method}` not found in memory cache.")
+                st.info(f"Methodology text asset `{f_method}` not found in memory cache.")
             
     with sub_source:
         st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
