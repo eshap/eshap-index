@@ -5,7 +5,7 @@ import os
 import io
 
 # ------------------------------------------------------------------------------------------------
-# COMPREHENSIVE REPOSITORY REGIONAL FILE MAPPING (ALL 23 EXPANDED TERRITORIES)
+# COMPREHENSIVE REPOSITORY REGIONAL FILE MAPPING (ALL 23 EXPLICIT TERRITORIES)
 # ------------------------------------------------------------------------------------------------
 EXPLICIT_METHODOLOGIES = [
     "methodology_us.txt", "methodology_fr.txt", "methodology_uk.txt",
@@ -45,13 +45,14 @@ if "text_memory_cache" not in st.session_state:
                 content = ""
         st.session_state.text_memory_cache[filename] = content
 
-def load_text_asset(filename, default_text=""):
+def load_text_asset(filename):
     """Safely extracts decoupled plaintext methodology and sources data from RAM cache arrays."""
     if "text_memory_cache" in st.session_state:
-        return st.session_state.text_memory_cache.get(filename, default_text)
-    return default_text
+        return st.session_state.text_memory_cache.get(filename, "")
+    return ""
 
 st.set_page_config(page_title="ESHAP CSAI Dashboard", layout="wide")
+
 US_BASE = [
     ["YOUTUBE", 2110.0, 490.0, 1620.0, 1134.0, 884.5, 539.5],
     ["OTHER", 1120.0, 210.0, 910.0, 780.0, 620.0, 310.0],
