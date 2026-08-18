@@ -54,7 +54,7 @@ st.html(
     "    color: #333333 !important;\n"
     "}\n"
     "</style>"
-)with st.sidebar:
+with st.sidebar:
     st.write("---")
     
     # Custom state trigger to clear variables on click
