@@ -569,41 +569,141 @@ flag_icon = {
     "Moldova": "🇲🇩", "Czech Republic": "🇨🇿"
 }.get(market_choice, "🇺🇸")
 
+# ------------------------------------------------------------------------------------------------
+# COMPONENT ROUTING MAPS & VARIABLE ENFORCEMENT
+# ------------------------------------------------------------------------------------------------
+flag_icon = {
+    "Global Overview": "🌐", "United States": "🇺🇸", "Germany": "🇩🇪", 
+    "United Kingdom": "🇬🇧", "France": "🇫🇷", "Italy": "🇮🇹", 
+    "Spain": "🇪🇸", "Brazil": "🇧🇷", "Mexico": "🇲🇽"
+}.get(market_choice, "🇺🇸")
+
+# Flat Single-Line Initializer: Declared globally at indent level 0 to un-nest tabs
 tab_labels = ["CSAI Interactive Index Matrix", "Why ECSAI?", "ECSAI FAQs", "Index Architecture & Methodology"]
 tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
-
+# ================================================================================================
+# TAB 1: THE ACTIVE MATRIX / CANVAS RENDERING SECTION
+# ================================================================================================
 with tab1:
     if market_choice == "Global Overview":
         st.subheader("THE GLOBAL INDEX")
         st.markdown(
-            "What happens when we drop the pretense that TV is premium and social video is not? "
-            "What becomes of the mainstream mindset when we take down the silo walls and measure Media "
-            "consumption not BY device, but rather ACROSS devices? Turns out, a lot. Which is why we "
-            "embarked on this mission to measure it all, side-by-side."
+            "What happens when we measure Media consumption not BY device, but ACROSS devices? "
+            "Turns out, a lot. We embarked on this mission to measure it all, side-by-side. "
+            "Full analysis: [Media War & Peace](https://substack.com)"
         )
         
         if os.path.exists("global_index_13+.png"):
-            st.image("global_index_13+.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13+ (DEC 2025 - MAY 2026)", use_container_width=True)
+            st.image("global_index_13+.png", caption="GLOBAL ATTENTION INDEX: P13+", use_container_width=True)
         else:
             st.warning("⚠️ `global_index_13+.png` asset missing from repository folder.")
-        st.markdown("Look at this chart.")
-        st.markdown(
-            "You can see the share of consumer attention, spread across all eight regions in The Index, for all "
-            "people 13+. Note that the Local Legacy Media index is ALL local traditional Media from these "
-            "eight regions, combined, and compared to the rest of the global players on the chart. Note also "
-            "that for total attention, for all fourteen of the legacy media platforms across all eight regions, lose "
-            "the battle for cross-screen attention to the global attention champ, YouTube."
-        )
-        st.markdown(
-            "More importantly, this is total attention paid (not total people watching), for all people 13+ in "
-            "these regions. When we ZOOM IN and look at how the majority of humans on earth, consumer media..."
-        )
+            
+        st.markdown("This reveals the share of consumer attention spread across all eight regions in The Index.")
         
         if os.path.exists("global_index_13-54.png"):
-            st.image("global_index_13-54.png", caption="CROSS-SCREEN ATTENTION INDEX - GLOBAL SHARE OF ATTENTION: P13-54 (DEC 2025 - MAY 2026)", use_container_width=True)
+            st.image("global_index_13-54.png", caption="GLOBAL ATTENTION INDEX: P13-54", use_container_width=True)
         else:
             st.warning("⚠️ `global_index_13-54.png` asset missing from repository folder.")
+        st.markdown("##### **Crucial datapoint: 82% of the world population — 73% of the people in these eight regions — are now under 54.**")
+        st.markdown("Legacy TV relies almost entirely on the shrinking minority of senior citizens watching the same stuff. When you remove that demographic, combined legacy outlets are handily surpassed by YouTube, Netflix, and TikTok.")
+        st.markdown("##### **YouTube garners more attention among people 13-54 than Disney, Disco Bros, Paramount, NBCU, and FOX — combined.**")
+        st.markdown("The ECSAI is the first zero-sum, wholly deduplicated map of human attention in history.")
+        
+        if os.path.exists("us_index_13-54.png"):
+            st.image("us_index_13-54.png", caption="US ATTENTION DATA PROFILE", use_container_width=True)
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            if os.path.exists("us_index_13-34.png"): st.image("us_index_13-34.png", caption="US: P13-34", use_container_width=True)
+        with c2:
+            if os.path.exists("us_index_13-24.png"): st.image("us_index_13-24.png", caption="US: P13-24", use_container_width=True)
             
-        st.markdown(
-            "##### **Of all the data in this report, the most crucial datapoint is this: 82% of the world population — 73% of the people in these eight regions — are now under 54.**"
-        )
+        st.markdown("Traditional currencies track the device canvas; they do not track the human. They count a television playing to an empty room as a hit, while treating active mobile engagement as noise. Each quarter, we will update the ECSAI on a rolling six months basis.")
+    else:
+        st.subheader(f"Cross-Screen Attention Tracker: {flag_icon} {market_choice}")
+        st.markdown("#### Interactive Visual Share Map")
+        st.html("<style>div[data-testid='stRadio'] > div { gap: 1.5rem !important; } div[data-testid='stRadio'] label p { font-size: 0.95rem !important; white-space: nowrap !important; }</style>")
+        demo_columns = [col for col in df_matrix.columns if col != "Platform/Publisher"]
+        selected_demo = st.radio("Select Demographic Cohort to Isolate in Bar Chart:", options=demo_columns, horizontal=True)
+        
+        chart_df = df_matrix.copy()
+        chart_df["Platform/Publisher"] = chart_df["Platform/Publisher"].replace({"GROUPO RECORD": "RECORD"})
+        chart_df_fixed = chart_df.set_index("Platform/Publisher")
+        st.bar_chart(chart_df_fixed[[selected_demo]], horizontal=True, height=380, use_container_width=True, color="#FF0000")
+            
+        st.write("---")
+        st.markdown("#### Cross Screen Attention Ledger")
+        st.dataframe(df_matrix, use_container_width=True, hide_index=True)
+        
+        if market_choice == "Brazil":
+            st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444;'>Corporate structures incorporate streaming telemetry.</p>", unsafe_allow_html=True)
+        elif market_choice == "Mexico":
+            st.markdown("<p style='font-size: 0.82rem; font-style: italic; color: #444444;'>TelevisaUnivision incorporates ViX telemetry.</p>", unsafe_allow_html=True)
+            
+        # FIXED: Broken down into independent short variables to completely protect text window width restrictions
+        csv_payload = df_matrix.to_csv(index=False).encode('utf-8')
+        target_filename = f"ESHAP_CSAI_Ledger_{market_choice.replace(' ', '_')}_2026.csv"
+        st.download_button(label="Export Current Ledger to CSV", data=csv_payload, file_name=target_filename, mime="text/csv", use_container_width=True)
+# ================================================================================================
+# TAB 2: WHY THE ECSAI CRITERIA BLOCK (DECLARED CLEANLY AT INDENT 0)
+# ================================================================================================
+with tab2:
+    st.markdown("<div style='text-align: center; line-height: 0.95;'><h2 style='margin: 0;'>WHY THE ECSAI?</h2><h2 style='color: #FF0000; margin: 0;'>BECAUSE HUMAN ATTENTION IS FINITE.</h2></div>", unsafe_allow_html=True)
+    st.markdown("Our multi-billion-dollar industry is navigating by a map that does not match the earth. Traditional currencies track the device canvas; they do not track the human. They count a television playing to an empty room as an absolute hit, while treating a high-intensity mobile session that requires active thumb-and-eye engagement to exist as digital noise.")
+    st.markdown("##### **TO BE CLEAR: THIS IS NOT A MEDIA BUYING MECHANISM. IT'S A STRATEGIC AND FISCAL PLANNING COMPASS.**")
+    st.markdown("Since COVID and the arrival of TikTok, the phone has replaced the television as the center of video gravity. 60% of the world's video attention is now on mobile phones. If you are a media company investing 100% of your budget on TV sets, you are mapping a course to irrelevancy.")
+    
+    if os.path.exists("eshap_us_devices.png"): 
+        st.image("eshap_us_devices.png", caption="Video Consumption Share By Device Ecosystem", use_container_width=True)
+        
+    st.markdown("ESCAI enforces the absolute laws of human physics. Human time is a non-elastic, zero-sum commodity—a closed market sponge. Every single hour gained by an algorithm is an hour permanently destroyed for a broadcast tower. The model uses duplication discounts derived from consumer diaries to calculate the mathematical overlap when two devices are running in the same room. We didn't invent new numbers, and we didn't hide our math inside a proprietary black box. Every data point sits out in the open public domain.")
+# ================================================================================================
+# TAB 3: FREQUENTLY ASKED QUESTIONS (FAQs) (DECLARED CLEANLY AT INDENT 0)
+# ================================================================================================
+with tab3:
+    st.subheader("ECSAI Frequently Asked Questions (FAQs)")
+    st.markdown("#### Q: HOW DID WE CHOOSE THE VARIOUS COMBINATION OF SOURCES FOR THE INDEX ACROSS THE REGIONS?")
+    st.markdown("Data sources for each country were selected based on strict criteria: sovereign regulatory authority, parent corporate transparency, and audited single-screen telemetry. We ingest data from official state census registries for macro population controls, alongside published annual disclosures from public service broadcasters and tech titans.")
+    st.markdown("#### Q: HOW DO YOU BLEND THE VARIOUS INPUTS INTO ONE SMOOTH INDEX?")
+    st.markdown("Our model runs a three-step mathematical normalization loop that forces data into a strict, logic-enforced daily time budget. The index takes the total population headcount, filters for the P13+ universe, and establishes a Total Available Awake Hours Budget per month. This represents our absolute volume ceiling.")
+    
+    if os.path.exists("ecsai_flow.png"): 
+        st.image("ecsai_flow.png", caption="ESHAP Cross-Screen Attention Index Production Workflow Map", use_container_width=True)
+        
+    st.markdown("#### Q: DOESN'T BLENDING SURVEY RECALL WITH TELEMETRY CORRUPT THE DATA?")
+    st.markdown("The index operates on a strict Separation of Powers. We use a Sovereign Boundary Model where hard quantitative ceilings are locked down entirely by currency-grade, hard telemetry logs. Behavioral data from GWI Consumer Diaries is introduced strictly as a coefficient matrix to calculate the mathematical overlap when two devices are running in the same room.")
+# ================================================================================================
+# TAB 4: BLUEPRINTS & CACHED TEXT LOOKUPS (DECLARED CLEANLY AT INDENT 0)
+# ================================================================================================
+with tab4:
+    sub_method, sub_source = st.tabs(["Methodology Blueprint", "Sourcing Matrix"])
+    is_global_view = (market_choice == "Global Overview")
+    
+    token_dict = {
+        "United States": "us", "France": "fr", "United Kingdom": "uk", 
+        "Italy": "it", "Germany": "de", "Spain": "sp", "Brazil": "br", "Mexico": "mx"
+    }
+    f_token = "us" if is_global_view else token_dict.get(market_choice, "us")
+    
+    with sub_method:
+        st.markdown(f"### METHODOLOGY BLUEPRINT ({flag_icon} {market_choice.upper()})")
+        if not is_global_view:
+            w_dict = {
+                "United States": ("64.2%", "35.8%"), "France": ("65.1%", "34.9%"), "United Kingdom": ("63.8%", "36.2%"), 
+                "Italy": ("59.8%", "40.2%"), "Germany": ("61.5%", "38.5%"), "Spain": ("62.0%", "38.0%"), 
+                "Brazil": ("68.5%", "31.5%"), "Mexico": ("71.0%", "29.0%")
+            }
+            w1, w2 = w_dict.get(market_choice, ("64.2%", "35.8%"))
+            st.markdown(f"**Territorial Demographic Weight:** {w1} is &le; 54 / {w2} is &ge; 55")
+        
+        f_method = f"methodology_{f_token}.txt"
+        methodology_text = load_text_asset(f_method, "Methodology assets loading safely from cache...")
+        st.text_area(label="Active Regulatory Methodology Statement Data Logs", value=methodology_text, height=450, disabled=True)
+            
+    with sub_source:
+        st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
+        f_source = f"sources_{f_token}.txt"
+        if f_token == "mx": f_source = "sources_orig_mx.txt"
+            
+        sources_text = load_text_asset(f_source, "Sourcing footprint parameters extracting from cache...")
+        st.text_area(label="Verified Enterprise Metric Ingestion Registries", value=sources_text, height=450, disabled=True)
