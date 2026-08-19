@@ -749,7 +749,9 @@ with tab2:
     st.markdown("Perhaps the most important point for our industry: We didn't invent new numbers, and we didn't hide our math inside a proprietary black box. Every data point used to build this scale sits legitimately out in the open public domain, scattered across public broadcaster annual disclosures, investor relations filings, and sovereign regulatory white papers. Anyone could theoretically download these records and combine them to see the true division of human time for which they are competing. Until now, however, no one has.")
     st.markdown("Why? Because our industry incentivizes legacy silos. Because, among the most traditional of media and measurement experts, there is widespread fear of finding out how our consumers are actually spending their time and which half of their budgets are being wasted. The current system of content distribution and measurement is built by and for those who profit directly from it, whether or not it actually works. We have built what we believe is the ultimate \"Attention Model,\" the first index to track the actual behavior of humans across all the screens they use and account for their attention in a way that helps us all map a course for the future of media.")
     st.markdown("We will update this index monthly, on a rolling six months basis. Simultaneously, we will drop analysis of the latest data on **[Media War & Peace](https://eshap.substack.com/)**.")
-    st.markdown("This is a FREE platform. This public project is very open to your feedback and critique as we continually improve this product to meet the needs of the media community. Thanks for your attention! **ESHAP**")
+    st.markdown("This is a FREE platform. This public project is very open to your feedback and critique as we continually improve this product to meet the needs of the media community.")
+    st.markdown("Thanks for your attention!")
+    st.markdown("**ESHAP**")
 with tab3:
     st.subheader("ECSAI Frequently Asked Questions (FAQs)")
     st.markdown("#### **Q: HOW DID WE CHOOSE THE VARIOUS COMBINATION OF SOURCES FOR THE INDEX ACROSS THE REGIONS?**")
