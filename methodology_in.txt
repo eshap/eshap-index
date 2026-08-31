@@ -1,38 +1,16 @@
+Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis that models independent, platform-specific measurement panels into a singular, logic-enforced zero-sum market budget across televisions, smartphones, and computers. The baseline establishes total available time allocation parameters using territorial population data and GWI daily consumer diaries, applying an empirical duplication coefficient to filter out simultaneous multi-screening sessions so that concurrent device use is not double-counted. Television glass viewing shares from sector logs and application session tracking from telemetry are collapsed back into their unified parent corporate holding structures. 
 
-Figures represent an exclusive Cross-Screen Attention Index generated via ESHAP analysis\
-that models independent, platform-specific measurement panels into a singular, logicenforced\
-zero-sum market budget across televisions, smartphones, and computers. The\
-baseline establishes total available time allocation parameters using territorial population\
-data from the Ministry of Home AMairs Census Registry and GWI daily consumer diaries,\
-applying an empirical duplication coeMicient to filter out simultaneous multi-screening\
-sessions so that concurrent device use is not double-counted. Television glass viewing\
-shares from the Broadcast Audience Research Council (BARC) India and application\
-session tracking from Sensor Tower APAC, Comscore Video Metrix Global, and Jio\
-Platforms Enterprise Data telemetry are collapsed back into their unified parent corporate\
-holding structures. To isolate the commercially vital workforce pool and eliminate legacy\
-reach distortions, the index applies an unyielding zero-sum filter that strips the heavy 55+\
-demographic retirement layer directly out of the gen-pop baseline. The narrower, nested\
-generational cohorts (13-44, 13-34, and 13-24) are then programmatically processed\
-through a proprietary mathematical curve. This curve uses established transitional\
-benchmarks to calculate historical territory lag and local market friction-such as deepseated\
-domestic public service broadcast infrastructure loyalty-while automatically\
-enforcing a nested safety guard that guarantees strict downward monotonicity across all\
-sub-tables. This data covers the December 2025 through May 2026 cycle, tracking absolute\
-volume of attention across both total video and active social media usage. Platform\
-Inclusions Addendum (India Footnote Specifications) * JIOSTAR: Complete structural\
-consolidation of the combined JioHotstar, Star TV, and Viacom18 television networks\
-natively integrated with all digital sessions via the JioCinema aggregator. * ZEE\
-ENTERTAINMENT: Unified corporate footprint encompassing all linear broadcast networks\
-natively unified with all streaming volumes from the Zee5 platform backed by Zee\
-Entertainment Financial Reports. * SONY PICTURES NETWORKS: Consolidated corporate\
-footprint of all premium pay-TV channels, entertainment tiers, and digital streaming\
-attention via SonyLIV backed by Sony Pictures Networks India Holdings. * DOORDARSHAN:\
-Consolidated footprint of the core linear television infrastructure natively managed under\
-the Prasar Bharati public broadcasting network. * NETFLIX: Total audited subscription\
-video-on-demand attention footprint across mobile devices, computers, and Connected\
-TVs (CTV). * TIKTOK: Complete native mobile application session tracking and video\
-platform attention volume. * AMAZON: Total video attention footprint driven through\
-Amazon Prime Video subscription and premium digital storefront viewing. * INSTAGRAM:\
-Complete native mobile application session tracking and image-video social engagement\
-hours. * FACEBOOK: Complete native application session tracking and feed engagement\
-focus hours.}
+To isolate the commercially vital workforce pool and eliminate legacy reach distortions, the index applies an unyielding zero-sum filter that strips the heavy 55+ demographic retirement layer directly out of the gen-pop baseline. The narrower, nested generational cohorts (13-44, 13-34, and 13-24) are then programmatically processed through a proprietary mathematical curve. This curve uses established transitional benchmarks to calculate historical territory lag and local market friction while automatically enforcing a nested safety guard that guarantees strict downward monotonicity across all sub-tables: P13+ ≥ (P13+ - 55+ GenX+) ≥ 13-54 Majority ≥ 13-44 NextGen ≥ 13-34 Youth ≥ 13-24 GenA/Z
+
+### Platform Inclusions Addendum (India Footnote Specifications)
+* YOUTUBE: Complete native mobile application session tracking and video platform attention volume.
+* TIKTOK: Complete native mobile application session tracking and video platform attention volume.
+* JIOSTAR (Star TV): Consolidated corporate footprint mapping all linear feeds and JioCinema digital streaming properties under the unified merged parent corporate entity.
+* INSTAGRAM: Complete native application session tracking and feed engagement focus hours.
+* NETFLIX: Total audited subscription video-on-demand attention footprint across mobile devices, computers, and Connected TVs (CTV).
+* ZEE ENTERTAINMENT: Consolidated broadcast corporate footprint natively unified with all streaming volumes from the ZEE5 platform.
+* SONY PICTURES NET.: Unified broadcast corporate footprint natively integrated with all cross-screen digital sessions via the SonyLIV platform.
+* DOORDARSHAN: Complete structural consolidation of the entire public linear portfolio natively integrated with all regional network layers.
+* SUN TV NETWORK: Consolidated commercial network footprint natively unified with all streaming volumes from the Sun NXT platform.
+* AMAZON: Total video attention footprint driven through Amazon Prime Video subscription and premium digital storefront viewing.
+* FACEBOOK: Complete native application session tracking and feed engagement focus hours.
