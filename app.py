@@ -434,13 +434,23 @@ st.html("<style>div[data-testid='stSidebarNav'] + div, div[data-testid='stRadio'
 def handle_market_switch_callback():
     st.session_state.reset_id = st.session_state.get('reset_id', 0) + 1
 
+# 1. Define the raw unsorted list of options
+raw_market_list = [
+    "Global Overview", "United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain",
+    "Canada", "India", "Japan", "South Korea", "Denmark", "Sweden", "Norway", "Finland", "Slovakia", "Slovenia", 
+    "Croatia", "Bulgaria", "Romania", "Moldova", "Czech Republic"
+]
+
+# 2. Extract and sort all country choices alphabetically while keeping Global Overview separate
+sorted_countries = sorted([m for m in raw_market_list if m != "Global Overview"])
+
+# 3. Combine them back so Global Overview remains index 0, followed by A-Z territories
+alphabetical_market_list = ["Global Overview"] + sorted_countries
+
+# 4. Render the clean alphabetical selection menu
 market_choice = st.sidebar.radio(
     "Territory", 
-    [
-        "Global Overview", "United States", "Brazil", "Mexico", "Germany", "United Kingdom", "France", "Italy", "Spain",
-        "Canada", "India", "Japan", "South Korea", "Denmark", "Sweden", "Norway", "Finland", "Slovakia", "Slovenia", 
-        "Croatia", "Bulgaria", "Romania", "Moldova", "Czech Republic"
-    ], 
+    alphabetical_market_list, 
     key="market_choice_sync",
     on_change=handle_market_switch_callback
 )
