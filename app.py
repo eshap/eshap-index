@@ -507,6 +507,7 @@ elif market_choice == "Moldova": df_matrix = pd.DataFrame(MOL_BASE, columns=cols
 elif market_choice == "Czech Republic": df_matrix = pd.DataFrame(CR_BASE, columns=cols)
 else: df_matrix = None
 
+if df_matrix is not None:
     if merge_meta:
         meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
         non_meta_df = df_matrix[~df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
