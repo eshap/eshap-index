@@ -13,9 +13,8 @@ if "text_memory_cache" not in st.session_state:
     st.session_state.text_memory_cache = {}
     for token in CORE_TOKENS:
         for prefix in ["methodology", "sources"]:
+            # Hardcoded Mexico override removed entirely so it naturally looks for sources_mx.txt
             filename = f"{prefix}_{token}.txt"
-            if prefix == "sources" and token == "mx":
-                filename = "sources_mx.txt"
                 
             content = ""
             if os.path.exists(filename):
@@ -862,11 +861,11 @@ with tab4:
         else: 
             st.info(f"{market_choice} methodology text loading...")
             
+# === PASTE THIS UNIFORM DATA SOURCE STRUCTURING ===
     with sub_source:
         st.markdown(f"### DATA SOURCES ({flag_icon} {market_choice.upper()})")
+        # Cleans out all overrides completely to call the standard file path directly
         f_source_name = f"sources_{f_token}.txt"
-        if f_token == "mx": 
-            f_source_name = "sources_orig_mx.txt"
             
         sources_text = load_text_asset(f_source_name)
         if len(sources_text.strip()) > 0:
