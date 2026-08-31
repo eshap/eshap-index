@@ -15,7 +15,7 @@ if "text_memory_cache" not in st.session_state:
         for prefix in ["methodology", "sources"]:
             filename = f"{prefix}_{token}.txt"
             if prefix == "sources" and token == "mx":
-                filename = "sources_orig_mx.txt"
+                filename = "sources_mx.txt"
                 
             content = ""
             if os.path.exists(filename):
