@@ -409,12 +409,12 @@ logo_base64 = ""
 if os.path.exists("eshap_map.png"):
     with open("eshap_map.png", "rb") as img_f: logo_base64 = base64.b64encode(img_f.read()).decode()
 if logo_base64:
-    st.sidebar.html(f"""
+    st.sidebar.html("""
         <style>
-        div.sidebar-logo-container {{ width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }}
-        div.sidebar-logo-container img {{ max-width: 100% !important; height: auto !important; }}
+        div.sidebar-logo-container { width: 100% !important; margin: 0 0 0.5rem 0 !important; padding: 0 !important; text-align: center !important; }
+        div.sidebar-logo-container img { max-width: 100% !important; height: auto !important; }
         </style>
-        <div class="sidebar-logo-container"><a href="https://substack.com" target="_blank"><img src="data:image/png;base64,{logo_base64}"></a></div>
+        <div class="sidebar-logo-container"><a href="https://eshap.substack.com/p/eshap-index-report" target="_blank"><img src="data:image/png;base64,""" + logo_base64 + """"></a></div>
         """)
 
 merge_meta = st.sidebar.toggle("Consolidate Instagram/Facebook into Meta", value=False, key="meta_toggle_top")
@@ -504,9 +504,7 @@ elif market_choice == "Croatia": df_matrix = pd.DataFrame(CRO_BASE, columns=cols
 elif market_choice == "Bulgaria": df_matrix = pd.DataFrame(BG_BASE, columns=cols)
 elif market_choice == "Romania": df_matrix = pd.DataFrame(RO_BASE, columns=cols)
 elif market_choice == "Moldova": df_matrix = pd.DataFrame(MOL_BASE, columns=cols)
-elif market_choice == "Czech Republic": df_matrix = pd.DataFrame(CR_BASE, columns=cols)
-else: df_matrix = None
-
+else: df_matrix = pd.DataFrame(CR_BASE, columns=cols)
 if df_matrix is not None:
     if merge_meta:
         meta_rows = df_matrix[df_matrix["Platform/Publisher"].isin(["INSTAGRAM", "FACEBOOK"])]
@@ -875,5 +873,3 @@ with tab4:
             st.write(sources_text)
         else: 
             st.info(f"{market_choice} sourcing data loading...")
-
-
