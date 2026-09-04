@@ -9,7 +9,7 @@ CORE_TOKENS = [
 ]
 
 # Instant Memory Cache Bootstrapper: Reads the filesystem once and retains data permanently in RAM
-     if "text_memory_cache" not in st.session_state:
+if "text_memory_cache" not in st.session_state:
     st.session_state.text_memory_cache = {}
     for token in CORE_TOKENS:
         for prefix in ["methodology", "sources"]:
